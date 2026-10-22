@@ -1,11 +1,11 @@
 //! The header, toolbar, footer, the grid of cards and the table, laid out like the apps page on
 //! getartcraft.com: hairline cells, mono labels and square controls.
 
-use artcraft_launcher_core::details::AppDetails;
-use artcraft_launcher_core::platform::pick_asset;
-use artcraft_launcher_core::protocol::{Command, JobPhase};
-use artcraft_launcher_core::status::AppStatus;
-use artcraft_launcher_core::time;
+use oracle_suite_core::details::AppDetails;
+use oracle_suite_core::platform::pick_asset;
+use oracle_suite_core::protocol::{Command, JobPhase};
+use oracle_suite_core::status::AppStatus;
+use oracle_suite_core::time;
 use egui::{Color32, CornerRadius, FontId, Rect, RichText, Sense, Stroke, Ui, vec2};
 
 use crate::app::{Dialog, LauncherUi, TitleBar};
@@ -72,10 +72,10 @@ impl LauncherUi {
             if bar == TitleBar::MacOs {
                 ui.add_space(TRAFFIC_LIGHTS_W);
             }
-            // The ArtCraft wordmark exactly as supplied, in its own cell.
-            let logo = vec2(14.0 * crate::icons::ARTCRAFT_LOGO_ASPECT, 14.0);
+            // The Oracle wordmark, in its own cell. Product names are never translated.
+            let logo = vec2(20.0 * crate::icons::ORACLE_LOGO_ASPECT, 20.0);
             let (cell, _) = ui.allocate_exact_size(vec2(logo.x + 40.0, h), Sense::hover());
-            egui::Image::new(crate::icons::artcraft_logo(t.dark)).alt_text(tl!("ArtCraft")).paint_at(ui, Rect::from_center_size(cell.center(), logo));
+            egui::Image::new(crate::icons::oracle_logo(t.dark)).alt_text("Oracle").paint_at(ui, Rect::from_center_size(cell.center(), logo));
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 if bar == TitleBar::Custom {
                     widgets::window_buttons(ui, h);
@@ -83,12 +83,31 @@ impl LauncherUi {
                 if widgets::nav_icon(ui, "⚙", tl!("Settings"), h, false).clicked() {
                     self.dialog = Some(Dialog::Settings);
                 }
-                // The controls reserve their actual widths before the secondary text gets space.
+                // The two pages: the apps and the asset library.
                 ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
-                    if ui.available_width() >= 17.0 + widgets::hud_galley(ui, tl!("Craft App Suite"), t.muted).size().x {
-                        widgets::rule(ui, h);
-                        ui.add_space(16.0);
-                        widgets::hud(ui, tl!("Craft App Suite"), t.muted);
+                    widgets::rule(ui, h);
+                    ui.add_space(8.0);
+                    let french = crate::i18n::current().code() == "fr";
+                    let tabs = [
+                        (crate::app::Section::Apps, if french { "APPLICATIONS" } else { "APPS" }),
+                        (crate::app::Section::Library, if french { "BIBLIOTHÈQUE" } else { "LIBRARY" }),
+                    ];
+                    for (section, label) in tabs {
+                        let on = self.section == section;
+                        let color = if on { t.ink_strong } else { t.muted };
+                        let galley = widgets::hud_galley(ui, label, color);
+                        let (rect, resp) = ui.allocate_exact_size(vec2(galley.size().x + 28.0, h), Sense::click());
+                        if resp.hovered() && !on {
+                            ui.painter().rect_filled(rect, 0.0, t.sunken);
+                        }
+                        ui.painter().galley(rect.center() - galley.size() / 2.0, galley, color);
+                        if on {
+                            let bar = Rect::from_min_max(egui::pos2(rect.left() + 10.0, rect.bottom() - 2.0), egui::pos2(rect.right() - 10.0, rect.bottom()));
+                            ui.painter().rect_filled(bar, 0.0, t.accent);
+                        }
+                        if resp.on_hover_cursor(egui::CursorIcon::PointingHand).clicked() {
+                            self.section = section;
+                        }
                     }
                 });
             });
@@ -112,7 +131,7 @@ impl LauncherUi {
                         widgets::tag(ui, tl!("Update"), t.accent, Color32::WHITE);
                         ui.add_space(4.0);
                         ui.label(
-                            RichText::new(fmt(tl!("ArtCraft Launcher {version} is available."), &[("version", &r.version_label())]))
+                            RichText::new(fmt(tl!("Oracle Suite {version} is available."), &[("version", &r.version_label())]))
                                 .family(theme::medium())
                                 .color(t.ink_strong),
                         );
@@ -137,7 +156,7 @@ impl LauncherUi {
                                         .on_hover_text(tl!("Stop waiting; the update can be started again later"))
                                         .clicked()
                                 {
-                                    self.send(Command::Cancel { app: artcraft_launcher_core::catalog::LAUNCHER_ID.to_string() });
+                                    self.send(Command::Cancel { app: oracle_suite_core::catalog::LAUNCHER_ID.to_string() });
                                 }
                                 widgets::progress(ui, fraction, &caption, t.accent, 220.0);
                                 return;
@@ -263,7 +282,7 @@ impl LauncherUi {
     /// News from ArtCraft's release feed (and app renames), until the user dismisses each.
     fn announcements(&mut self, ui: &mut Ui) {
         let t = Tokens::get(ui.ctx());
-        let shown: Vec<artcraft_launcher_core::feed::Notice> =
+        let shown: Vec<oracle_suite_core::feed::Notice> =
             self.announcements.iter().filter(|n| !self.settings.dismissed_notices.contains(&n.id)).take(3).cloned().collect();
         for notice in shown {
             egui::Frame::new().fill(t.sunken).stroke(t.hairline()).inner_margin(egui::Margin::symmetric(14, 10)).show(ui, |ui| {
@@ -312,26 +331,8 @@ impl LauncherUi {
             let short = fmt(tl!("GitHub limit hit; back in {min} min"), &[("min", &min)]);
             (format!("· {full}"), format!("· {short}"))
         });
-        use artcraft_launcher_core::catalog::{GITHUB_URL, SOCIAL, WEBSITE_URL};
-        // Every link is an icon, reading Website, GitHub, Discord, then the social accounts.
-        let named =
-            |name: &'static str, label: &str, url: &'static str| widgets::IconLink { name, label: label.to_string(), tip: label.to_string(), url };
-        let mut links = vec![
-            named("Website", tl!("Website"), WEBSITE_URL),
-            named("GitHub", tl!("GitHub"), GITHUB_URL),
-            widgets::IconLink {
-                name: "Discord",
-                label: tl!("Discord").to_string(),
-                tip: tl!("Join the ArtCraft community on Discord").to_string(),
-                url: self.discord_url,
-            },
-        ];
-        links.extend(SOCIAL.iter().map(|(name, url)| widgets::IconLink {
-            name,
-            label: (*name).to_string(),
-            tip: fmt(tl!("ArtCraft on {name}"), &[("name", name)]),
-            url,
-        }));
+        // Oracle has no website or community accounts yet, so the footer carries no links.
+        let links: Vec<widgets::IconLink> = Vec::new();
         let icon = 13.0;
         let spacing = ui.spacing().item_spacing.x;
         // The icons on the right keep their size; the status on the left gets what is left and
@@ -386,15 +387,16 @@ impl LauncherUi {
             return;
         }
         let width = ui.available_width();
-        // Neighbouring cards share their 1 px hairline, like the site's `gap-px` grid.
-        let cols = ((width / CARD_MIN_W).floor() as usize).max(1);
-        let card_w = (width + (cols as f32 - 1.0)) / cols as f32;
+        // Cards stand apart by a small gap, so their rounded corners never meet.
+        const GAP: f32 = 12.0;
+        let cols = (((width + GAP) / (CARD_MIN_W + GAP)).floor() as usize).max(1);
+        let card_w = (width - (cols as f32 - 1.0) * GAP) / cols as f32;
         let rows = ids.len().div_ceil(cols);
-        let height = rows as f32 * (CARD_H - 1.0) + 1.0;
+        let height = rows as f32 * (CARD_H + GAP) - GAP;
         let (area, _) = ui.allocate_exact_size(vec2(width, height), Sense::hover());
         for (i, id) in ids.iter().enumerate() {
             let (row, col) = (i / cols, i % cols);
-            let min = area.min + vec2(col as f32 * (card_w - 1.0), row as f32 * (CARD_H - 1.0));
+            let min = area.min + vec2(col as f32 * (card_w + GAP), row as f32 * (CARD_H + GAP));
             self.card(ui, id, Rect::from_min_size(min, vec2(card_w, CARD_H)));
         }
     }
@@ -424,12 +426,12 @@ impl LauncherUi {
         let painter = ui.painter_at(rect.expand(16.0));
         // A faint wash in the app's colour fades in under the pointer.
         let fill = t.bg.lerp_to_gamma(app_color, 0.05 * lift);
-        painter.rect(rect, CornerRadius::ZERO, fill, t.hairline(), egui::StrokeKind::Inside);
-        // On hover, a 2 px rule in the app's colour wipes in from the left along the top, inside the
-        // hairlines the card shares with its neighbours (the site's rule sits within its grid gaps).
+        painter.rect(rect, theme::RADIUS, fill, t.hairline(), egui::StrokeKind::Inside);
+        // On hover, a 2 px rule in the app's colour wipes in from the left along the top, inside
+        // the card's hairline.
         if lift > 0.0 {
             let inside = rect.shrink(1.0);
-            painter.rect_filled(Rect::from_min_size(inside.min, vec2(inside.width() * lift, 2.0)), CornerRadius::ZERO, app_color);
+            painter.rect_filled(Rect::from_min_size(inside.min, vec2(inside.width() * lift, 2.0)), CornerRadius { nw: 3, ne: 3, sw: 0, se: 0 }, app_color);
         }
 
         // The top strip: the version in the app's colour, and its GitHub page.
@@ -505,7 +507,7 @@ impl LauncherUi {
             }
         }
         if let Some(details) = AppDetails::by_id(id) {
-            crate::card_parts::blurb(ui, details.headline, t.muted, 4);
+            crate::card_parts::blurb(ui, crate::i18n::tr_ctx(crate::i18n::current(), details.id, details.headline), t.muted, 4);
         }
         if let Some(line) = crate::card_parts::last_updated(&entry) {
             ui.add_space(6.0);
@@ -992,14 +994,14 @@ pub(crate) fn version_line(e: &AppEntry, status: &AppStatus) -> String {
 /// The launcher's own download for this platform. `flatpak` is whether this copy runs as a
 /// Flatpak; such a copy's download stays the `.flatpak` bundle — offering it an AppImage (or a
 /// `.deb`) would point at replacing the sandboxed install with a different one.
-pub(crate) fn launcher_download(r: &artcraft_launcher_core::Release, p: artcraft_launcher_core::Platform, flatpak: bool) -> Option<String> {
-    use artcraft_launcher_core::PackageKind;
+pub(crate) fn launcher_download(r: &oracle_suite_core::Release, p: oracle_suite_core::Platform, flatpak: bool) -> Option<String> {
+    use oracle_suite_core::PackageKind;
     let kinds: &[PackageKind] = match p.os {
-        artcraft_launcher_core::Os::Linux if flatpak => &[PackageKind::Flatpak],
-        artcraft_launcher_core::Os::Linux => &[PackageKind::AppImage, PackageKind::Deb],
+        oracle_suite_core::Os::Linux if flatpak => &[PackageKind::Flatpak],
+        oracle_suite_core::Os::Linux => &[PackageKind::AppImage, PackageKind::Deb],
         _ => p.default_kinds(),
     };
-    pick_asset(r, &[artcraft_launcher_core::catalog::LAUNCHER_ID], p, kinds).map(|(a, _)| a.url.clone())
+    pick_asset(r, &[oracle_suite_core::catalog::LAUNCHER_ID], p, kinds).map(|(a, _)| a.url.clone())
 }
 
 /// A column of single-line texts, one per font and `gap` apart, centred across the row it is in.
@@ -1022,15 +1024,15 @@ fn lines_height(ui: &Ui, fonts: &[&FontId], gap: f32) -> f32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use artcraft_launcher_core::catalog::LAUNCHER_ID;
-    use artcraft_launcher_core::{Arch, Asset, Platform, Release};
+    use oracle_suite_core::catalog::LAUNCHER_ID;
+    use oracle_suite_core::{Arch, Asset, Platform, Release};
 
     fn release() -> Release {
         let asset = |name: &str| Asset { name: name.into(), size: 0, url: format!("https://dl.example/{name}"), sha256: None };
         Release {
             tag: "v0.4.1".into(),
             version: None,
-            name: "ArtCraft Launcher v0.4.1".into(),
+            name: "Oracle Suite v0.4.1".into(),
             published_at: None,
             html_url: "https://github.com/storytold/craft-launcher/releases/tag/v0.4.1".into(),
             notes: String::new(),
@@ -1044,7 +1046,7 @@ mod tests {
     }
 
     fn platform() -> Platform {
-        Platform { os: artcraft_launcher_core::Os::Linux, arch: Arch::X64 }
+        Platform { os: oracle_suite_core::Os::Linux, arch: Arch::X64 }
     }
 
     #[test]

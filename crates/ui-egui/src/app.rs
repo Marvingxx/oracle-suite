@@ -2,12 +2,12 @@
 
 use std::time::Duration;
 
-use artcraft_launcher_core::protocol::{
+use oracle_suite_core::protocol::{
     Backend, BackendOptions, CANCELLED, Capabilities, Command, Event, INSTALL_CANCELLED, JobPhase, LatestRelease, PAUSED, Source,
 };
-use artcraft_launcher_core::release::Release;
-use artcraft_launcher_core::status::AppStatus;
-use artcraft_launcher_core::{Platform, SUITE};
+use oracle_suite_core::release::Release;
+use oracle_suite_core::status::AppStatus;
+use oracle_suite_core::{Platform, SUITE};
 
 use crate::i18n::set_current;
 use crate::model::AppEntry;
@@ -63,7 +63,7 @@ pub trait Host {
     }
     /// The URL to open when Discord is clicked. Defaults to the web link.
     fn discord_url(&self) -> &'static str {
-        artcraft_launcher_core::catalog::DISCORD_URL
+        oracle_suite_core::catalog::DISCORD_URL
     }
     /// Quit the launcher for real (not just hide to the tray).
     fn quit(&mut self) {}
@@ -82,7 +82,7 @@ pub(crate) enum Dialog {
     Install { app: String, folder: String },
     Replace { app: String, path: String },
     Settings,
-    LauncherUpdate(artcraft_launcher_core::Release),
+    LauncherUpdate(oracle_suite_core::Release),
 }
 
 impl Dialog {
@@ -100,6 +100,14 @@ impl Dialog {
     }
 }
 
+/// The window's two pages.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Section {
+    #[default]
+    Apps,
+    Library,
+}
+
 pub struct LauncherUi {
     pub(crate) backend: Box<dyn Backend>,
     pub settings: Settings,
@@ -111,13 +119,13 @@ pub struct LauncherUi {
     pub(crate) rate_limited_until: Option<i64>,
     pub(crate) launcher_update: Option<Release>,
     /// The launcher's own update, while it downloads and installs.
-    pub(crate) launcher_job: Option<artcraft_launcher_core::protocol::JobPhase>,
+    pub(crate) launcher_job: Option<oracle_suite_core::protocol::JobPhase>,
     /// The new launcher is in place: quit so it can start.
     restart_requested: bool,
     /// News from ArtCraft's release feed, shown inline until dismissed.
-    pub(crate) announcements: Vec<artcraft_launcher_core::feed::Notice>,
+    pub(crate) announcements: Vec<oracle_suite_core::feed::Notice>,
     /// Alerts from the feed, shown as popups until acknowledged.
-    pub(crate) alerts: Vec<artcraft_launcher_core::feed::Notice>,
+    pub(crate) alerts: Vec<oracle_suite_core::feed::Notice>,
     pub(crate) search: String,
     pub(crate) toasts: Vec<Toast>,
     pub(crate) dialog: Option<Dialog>,
@@ -157,6 +165,11 @@ pub struct LauncherUi {
     pub(crate) auto_update_attempted: std::collections::BTreeSet<(String, String)>,
     /// The URL or deep link to open when Discord is clicked.
     pub(crate) discord_url: &'static str,
+    /// Which page the window shows: the apps or the asset library.
+    pub section: Section,
+    /// The asset library, made the first time its tab opens.
+    #[cfg(not(target_arch = "wasm32"))]
+    pub library: Option<oracle_library_ui::LibraryBrowser>,
 }
 
 /// The language to draw in: the preference, or English where it needs a CJK font the system
@@ -217,7 +230,10 @@ impl LauncherUi {
             last_detect: 0,
             was_focused: true,
             auto_update_attempted: std::collections::BTreeSet::new(),
-            discord_url: artcraft_launcher_core::catalog::DISCORD_URL,
+            discord_url: oracle_suite_core::catalog::DISCORD_URL,
+            section: Section::Apps,
+            #[cfg(not(target_arch = "wasm32"))]
+            library: None,
         }
     }
 
@@ -297,7 +313,7 @@ impl LauncherUi {
     pub(crate) fn custom_install_folders(&self) -> bool {
         self.caps.manage_apps
             && self.platform.is_some_and(|p| {
-                matches!(p.os, artcraft_launcher_core::Os::Windows | artcraft_launcher_core::Os::MacOs | artcraft_launcher_core::Os::Linux)
+                matches!(p.os, oracle_suite_core::Os::Windows | oracle_suite_core::Os::MacOs | oracle_suite_core::Os::Linux)
             })
             && !crate::settings::is_flatpak_sandbox()
     }
@@ -381,7 +397,7 @@ impl LauncherUi {
                 true
             }
             Event::Progress { app, phase } => {
-                if app == artcraft_launcher_core::catalog::LAUNCHER_ID {
+                if app == oracle_suite_core::catalog::LAUNCHER_ID {
                     self.launcher_job = Some(phase);
                     if matches!(self.dialog, Some(Dialog::LauncherUpdate(_))) {
                         self.dialog = None;
@@ -417,7 +433,7 @@ impl LauncherUi {
                 false
             }
             Event::JobFinished { app, result } => {
-                let launcher = app == artcraft_launcher_core::catalog::LAUNCHER_ID;
+                let launcher = app == oracle_suite_core::catalog::LAUNCHER_ID;
                 // What the job was doing when it ended says what a cancellation called off.
                 let last = if launcher { self.launcher_job.take() } else { self.entry(&app).and_then(|e| e.job) };
                 if let Some(e) = self.entry_mut(&app) {
@@ -489,7 +505,7 @@ impl LauncherUi {
         if self.settings.notify {
             let (title, body) = match fresh.as_slice() {
                 [(_, name, v)] => {
-                    let body: String = tl!("Open ArtCraft Launcher to update.").to_string();
+                    let body: String = tl!("Open Oracle Suite to update.").to_string();
                     (crate::i18n::fmt(tl!("{name} {v} is available"), &[("name", name), ("v", v)]), body)
                 }
                 many => {
@@ -527,7 +543,7 @@ impl LauncherUi {
             && let Some(r) = &self.launcher_update
             && self.launcher_job.is_none()
         {
-            let id = artcraft_launcher_core::catalog::LAUNCHER_ID.to_string();
+            let id = oracle_suite_core::catalog::LAUNCHER_ID.to_string();
             let v = r.version_label();
             if !self.auto_update_attempted.contains(&(id.clone(), v.clone())) {
                 log::info!("auto-update: queuing launcher self-update to {v}");
@@ -611,6 +627,18 @@ impl LauncherUi {
             .exact_size(crate::views::FOOTER_H)
             .resizable(false)
             .show(ui, |ui| self.footer(ui));
+        #[cfg(not(target_arch = "wasm32"))]
+        if self.section == Section::Library {
+            let french = crate::i18n::current().code() == "fr";
+            let library = self.library.get_or_insert_with(oracle_library_ui::LibraryBrowser::new);
+            library.french = french;
+            library.accent = tokens.accent;
+            egui::CentralPanel::default()
+                .frame(egui::Frame::new().fill(tokens.bg).inner_margin(egui::Margin { left: 20, right: 20, top: 18, bottom: 12 }))
+                .show(ui, |ui| library.ui(ui));
+            self.details_drawer(&ctx);
+            return;
+        }
         egui::CentralPanel::default()
             .frame(egui::Frame::new().fill(tokens.bg).inner_margin(egui::Margin { left: 20, right: 20, top: 18, bottom: 0 }))
             .show(ui, |ui| {
@@ -720,10 +748,10 @@ impl LauncherUi {
         self.entry(id).is_some_and(|e| e.status(self.platform, self.caps.manage_apps).is_installed())
     }
 
-    /// "ArtCraft API", "GitHub" or "ArtCraft API and GitHub": the services behind the releases on
+    /// "Oracle", "GitHub" or "Oracle and GitHub": the services behind the releases on
     /// screen right now. `None` until something has loaded.
     pub(crate) fn sources_label(&self) -> Option<String> {
-        use artcraft_launcher_core::protocol::Origin;
+        use oracle_suite_core::protocol::Origin;
         let mut api = false;
         let mut github = false;
         for e in &self.entries {
@@ -795,5 +823,12 @@ impl LauncherUi {
                 self.toasts.remove(i);
             }
         });
+    }
+}
+
+impl LauncherUi {
+    /// Where an installed Oracle app's program is (`oracle-edit`), for opening a library file in it.
+    pub fn installed_location(&self, app_id: &str) -> Option<String> {
+        self.entries.iter().find(|e| e.app.id == app_id).and_then(|e| e.installed.as_ref()).map(|i| i.location.clone())
     }
 }

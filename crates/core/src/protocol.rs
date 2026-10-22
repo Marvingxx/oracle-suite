@@ -47,7 +47,7 @@ pub enum Command {
     Cancel {
         app: String,
     },
-    /// Download the newer ArtCraft Launcher, put it in place and restart into it.
+    /// Download the newer Oracle Suite, put it in place and restart into it.
     UpdateLauncher,
     /// Fetch the pictures of an app's details page (`core::details`), one [`Event::Screenshot`]
     /// each, the lead picture first. Pictures already saved on this machine arrive without
@@ -142,7 +142,7 @@ pub enum Origin {
 impl Origin {
     pub fn label(self) -> &'static str {
         match self {
-            Self::ArtCraftApi => "ArtCraft API",
+            Self::ArtCraftApi => "Oracle",
             Self::GitHub => "GitHub",
         }
     }
@@ -164,7 +164,7 @@ pub enum Source {
 impl Source {
     pub fn label(self) -> &'static str {
         match self {
-            Self::Feed => "ArtCraft",
+            Self::Feed => "Oracle",
             Self::GitHubApi => "GitHub",
             Self::GitHubPages => "GitHub (release pages)",
             Self::Cache => "saved results",
@@ -181,7 +181,7 @@ pub enum Event {
         /// The service this answer came from.
         from: Origin,
     },
-    /// The latest ArtCraft Launcher release, when it's newer than this one.
+    /// The latest Oracle Suite release, when it's newer than this one.
     LauncherUpdate(Release),
     /// The new launcher is in place (or will be, once this one exits): quit now so it can start.
     LauncherRestarting,

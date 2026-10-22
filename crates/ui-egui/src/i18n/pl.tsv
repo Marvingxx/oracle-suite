@@ -1,4 +1,4 @@
-# Polish (pl) catalog for ArtCraft Launcher.
+# Polish (pl) catalog for Oracle Suite.
 # Format: context<TAB>source<TAB>translation
 # Empty context = plain UI string (tl!, t).
 # @id = command-id keyed (tr_id).
@@ -6,13 +6,13 @@
 # @msg = status/error message template (message, msg).
 # Other context = disambiguation for tr_ctx.
 #
-# Clean-room: written from the meaning of ArtCraft Launcher's English labels in neutral Polish,
+# Clean-room: written from the meaning of Oracle Suite's English labels in neutral Polish,
 # using the terms Polish users of creative and system software know. The user is addressed
 # informally ("twoje", "cię"), as in Polish system interfaces.
 #
 # Coverage: the whole interface — every menu string and tl! literal (complete_menus = true).
-# Left in English on purpose: product name "ArtCraft Launcher" (and its "Launcher" tag), suite
-# name "Craft App Suite", app names (PhotoCraft, LightCraft, FilmCraft, DesignCraft, VectorCraft,
+# Left in English on purpose: product name "Oracle Suite" (and its "Launcher" tag), suite
+# name "Oracle Suite", app names (Oracle Edit, LightCraft, FilmCraft, DesignCraft, Oracle Vector,
 # PdfCraft, EffectCraft, WordCraft, DeckCraft, GridCraft, CADCraft, SoundCraft, FigCraft), "GitHub",
 # "Discord".
 # Shortcut keys keep their key-cap names (Shift, Alt, Ctrl, Cmd, Esc).
@@ -20,7 +20,7 @@
 # {what}, {unit}, {real}, {e} must appear in translation.
 
 	Launcher	Launcher
-	Craft App Suite	Craft App Suite
+	Oracle Suite	Oracle Suite
 	Open Source Tools for Creatives, Makers, and Builders	Narzędzia open source dla artystów, twórców i konstruktorów
 	Settings	Ustawienia
 	Check for updates	Sprawdź dostępność aktualizacji
@@ -74,7 +74,7 @@
 	Reinstall	Przeinstaluj
 	Uninstall…	Odinstaluj…
 	All releases	Wszystkie wydania
-	ArtCraft Launcher {version} is available.	Dostępna jest nowa wersja ArtCraft Launcher ({version}).
+	Oracle Suite {version} is available.	Dostępna jest nowa wersja Oracle Suite ({version}).
 	Dismiss	Zamknij
 	Update and restart	Zaktualizuj i zrestartuj
 	A new version is available. Would you like to relaunch with the updated version?	Nowa wersja jest dostępna. Czy chcesz uruchomić ponownie ze zaktualizowaną wersją
@@ -85,7 +85,7 @@
 	Released {date}	Wydano {date}
 	Open on GitHub	Otwórz na GitHubie
 	Close	Zamknij
-	ArtCraft Launcher {version}	ArtCraft Launcher {version}
+	Oracle Suite {version}	Oracle Suite {version}
 	Only when I ask	Tylko kiedy zapytam
 	Automatically download and install updates	Automatycznie pobieraj i instaluj aktualizacje
 	Notify me when an installed app has an update	Powiadom mnie o aktualizacjach dla zainstalowanych aplikacji
@@ -98,11 +98,11 @@
 	Running in the background	Działanie w tle
 	Keep running in the tray when the window is closed	Po zamknięciu okna działaj w zasobniku systemowym
 	Show the window on the current desktop	Pokaż okno na bieżącym pulpicie
-	Start ArtCraft Launcher when I log in	Uruchom ArtCraft Launcher po zalogowaniu
+	Start Oracle Suite when I log in	Uruchom Oracle Suite po zalogowaniu
 	Community	Społeczność
 	Questions, ideas and news from the ArtCraft team	Pytania, pomysły i nowości od zespołu ArtCraft
 	Appearance	Motyw
-	Quit ArtCraft Launcher	Wyjdź z ArtCraft Launcher
+	Quit Oracle Suite	Wyjdź z Oracle Suite
 	Done	Gotowe
 	Uninstall {name}?	Odinstalować {name}?
 	The app will be moved to the Trash. Your documents and settings stay.	Aplikacja zostanie przeniesiona do kosza. Twoje dokumenty i ustawienia pozostaną.
@@ -117,7 +117,7 @@
 	{month} {day}, {year}	{day} {month} {year}
 
 	Automatically	Automatycznie
-	Every Craft app	Wszystkie aplikacje Craft
+	Every Oracle app	Wszystkie aplikacje Oracle
 	Apps on this computer	Aplikacje na tym komputerze
 	Installed apps with a newer version	Zainstalowane aplikacje z nowszą wersją
 	Apps you can install	Aplikacje, które możesz zainstalować
@@ -137,7 +137,7 @@
 	Open link	Otwórz link
 	Update	Aktualizacja
 	{name} icon	Ikona {name}
-	Loading ArtCraft Launcher…	Ładowanie ArtCraft Launcher…
+	Loading Oracle Suite…	Ładowanie Oracle Suite…
 	Cancel update	Anuluj aktualizację
 	Stop waiting; the update can be started again later	Przerwij oczekiwanie; aktualizację można uruchomić ponownie później
 	Download again	Pobierz ponownie
@@ -162,19 +162,11 @@
 	Tarball (.tar.gz)	Archiwum (.tar.gz)
 
 # Contextual: each app's tagline, keyed by app id
-photocraft	Image editing	Edycja zdjęć
-vectorcraft	Vector illustration	Ilustracja wektorowa
-filmcraft	Video editing, color and sound	Montaż wideo, kolor i dźwięk
-lightcraft	Photo library and raw development	Biblioteka zdjęć i obróbka RAW
-pdfcraft	Reading, organizing and protecting PDFs	Czytanie, porządkowanie i zabezpieczanie plików PDF
-effectcraft	Motion graphics and visual effects	Grafika ruchoma i efekty wizualne
-designcraft	Page layout and publishing	Skład stron i publikowanie
-wordcraft	Writing and document design	Pisanie i projektowanie dokumentów
-deckcraft	Presentations and slide shows	Prezentacje i pokazy slajdów
-gridcraft	Spreadsheets and data	Arkusze kalkulacyjne i dane
-cadcraft	Computer-aided design and drafting	Projektowanie i kreślenie wspomagane komputerowo
-soundcraft	Recording, editing and mixing audio	Nagrywanie, edycja i miksowanie dźwięku
-figcraft	Interface design and prototyping	Projektowanie interfejsów i prototypowanie
+oracle-edit	Image editing	Edycja zdjęć
+oracle-vector	Vector illustration	Ilustracja wektorowa
+oracle-brand-kit	Brand identity and client deliveries	Identyfikacja marki i pliki dla klienta
+oracle-mockup-studio	2D mockups	Makiety 2D
+oracle-guide	Brand guidelines and page layout	Księgi znaku i skład
 
 # Contextual: month abbreviations for date rendering
 month	Jan	sty
@@ -216,7 +208,6 @@ month	Dec	gru
 	Version {version} installed	Wersja {version} zainstalowana
 	Version {latest}	Wersja {latest}
 	No release published yet	Nie opublikowano jeszcze wydania
-	ArtCraft Launcher	ArtCraft Launcher
 	App	Aplikacja
 	Latest	Najnowsza
 	Released	Wydano
@@ -251,7 +242,7 @@ month	Dec	gru
 	Full changelog	Pełna lista zmian
 	link	link
 	No apps match	Brak pasujących aplikacji
-	Open ArtCraft Launcher to update.	Otwórz ArtCraft Launcher, aby zaktualizować aplikacje.
+	Open Oracle Suite to update.	Otwórz Oracle Suite, aby zaktualizować aplikacje.
 	{name} {v} is available	Dostępna jest nowa wersja {name} {v}
 	{count} updates are available	Dostępne aktualizacje: {count}
 	These notes weren't fetched (GitHub's request limit was reached). They're on the release page.	Nie udało się pobrać tych notatek (osiągnięto limit zapytań GitHuba). Znajdziesz je na stronie wydania.
@@ -319,7 +310,7 @@ filter	Installed	Zainstalowane
 @id	launcher.notes	Co nowego
 @id	launcher.dismiss	Zamknij
 @id	settings.open	Ustawienia
-@id	settings.quit	Wyjdź z ArtCraft Launcher
+@id	settings.quit	Wyjdź z Oracle Suite
 @id	view.grid	Siatka
 @id	view.table	Tabela
 @id	filter.all	Wszystkie
@@ -343,16 +334,16 @@ filter	Installed	Zainstalowane
 @id	linux.preferred_kind	Instaluj nowe aplikacje jako
 @id	tray.close_to_tray	Po zamknięciu okna działaj w zasobniku systemowym
 @id	tray.show_on_current_desktop	Pokaż okno na bieżącym pulpicie
-@id	tray.login_item	Uruchom ArtCraft Launcher po zalogowaniu
+@id	tray.login_item	Uruchom Oracle Suite po zalogowaniu
 @id	appearance.theme	Wygląd
 
 # Tray (menu bar) menu and tooltip
-	Show ArtCraft Launcher	Pokaż ArtCraft Launcher
+	Show Oracle Suite	Pokaż Oracle Suite
 	Check for Updates	Sprawdź dostępność aktualizacji
 	Visit getartcraft.com	Odwiedź getartcraft.com
 	ArtCraft on GitHub	ArtCraft na GitHubie
 	Join the ArtCraft Discord	Dołącz do Discorda ArtCraft
-@plural	ArtCraft Launcher · {n} update available|ArtCraft Launcher · {n} updates available	ArtCraft Launcher · {n} dostępna aktualizacja|ArtCraft Launcher · {n} dostępne aktualizacje|ArtCraft Launcher · {n} dostępnych aktualizacji
+@plural	Oracle Suite · {n} update available|Oracle Suite · {n} updates available	Oracle Suite · {n} dostępna aktualizacja|Oracle Suite · {n} dostępne aktualizacje|Oracle Suite · {n} dostępnych aktualizacji
 	Install folder	Folder instalacji
 	Default install folder	Domyślny folder instalacji
 	System default	Domyślny systemowy
@@ -365,7 +356,7 @@ filter	Installed	Zainstalowane
 @msg	couldn't use install folder {path}: {reason}	nie można użyć folderu instalacji {path}: {reason}
 @msg	this release has no AppImage for a custom install folder	to wydanie nie zawiera AppImage dla własnego folderu instalacji
 @msg	custom install folders aren't supported on this system	własne foldery instalacji nie są obsługiwane w tym systemie
-@msg	{path} already exists and wasn't installed by ArtCraft Launcher	{path} już istnieje i nie został zainstalowany przez ArtCraft Launcher
+@msg	{path} already exists and wasn't installed by Oracle Suite	{path} już istnieje i nie został zainstalowany przez Oracle Suite
 @msg	couldn't move {path} to Trash ({reason}). Remove it in Finder instead.	nie można przenieść {path} do Kosza ({reason}). Usuń go w Finderze.
 	Apps are placed inside this folder.	Aplikacje są umieszczane w tym folderze.
 	Replace what's there?	Zastąpić to, co tam jest?

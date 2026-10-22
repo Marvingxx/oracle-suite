@@ -24,3 +24,8 @@ Geist Mono font (assets/fonts/GeistMono-Variable.ttf) — SIL Open Font License 
 Craft App Suite app icons (assets/app-icons/*.png) — from each app's repository
 (github.com/storytold/<app>), MIT OR Apache-2.0, Copyright (c) 2026 ArtCraft Team and the <App>
 contributors.
+
+---
+
+Oracle Suite is a modified version of ArtCraft Launcher (craft-launcher), renamed and rebranded.
+The original notices above are kept as required by the Apache License 2.0.

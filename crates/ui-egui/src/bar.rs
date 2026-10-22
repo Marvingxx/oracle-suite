@@ -69,9 +69,9 @@ pub fn refresh_button(ui: &mut Ui, tip: &str, busy: bool) -> egui::Response {
     let hovered = resp.hovered() && !busy;
     let p = ui.painter();
     if hovered {
-        p.rect_filled(rect, CornerRadius::ZERO, t.sunken);
+        p.rect_filled(rect, crate::theme::RADIUS, t.sunken);
     }
-    p.rect_stroke(rect, CornerRadius::ZERO, t.hairline(), egui::StrokeKind::Inside);
+    p.rect_stroke(rect, crate::theme::RADIUS, t.hairline(), egui::StrokeKind::Inside);
     if busy {
         egui::Spinner::new().size(16.0).color(t.muted).paint_at(ui, Rect::from_center_size(rect.center(), vec2(16.0, 16.0)));
     } else {

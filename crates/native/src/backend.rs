@@ -5,15 +5,15 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, OnceLock, PoisonError};
 use std::time::{Duration, Instant};
 
-use artcraft_launcher_core::catalog::{LAUNCHER, LAUNCHER_ID};
-use artcraft_launcher_core::feed::{Feed, FeedAnswer};
-use artcraft_launcher_core::platform::{Arch, Os, Platform, pick_asset};
-use artcraft_launcher_core::protocol::{
+use oracle_suite_core::catalog::{LAUNCHER, LAUNCHER_ID};
+use oracle_suite_core::feed::{Feed, FeedAnswer};
+use oracle_suite_core::platform::{Arch, Os, Platform, pick_asset};
+use oracle_suite_core::protocol::{
     Backend, BackendOptions, CANCELLED, Capabilities, Command, Event, INSTALL_CANCELLED, JobPhase, LatestRelease, Origin, PAUSED, PausedDownload,
     Source,
 };
-use artcraft_launcher_core::release::{Asset, Release};
-use artcraft_launcher_core::{CraftApp, Installed, PackageKind, SUITE, version};
+use oracle_suite_core::release::{Asset, Release};
+use oracle_suite_core::{CraftApp, Installed, PackageKind, SUITE, version};
 
 use crate::feed_throttle::{self, FeedThrottle, Outcome};
 use crate::http::{self, Http, Stop};
@@ -64,7 +64,7 @@ struct Shared {
     /// A detection pass is running; another request waits for the next one.
     detecting: AtomicBool,
     last_check: Mutex<Option<i64>>,
-    /// The newer ArtCraft Launcher release, once a check has found one.
+    /// The newer Oracle Suite release, once a check has found one.
     launcher_release: Mutex<Option<Release>>,
     /// How this launcher is installed, when it can replace itself. Worked out on the check thread
     /// just before a newer launcher is announced: finding out can ask the host's Flatpak, which
@@ -107,7 +107,7 @@ impl NativeBackend {
         let waker: Waker = Arc::new(waker);
         let paths = Paths::new().unwrap_or_else(|e| {
             log::error!("{e}; keeping files in the temporary folder");
-            Paths::under(&std::env::temp_dir().join("artcraft-launcher"))
+            Paths::under(&std::env::temp_dir().join("oracle-suite"))
         });
         let http = match Http::new() {
             Ok(h) => Some(h),
@@ -261,7 +261,7 @@ impl NativeBackend {
                                 sources.lock().unwrap_or_else(PoisonError::into_inner).push(used);
                             }
                             if app.id == LAUNCHER_ID {
-                                // Is there a newer ArtCraft Launcher?
+                                // Is there a newer Oracle Suite?
                                 if let Some(LatestRelease::Found(r)) = latest
                                     && let (Some(newest), Some(current)) = (r.version.as_ref(), crate::self_update::current_version())
                                     && version::is_newer(newest, &current)
@@ -332,7 +332,7 @@ impl NativeBackend {
             restarting
         };
         if restarting {
-            let result = Err("ArtCraft Launcher is restarting to finish its update. Try again once it's back.".into());
+            let result = Err("Oracle Suite is restarting to finish its update. Try again once it's back.".into());
             self.shared.emit(Event::JobFinished { app: app.id.to_string(), result });
             return;
         }
@@ -412,7 +412,7 @@ impl NativeBackend {
         let (Some(install), Some(platform)) = (self.shared.self_install.get().cloned().flatten(), self.platform) else {
             self.shared.emit(Event::JobFinished {
                 app: id,
-                result: Err("this copy of ArtCraft Launcher can't update itself; download the new version instead".into()),
+                result: Err("this copy of Oracle Suite can't update itself; download the new version instead".into()),
             });
             return;
         };
@@ -493,7 +493,7 @@ fn run_install(
         .cloned()
         .ok_or("the latest release hasn't been found yet. Check for updates first.")?;
     let (asset, kind) = planned_asset(app, &release, platform, options, existing, record).ok_or_else(|| {
-        if platform.os == artcraft_launcher_core::Os::Linux
+        if platform.os == oracle_suite_core::Os::Linux
             && options.install_locations.folder(app.id).is_some()
             && existing.is_none()
             && record.is_none()
@@ -607,7 +607,7 @@ fn restart_blocked(mut busy: Vec<&str>) -> String {
         _ => (busy.join(", "), "were", "them"),
     };
     format!(
-        "ArtCraft Launcher didn't restart to update: {names} {were} still installing. Answer or close any password prompt, \
+        "Oracle Suite didn't restart to update: {names} {were} still installing. Answer or close any password prompt, \
          let {them} finish or cancel {them}, then press Update and restart again."
     )
 }
@@ -623,7 +623,7 @@ fn planned_asset(
     record: Option<&crate::manifest::Record>,
 ) -> Option<(Asset, PackageKind)> {
     let stems: Vec<&str> = app.stems().collect();
-    let custom_linux = platform.os == artcraft_launcher_core::Os::Linux
+    let custom_linux = platform.os == oracle_suite_core::Os::Linux
         && !process::in_sandbox()
         && existing.is_none()
         && record.is_none()
@@ -631,7 +631,7 @@ fn planned_asset(
     let kinds = if existing.is_none() && record.is_some_and(|r| r.kind == PackageKind::PortableZip) {
         vec![PackageKind::PortableZip]
     } else if custom_linux {
-        vec![artcraft_launcher_core::PackageKind::AppImage]
+        vec![oracle_suite_core::PackageKind::AppImage]
     } else {
         install::choose_kinds(app, existing, record, &options.kinds)
     };
@@ -659,7 +659,7 @@ fn planned_download(
     let existing = shared.installed.lock().unwrap_or_else(PoisonError::into_inner).get(app.id).cloned();
     let record = shared.manifest.lock().unwrap_or_else(PoisonError::into_inner).apps.get(app.id).cloned();
     let (asset, _) = planned_asset(app, &release, platform?, options, existing.as_ref(), record.as_ref())?;
-    artcraft_launcher_core::release::valid_file_name(&asset.name).then(|| (install::download_path(paths, &asset), asset.size))
+    oracle_suite_core::release::valid_file_name(&asset.name).then(|| (install::download_path(paths, &asset), asset.size))
 }
 
 /// How much the feed is trusted in one check, and how freely GitHub may be asked.
@@ -779,12 +779,16 @@ enum FeedFetch {
 /// Asks ArtCraft's release feed up to `attempts` times, as often as `throttle` allows (waiting at
 /// most [`MAX_THROTTLE_WAIT`] for it), saving a good answer.
 fn fetch_feed(http: &Http, paths: &Paths, url: &str, throttle: &Mutex<FeedThrottle>, attempts: usize) -> FeedFetch {
+    // No feed configured: nothing to ask, GitHub answers instead.
+    if url.is_empty() {
+        return FeedFetch::Failed;
+    }
     let mut asked = false;
     for attempt in 0..attempts.max(1) {
         let wait = throttle.lock().unwrap_or_else(PoisonError::into_inner).wait(crate::now());
         if wait > MAX_THROTTLE_WAIT {
             if !asked {
-                log::info!("holding off the ArtCraft API for {wait} s");
+                log::info!("holding off the release feed for {wait} s");
             }
             break;
         }
@@ -815,7 +819,7 @@ fn fetch_feed(http: &Http, paths: &Paths, url: &str, throttle: &Mutex<FeedThrott
                 }
             },
             Err(e) if e.throttled => {
-                log::warn!("the ArtCraft API asked us to slow down (HTTP 429); holding off");
+                log::warn!("the release feed asked us to slow down (HTTP 429); holding off");
                 Outcome::Throttled { retry_after: e.retry_after }
             }
             Err(e) => {
@@ -831,13 +835,13 @@ fn fetch_feed(http: &Http, paths: &Paths, url: &str, throttle: &Mutex<FeedThrott
     if asked { FeedFetch::Failed } else { FeedFetch::Held }
 }
 
-/// The feed's address. `ARTCRAFT_LAUNCHER_FEED_URL` points at a staging server or a local copy
+/// The feed's address. `ORACLE_SUITE_FEED_URL` points at a staging server or a local copy
 /// (only `https://`, or plain `http://` on localhost).
 fn feed_url() -> String {
-    std::env::var("ARTCRAFT_LAUNCHER_FEED_URL")
+    std::env::var("ORACLE_SUITE_FEED_URL")
         .ok()
         .filter(|u| u.starts_with("https://") || is_loopback(u))
-        .unwrap_or_else(|| artcraft_launcher_core::feed::FEED_URL.to_string())
+        .unwrap_or_else(|| oracle_suite_core::feed::FEED_URL.to_string())
 }
 
 /// `http://<loopback host>:<port>` and an optional path: the host must be exactly 127.0.0.1,
@@ -849,7 +853,7 @@ fn is_loopback(url: &str) -> bool {
     matches!(host, "127.0.0.1" | "localhost" | "[::1]") && !port.is_empty() && port.parse::<u16>().is_ok()
 }
 
-/// `ARTCRAFT_LAUNCHER_DOWNLOAD_BASE`: a mirror on this machine (`cargo xtask local serve`) that
+/// `ORACLE_SUITE_DOWNLOAD_BASE`: a mirror on this machine (`cargo xtask local serve`) that
 /// serves `release_info.json` and the builds it lists. While it's set, releases come only from
 /// there (never GitHub or ArtCraft's API), and its download links are trusted. Loopback only, so
 /// nothing but the developer's own builds can be installed this way, and only in builds with the
@@ -858,21 +862,21 @@ fn local_mirror() -> Option<String> {
     if !cfg!(feature = "local-mirror") {
         return None;
     }
-    let base = std::env::var("ARTCRAFT_LAUNCHER_DOWNLOAD_BASE").ok()?;
+    let base = std::env::var("ORACLE_SUITE_DOWNLOAD_BASE").ok()?;
     let base = base.trim();
     if !is_loopback(base) || base.contains(['?', '#', '\\']) {
         log::warn!(
-            "ignoring ARTCRAFT_LAUNCHER_DOWNLOAD_BASE={base}: only http://127.0.0.1:<port>/, http://localhost:<port>/ or http://[::1]:<port>/"
+            "ignoring ORACLE_SUITE_DOWNLOAD_BASE={base}: only http://127.0.0.1:<port>/, http://localhost:<port>/ or http://[::1]:<port>/"
         );
         return None;
     }
     Some(if base.ends_with('/') { base.to_string() } else { format!("{base}/") })
 }
 
-/// The local mirror's feed: `ARTCRAFT_LAUNCHER_FEED_URL` if set, else `release_info.json` beside
+/// The local mirror's feed: `ORACLE_SUITE_FEED_URL` if set, else `release_info.json` beside
 /// the builds. Asked every check (it's on this machine), and never saved over ArtCraft's.
 fn local_feed(http: &Http, base: &str) -> Option<Feed> {
-    let url = std::env::var("ARTCRAFT_LAUNCHER_FEED_URL").ok().filter(|u| is_loopback(u)).unwrap_or_else(|| format!("{base}release_info.json"));
+    let url = std::env::var("ORACLE_SUITE_FEED_URL").ok().filter(|u| is_loopback(u)).unwrap_or_else(|| format!("{base}release_info.json"));
     match http.get_feed(&url) {
         Ok(body) => {
             let feed = Feed::parse(&body).map(|f| f.with_mirror(base));
@@ -934,7 +938,7 @@ impl NativeBackend {
     /// Starts fetching the pictures of an app's details page, unless they are already on their way.
     /// An app without a page, or a name that isn't an app, is ignored.
     fn fetch_screenshots(&self, app: &str) {
-        let Some(details) = artcraft_launcher_core::details::AppDetails::by_id(app) else { return };
+        let Some(details) = oracle_suite_core::details::AppDetails::by_id(app) else { return };
         if !self.shared.pictures_busy.lock().unwrap_or_else(PoisonError::into_inner).insert(details.id) {
             return;
         }
@@ -1044,9 +1048,9 @@ mod tests {
     use std::sync::atomic::AtomicUsize;
     use std::sync::mpsc;
 
-    use artcraft_launcher_core::InstallSource;
+    use oracle_suite_core::InstallSource;
 
-    use artcraft_launcher_core::protocol::LatestRelease;
+    use oracle_suite_core::protocol::LatestRelease;
 
     use super::*;
     use crate::source::Answer;
@@ -1154,7 +1158,7 @@ mod tests {
     fn feed() -> Feed {
         Feed::parse(
             r#"{"release_info": {"apps": {
-            "photocraft": {"repo": "storytold/photocraft", "latest_release": {"tag": "v0.6.0"}, "app_last_fetched": "2026-10-09T13:00:00Z"}
+            "oracle-edit": {"repo": "Marvingxx/oracle-edit", "latest_release": {"tag": "v0.6.0"}, "app_last_fetched": "2026-10-09T13:00:00Z"}
         }}}"#,
         )
         .unwrap()
@@ -1204,8 +1208,8 @@ mod tests {
 
     #[test]
     fn a_local_mirror_answers_for_every_app_on_its_own() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let word = CraftApp::by_id("wordcraft").unwrap();
+        let photo = CraftApp::by_id("oracle-edit").unwrap();
+        let word = CraftApp::by_id("oracle-vector").unwrap();
         let feed = feed().with_mirror("http://127.0.0.1:8787/");
         // Listed: found, even long after the sync.
         let (latest, _, _) = mirror_latest(photo, Some(&feed), NOW + 30 * 86_400);
@@ -1225,17 +1229,17 @@ mod tests {
     fn github_is_only_the_fallback_and_is_asked_rarely() {
         let github = CountingGitHub::default();
         let shared = shared();
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let word = CraftApp::by_id("wordcraft").unwrap();
+        let photo = CraftApp::by_id("oracle-edit").unwrap();
+        let word = CraftApp::by_id("oracle-vector").unwrap();
         let feed = feed();
 
-        // The feed vouches for PhotoCraft: GitHub isn't asked.
+        // The feed vouches for Oracle Edit: GitHub isn't asked.
         let (latest, _, used) = latest_for(photo, Some(&feed), LOADED, &github, &shared, false, false, NOW);
         assert!(matches!(latest, Some(LatestRelease::Found(ref r)) if r.tag == "v0.6.0"));
         assert_eq!(used, Some(Source::Feed));
         assert_eq!(github.0.load(Ordering::SeqCst), 0);
 
-        // The feed doesn't list WordCraft: GitHub is asked once…
+        // The feed doesn't list Oracle Vector: GitHub is asked once…
         let (_, _, used) = latest_for(word, Some(&feed), LOADED, &github, &shared, false, false, NOW);
         assert_eq!(used, Some(Source::GitHubApi));
         assert_eq!(github.0.load(Ordering::SeqCst), 1);
@@ -1260,9 +1264,9 @@ mod tests {
         assert_eq!(used, Some(Source::GitHubApi));
     }
 
-    const APP: &str = "photocraft";
+    const APP: &str = "oracle-edit";
 
-    /// A PhotoCraft release with one file per platform and format, so whichever this machine
+    /// A Oracle Edit release with one file per platform and format, so whichever this machine
     /// installs is there.
     fn release(version: &str) -> Release {
         let suffixes = ["-portable.zip", ".tar.gz", ".msi", ".dmg", ".AppImage", ".deb", ".rpm", ".flatpak"];
@@ -1295,15 +1299,15 @@ mod tests {
         assert_eq!(planned_asset(app, &release, platform, &portable_options, None, None).unwrap().1, PackageKind::PortableZip);
         let msi = Installed {
             version: None,
-            source: artcraft_launcher_core::InstallSource::Msi,
-            location: r"C:\Apps\PhotoCraft\photocraft.exe".into(),
+            source: oracle_suite_core::InstallSource::Msi,
+            location: r"C:\Apps\Oracle Edit\oracle-edit.exe".into(),
             package: None,
         };
         assert_eq!(planned_asset(app, &release, platform, &portable_options, Some(&msi), None).unwrap().1, PackageKind::Msi);
         let launcher = Installed {
             version: None,
-            source: artcraft_launcher_core::InstallSource::Launcher,
-            location: r"D:\Craft Apps\PhotoCraft\photocraft.exe".into(),
+            source: oracle_suite_core::InstallSource::Launcher,
+            location: r"D:\Oracle apps\Oracle Edit\oracle-edit.exe".into(),
             package: None,
         };
         let record = crate::manifest::Record {
@@ -1329,7 +1333,7 @@ mod tests {
         let platform = Platform { os: Os::Linux, arch: Arch::X64 };
         let options = BackendOptions {
             kinds: vec![PackageKind::Deb],
-            install_locations: artcraft_launcher_core::protocol::InstallLocations { root: Some("/custom/apps".into()), ..Default::default() },
+            install_locations: oracle_suite_core::protocol::InstallLocations { root: Some("/custom/apps".into()), ..Default::default() },
             ..Default::default()
         };
         let mut release = release("0.5.0");
@@ -1337,7 +1341,7 @@ mod tests {
         release.assets.retain(|a| !a.name.ends_with(".AppImage"));
         assert!(planned_asset(app, &release, platform, &options, None, None).is_none());
         let existing =
-            Installed { version: None, source: artcraft_launcher_core::InstallSource::Deb, location: "/usr/bin/photocraft".into(), package: None };
+            Installed { version: None, source: oracle_suite_core::InstallSource::Deb, location: "/usr/bin/oracle-edit".into(), package: None };
         let system = BackendOptions { kinds: options.kinds.clone(), ..Default::default() };
         assert_eq!(
             planned_asset(app, &release, platform, &options, Some(&existing), None),
@@ -1479,20 +1483,20 @@ mod tests {
     #[test]
     fn the_launcher_gives_up_waiting_and_names_the_busy_apps() {
         let jobs = Mutex::new(HashMap::new());
-        for id in [LAUNCHER_ID, "photocraft"] {
+        for id in [LAUNCHER_ID, "oracle-edit"] {
             jobs.lock().unwrap().insert(id.to_string(), Arc::new(Stop::default()));
         }
         let restarting = AtomicBool::new(false);
         let error = claim_restart(&jobs, &restarting, &Stop::default(), Duration::from_millis(300), &mut || {}).unwrap_err();
-        assert!(error.contains("PhotoCraft was still installing") && error.contains("cancel it"), "{error}");
+        assert!(error.contains("Oracle Edit was still installing") && error.contains("cancel it"), "{error}");
         assert!(!restarting.load(Ordering::SeqCst));
-        assert!(restart_blocked(vec!["WordCraft", "FilmCraft"]).contains("FilmCraft, WordCraft were still installing"));
+        assert!(restart_blocked(vec!["Oracle Edit", "Oracle Vector"]).contains("Oracle Edit, Oracle Vector were still installing"));
     }
 
     #[test]
     fn the_launcher_restarts_only_once_every_other_job_has_ended() {
         let jobs = Mutex::new(HashMap::new());
-        for id in [LAUNCHER_ID, "photocraft", "filmcraft"] {
+        for id in [LAUNCHER_ID, "oracle-edit", "oracle-vector"] {
             jobs.lock().unwrap().insert(id.to_string(), Arc::new(Stop::default()));
         }
         let restarting = AtomicBool::new(false);
@@ -1503,10 +1507,10 @@ mod tests {
             let claim = scope.spawn(move || claim_restart(jobs, restarting, stop, RESTART_WAIT, &mut || waiting.send(()).unwrap()));
             waits.recv().unwrap();
             // One install ends; another is still running or queued.
-            jobs.lock().unwrap().remove("photocraft");
+            jobs.lock().unwrap().remove("oracle-edit");
             std::thread::sleep(Duration::from_millis(250));
             assert!(!claim.is_finished() && !restarting.load(Ordering::SeqCst));
-            jobs.lock().unwrap().remove("filmcraft");
+            jobs.lock().unwrap().remove("oracle-vector");
             assert_eq!(claim.join().unwrap(), Ok(()));
         });
         assert!(restarting.load(Ordering::SeqCst));
@@ -1521,7 +1525,7 @@ mod tests {
     #[test]
     fn a_cancelled_launcher_update_stops_waiting_and_claims_nothing() {
         let jobs =
-            Mutex::new(HashMap::from([(LAUNCHER_ID.to_string(), Arc::new(Stop::default())), ("photocraft".to_string(), Arc::new(Stop::default()))]));
+            Mutex::new(HashMap::from([(LAUNCHER_ID.to_string(), Arc::new(Stop::default())), ("oracle-edit".to_string(), Arc::new(Stop::default()))]));
         let restarting = AtomicBool::new(false);
         let stop = Stop::default();
         let (waiting, waits) = mpsc::channel();

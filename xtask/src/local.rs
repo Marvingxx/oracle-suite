@@ -1,4 +1,4 @@
-//! `cargo xtask local`: install the Craft apps from builds on this machine instead of GitHub.
+//! `cargo xtask local`: install the Oracle apps from builds on this machine instead of GitHub.
 //!
 //! - `sync` pulls every app's checkout (the sibling folders of this repo), builds and packages the
 //!   ones whose version isn't in the mirror yet, and files the results under
@@ -6,7 +6,7 @@
 //! - `serve` serves the mirror on 127.0.0.1 and answers `release_info.json` with a feed (the same
 //!   shape as ArtCraft's) written fresh from whatever is in the mirror at that moment.
 //!
-//! Run the launcher with `ARTCRAFT_LAUNCHER_DOWNLOAD_BASE=http://127.0.0.1:<port>/` and it installs
+//! Run the launcher with `ORACLE_SUITE_DOWNLOAD_BASE=http://127.0.0.1:<port>/` and it installs
 //! and updates from the mirror alone.
 
 use std::collections::BTreeMap;
@@ -17,7 +17,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-/// Every Craft App: (id = folder name, display name). Keep in step with `catalog::SUITE`.
+/// Every Oracle app: (id = folder name, display name). Keep in step with `catalog::SUITE`.
 const APPS: &[(&str, &str)] = &[
     ("photocraft", "PhotoCraft"),
     ("vectorcraft", "VectorCraft"),
@@ -64,7 +64,7 @@ commands:
   status [--root <dir>] [--mirror <dir>]
                   each app's checked-out version and commit next to what's mirrored
 
-then: ARTCRAFT_LAUNCHER_DOWNLOAD_BASE=http://127.0.0.1:8787/ cargo run -p artcraft-launcher --features local-mirror
+then: ORACLE_SUITE_DOWNLOAD_BASE=http://127.0.0.1:8787/ cargo run -p oracle-suite --features local-mirror
 ";
 
 #[derive(Clone)]
@@ -554,7 +554,7 @@ fn serve(o: &Opts) -> Result<(), String> {
     let base = format!("http://127.0.0.1:{}/", o.port);
     println!("serving {} at {base}", o.mirror.display());
     println!("feed:    {base}release_info.json");
-    println!("launch:  ARTCRAFT_LAUNCHER_DOWNLOAD_BASE={base} cargo run -p artcraft-launcher --features local-mirror");
+    println!("launch:  ORACLE_SUITE_DOWNLOAD_BASE={base} cargo run -p oracle-suite --features local-mirror");
     if let Some(every) = o.sync_every {
         // Syncs run one after another on their own thread, so a long build never holds up a
         // download; a version only joins the feed once its build is complete.

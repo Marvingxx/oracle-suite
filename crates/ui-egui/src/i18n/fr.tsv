@@ -1,4 +1,4 @@
-# French (fr) catalog for ArtCraft Launcher.
+# French (fr) catalog for Oracle Suite.
 # Format: context<TAB>source<TAB>translation
 # Empty context = plain UI string (tl!, t).
 # @id = command-id keyed (tr_id).
@@ -6,19 +6,19 @@
 # @msg = status/error message template (message, msg).
 # Other context = disambiguation for tr_ctx.
 #
-# Clean-room: written from the meaning of ArtCraft Launcher's English labels, in neutral
+# Clean-room: written from the meaning of Oracle Suite's English labels, in neutral
 # international French (the interface addresses the user as "vous").
 #
 # Coverage: the whole interface: every menu string and tl! literal (complete_menus = true).
-# Left in English on purpose: product name "ArtCraft Launcher" (and its "Launcher" tag), suite
-# name "Craft App Suite", app names (PhotoCraft, LightCraft, FilmCraft, DesignCraft, VectorCraft,
+# Left in English on purpose: product name "Oracle Suite" (and its "Launcher" tag), suite
+# name "Oracle Suite", app names (Oracle Edit, LightCraft, FilmCraft, DesignCraft, Oracle Vector,
 # PdfCraft, EffectCraft, WordCraft, DeckCraft, GridCraft, CADCraft, SoundCraft, FigCraft), "GitHub",
 # "Discord".
 # Trailing "…" (U+2026) must be preserved. Placeholders {name}, {n}, {version}, {count}, {v},
 # {what}, {unit}, {real}, {e} must appear in translation.
 
 	Launcher	Launcher
-	Craft App Suite	Craft App Suite
+	Oracle Suite	Oracle Suite
 	Open Source Tools for Creatives, Makers, and Builders	Des outils open source pour les créatifs, les makers et les bâtisseurs
 	Settings	Réglages
 	Check for updates	Rechercher des mises à jour
@@ -71,7 +71,7 @@
 	Reinstall	Réinstaller
 	Uninstall…	Désinstaller…
 	All releases	Toutes les versions
-	ArtCraft Launcher {version} is available.	ArtCraft Launcher {version} est disponible.
+	Oracle Suite {version} is available.	Oracle Suite {version} est disponible.
 	Dismiss	Ignorer
 	Update and restart	Mettre à jour et redémarrer
 	A new version is available. Would you like to relaunch with the updated version?	Une nouvelle version est disponible. Redémarrer avec la nouvelle version ?
@@ -82,7 +82,7 @@
 	Released {date}	Publiée le {date}
 	Open on GitHub	Ouvrir sur GitHub
 	Close	Fermer
-	ArtCraft Launcher {version}	ArtCraft Launcher {version}
+	Oracle Suite {version}	Oracle Suite {version}
 	Only when I ask	Seulement à ma demande
 	Automatically download and install updates	Télécharger et installer les mises à jour automatiquement
 	Notify me when an installed app has an update	Me prévenir quand une application installée a une mise à jour
@@ -95,11 +95,11 @@
 	Running in the background	Exécution en arrière-plan
 	Keep running in the tray when the window is closed	Rester actif dans la zone de notification à la fermeture de la fenêtre
 	Show the window on the current desktop	Afficher la fenêtre sur le bureau actuel
-	Start ArtCraft Launcher when I log in	Lancer ArtCraft Launcher à l'ouverture de session
+	Start Oracle Suite when I log in	Lancer Oracle Suite à l'ouverture de session
 	Community	Communauté
 	Questions, ideas and news from the ArtCraft team	Questions, idées et actualités de l'équipe ArtCraft
 	Appearance	Apparence
-	Quit ArtCraft Launcher	Quitter ArtCraft Launcher
+	Quit Oracle Suite	Quitter Oracle Suite
 	Done	Terminé
 	Uninstall {name}?	Désinstaller {name} ?
 	The app will be moved to the Trash. Your documents and settings stay.	L'application sera placée dans la Corbeille. Vos documents et réglages sont conservés.
@@ -114,7 +114,7 @@
 	{month} {day}, {year}	{day} {month} {year}
 
 	Automatically	Automatiquement
-	Every Craft app	Toutes les applications Craft
+	Every Oracle app	Toutes les applications Oracle
 	Apps on this computer	Applications sur cet ordinateur
 	Installed apps with a newer version	Applications installées avec une version plus récente
 	Apps you can install	Applications que vous pouvez installer
@@ -134,7 +134,7 @@
 	Open link	Ouvrir le lien
 	Update	Mettre à jour
 	{name} icon	Icône de {name}
-	Loading ArtCraft Launcher…	Chargement d'ArtCraft Launcher…
+	Loading Oracle Suite…	Chargement d'Oracle Suite…
 	Cancel update	Annuler la mise à jour
 	Stop waiting; the update can be started again later	Ne plus attendre ; la mise à jour pourra être relancée plus tard
 	Download again	Télécharger à nouveau
@@ -159,19 +159,11 @@
 	Tarball (.tar.gz)	Archive (.tar.gz)
 
 # Contextual: each app's tagline, keyed by app id
-photocraft	Image editing	Retouche d'images
-vectorcraft	Vector illustration	Illustration vectorielle
-filmcraft	Video editing, color and sound	Montage vidéo, étalonnage et son
-lightcraft	Photo library and raw development	Photothèque et développement RAW
-pdfcraft	Reading, organizing and protecting PDFs	Lecture, organisation et protection de PDF
-effectcraft	Motion graphics and visual effects	Motion design et effets visuels
-designcraft	Page layout and publishing	Mise en page et édition
-wordcraft	Writing and document design	Rédaction et mise en forme de documents
-deckcraft	Presentations and slide shows	Présentations et diaporamas
-gridcraft	Spreadsheets and data	Tableurs et données
-cadcraft	Computer-aided design and drafting	Conception et dessin assistés par ordinateur
-soundcraft	Recording, editing and mixing audio	Enregistrement, édition et mixage audio
-figcraft	Interface design and prototyping	Design d'interfaces et prototypage
+oracle-edit	Image editing	Retouche d'images
+oracle-vector	Vector illustration	Illustration vectorielle
+oracle-brand-kit	Brand identity and client deliveries	Identité de marque et livrables
+oracle-mockup-studio	2D mockups	Mockups 2D
+oracle-guide	Brand guidelines and page layout	Chartes graphiques et mise en page
 
 # Contextual: month abbreviations for date rendering
 month	Jan	janv.
@@ -213,7 +205,6 @@ month	Dec	déc.
 	Version {version} installed	Version {version} installée
 	Version {latest}	Version {latest}
 	No release published yet	Aucune version publiée pour l'instant
-	ArtCraft Launcher	ArtCraft Launcher
 	App	Application
 	Latest	Dernière
 	Released	Publiée
@@ -247,7 +238,7 @@ month	Dec	déc.
 	Full changelog	Journal des modifications complet
 	link	lien
 	No apps match	Aucune application ne correspond
-	Open ArtCraft Launcher to update.	Ouvrez ArtCraft Launcher pour mettre à jour.
+	Open Oracle Suite to update.	Ouvrez Oracle Suite pour mettre à jour.
 	{name} {v} is available	{name} {v} est disponible
 	{count} updates are available	{count} mises à jour sont disponibles
 	These notes weren't fetched (GitHub's request limit was reached). They're on the release page.	Ces notes n'ont pas pu être récupérées (la limite de requêtes de GitHub a été atteinte). Elles sont sur la page de la version.
@@ -302,7 +293,7 @@ filter	Installed	Installées
 @id	launcher.notes	Nouveautés
 @id	launcher.dismiss	Ignorer
 @id	settings.open	Réglages
-@id	settings.quit	Quitter ArtCraft Launcher
+@id	settings.quit	Quitter Oracle Suite
 @id	view.grid	Grille
 @id	view.table	Tableau
 @id	filter.all	Toutes
@@ -326,11 +317,11 @@ filter	Installed	Installées
 @id	linux.preferred_kind	Installer les nouvelles applications en tant que
 @id	tray.close_to_tray	Rester actif dans la zone de notification à la fermeture de la fenêtre
 @id	tray.show_on_current_desktop	Afficher la fenêtre sur le bureau actuel
-@id	tray.login_item	Lancer ArtCraft Launcher à l'ouverture de session
+@id	tray.login_item	Lancer Oracle Suite à l'ouverture de session
 @id	appearance.theme	Apparence
 
 # Tray (menu bar) menu and tooltip
-	Show ArtCraft Launcher	Afficher ArtCraft Launcher
+	Show Oracle Suite	Afficher Oracle Suite
 	Check for Updates	Rechercher des mises à jour
 	Visit getartcraft.com	Visiter getartcraft.com
 	ArtCraft on GitHub	ArtCraft sur GitHub
@@ -348,7 +339,7 @@ filter	Installed	Installées
 	Next picture (→)	Image suivante (→)
 	Loading pictures…	Chargement des images…
 	Pictures couldn't be loaded. Reopen this page to try again.	Impossible de charger les images. Rouvrir la page permet de réessayer.
-@plural	ArtCraft Launcher · {n} update available|ArtCraft Launcher · {n} updates available	ArtCraft Launcher · {n} mise à jour disponible|ArtCraft Launcher · {n} mises à jour disponibles
+@plural	Oracle Suite · {n} update available|Oracle Suite · {n} updates available	Oracle Suite · {n} mise à jour disponible|Oracle Suite · {n} mises à jour disponibles
 	Install folder	Dossier d’installation
 	Default install folder	Dossier d’installation par défaut
 	System default	Par défaut du système
@@ -361,7 +352,7 @@ filter	Installed	Installées
 @msg	couldn't use install folder {path}: {reason}	impossible d’utiliser le dossier d’installation {path} : {reason}
 @msg	this release has no AppImage for a custom install folder	cette version ne propose pas d’AppImage pour un dossier d’installation personnalisé
 @msg	custom install folders aren't supported on this system	les dossiers d’installation personnalisés ne sont pas pris en charge sur ce système
-@msg	{path} already exists and wasn't installed by ArtCraft Launcher	{path} existe déjà et n’a pas été installé par ArtCraft Launcher
+@msg	{path} already exists and wasn't installed by Oracle Suite	{path} existe déjà et n’a pas été installé par Oracle Suite
 @msg	couldn't move {path} to Trash ({reason}). Remove it in Finder instead.	impossible de déplacer {path} vers la Corbeille ({reason}). Supprimez-le dans le Finder.
 	Apps are placed inside this folder.	Les applications sont placées dans ce dossier.
 	Replace what's there?	Remplacer l’existant ?
@@ -376,3 +367,55 @@ filter	Installed	Installées
 	Show {n} more changes	Afficher {n} modifications de plus
 	Last updated: {date}	Dernière mise à jour : {date}
 column	Version	Version
+# Details pages (Oracle Edit, Oracle Vector), keyed by app id.
+oracle-edit	The image editor you already know how to use.	L'éditeur d'images que vous savez déjà utiliser.
+oracle-edit	Layers, masks, adjustment layers, layer styles, type, vectors and brushes in a native app written in Rust. Open source, offline, and yours.	Calques, masques, calques de réglage, styles de calque, texte, vecteurs et pinceaux dans une application native écrite en Rust. Open source, hors ligne, et à vous.
+oracle-edit	Oracle Edit keeps the menus, shortcuts and panels your hands already know, so there is nothing to relearn.	Oracle Edit garde les menus, raccourcis et panneaux que vos mains connaissent déjà : rien à réapprendre.
+oracle-edit	Native GPU canvas	Canevas GPU natif
+oracle-edit	No Electron and no web view: a fast native compositor.	Ni Electron ni vue web : un compositeur natif rapide.
+oracle-edit	Real layered files	De vrais fichiers à calques
+oracle-edit	Opens and saves layered PSD and PSB documents.	Ouvre et enregistre des documents PSD et PSB avec leurs calques.
+oracle-edit	Non-destructive editing	Retouche non destructive
+oracle-edit	Adjustment layers, live-preview filters, smart objects and layer styles.	Calques de réglage, filtres avec aperçu en direct, objets dynamiques et styles de calque.
+oracle-edit	On-device selection	Sélection sur l'appareil
+oracle-edit	Subject and object selection and mask refinement run locally.	La sélection du sujet et des objets et l'affinage des masques s'exécutent en local.
+oracle-edit	Serious color	Une vraie gestion des couleurs
+oracle-edit	8-, 16- and 32-bit RGB, CMYK, Lab and Grayscale, with ICC color management and soft proofing.	RVB, CMJN, Lab et niveaux de gris en 8, 16 et 32 bits, avec gestion des couleurs ICC et épreuvage à l'écran.
+oracle-vector	Vector illustration, reimagined in pure Rust.	L'illustration vectorielle, réinventée en pur Rust.
+oracle-vector	A native vector illustration app with the pen, panels and shortcuts illustrators expect. Open source, and it also runs in a browser.	Une application native d'illustration vectorielle, avec la plume, les panneaux et les raccourcis qu'attendent les illustrateurs. Open source, et elle fonctionne aussi dans un navigateur.
+oracle-vector	The workflow you know	Le flux de travail que vous connaissez
+oracle-vector	Pen, direct selection, shape booleans, snapping guides and an appearance panel, laid out the way you expect.	Plume, sélection directe, opérations booléennes, repères magnétiques et panneau Aspect, disposés comme vous vous y attendez.
+oracle-vector	Genuinely fast	Vraiment rapide
+oracle-vector	Drawings with thousands of shapes stay responsive on a retina display.	Les dessins de milliers de formes restent fluides sur un écran haute densité.
+oracle-vector	Booleans that don't fail	Des booléens qui n'échouent jamais
+oracle-vector	Shape booleans work on the exact curves, so there is no "cannot perform operation", and undo is unlimited.	Les opérations booléennes travaillent sur les courbes exactes : jamais de « impossible d'effectuer l'opération », et des annulations illimitées.
+oracle-vector	Live, editable effects	Des effets dynamiques et modifiables
+oracle-vector	Blends, envelope distort, gradient mesh, repeats, glows and drop shadows all stay editable.	Dégradés de formes, distorsions d'enveloppe, filets de dégradé, répétitions, lueurs et ombres portées restent tous modifiables.
+oracle-vector	Image tracing	Vectorisation d'images
+oracle-vector	Turn raster images into clean vector paths, with presets for the common cases.	Transformez des images matricielles en tracés vectoriels propres, avec des préréglages pour les cas courants.
+oracle-vector	Open formats	Des formats ouverts
+oracle-vector	Native JSON documents, SVG and PDF import and export, and PNG, JPEG and WebP output.	Documents JSON natifs, import et export SVG et PDF, et sortie PNG, JPEG et WebP.
+oracle-brand-kit	Your brand's source of truth, and the files your client receives.	La source de vérité de votre marque, et les fichiers que reçoit votre client.
+oracle-brand-kit	Logos sorted by role, palette, typefaces and rules, then every delivery file made from your masters in one click: SVG, PDF, PNG, WebP and JPEG, with a README and a manifest. Local, no account, no AI.	Logos rangés par rôle, palette, typographies et règles, puis tous les fichiers à livrer produits depuis vos fichiers maîtres en un clic : SVG, PDF, PNG, WebP et JPEG, avec un README et un manifeste. En local, sans compte, sans IA.
+oracle-brand-kit	Masters never touched	Fichiers maîtres jamais modifiés
+oracle-brand-kit	Exports are made from your files and recorded with their hash; delivered folders are never rewritten.	Les exports partent de vos fichiers et notent leur empreinte ; un dossier livré n'est jamais réécrit.
+oracle-brand-kit	Export presets	Préréglages d'export
+oracle-brand-kit	Web, avatar, favicon, print at 300 dpi: sizes, margins, backgrounds and names you control.	Web, avatar, favicon, impression 300 dpi : tailles, marges, fonds et noms à votre main.
+oracle-brand-kit	Change detection	Détection des changements
+oracle-brand-kit	A modified logo is spotted, and only what you choose is made again.	Un logo modifié est repéré, et seul ce que vous choisissez est refait.
+oracle-mockup-studio	Your logos on real photos, in two dimensions.	Vos logos sur de vraies photos, en deux dimensions.
+oracle-mockup-studio	Four corners, masks, a foreground and overlays prepared once per template; then your Brand Kit logos land on them, sharp, in one render. No AI, no 3D.	Quatre coins, des masques, un premier plan et des surcouches préparés une fois par modèle ; vos logos du Brand Kit s'y posent, nets, en un rendu. Sans IA, sans 3D.
+oracle-mockup-studio	Linked to the Brand Kit	Lié au Brand Kit
+oracle-mockup-studio	Change a logo and the scenes that use it say so; render again with nothing to place again.	Changez un logo : les scènes qui l'utilisent le signalent, et un nouveau rendu suffit, sans rien replacer.
+oracle-mockup-studio	Real perspective	Une vraie perspective
+oracle-mockup-studio	A true four-corner perspective, with masks and objects that stay in front.	Une perspective exacte sur quatre coins, avec des masques et des objets qui restent devant.
+oracle-mockup-studio	PNG, JPEG, WebP	PNG, JPEG, WebP
+oracle-mockup-studio	At the photo's size or any width, one scene or a batch.	À la taille de la photo ou à la largeur voulue, une scène ou un lot.
+oracle-guide	Brand guidelines that follow your brand.	Des chartes graphiques qui suivent votre marque.
+oracle-guide	A page-layout app forked from DesignCraft, with master pages, styles and PDF export, whose colours, type, logos and mockups stay linked to your Brand Kit.	Une application de mise en page issue de DesignCraft, avec gabarits, styles et export PDF, dont les couleurs, typographies, logos et mockups restent liés à votre Brand Kit.
+oracle-guide	Linked blocks	Des blocs liés
+oracle-guide	Colour values, typefaces, rules, logos and mockups update when you ask, with a preview of every change.	Valeurs de couleur, typographies, règles, logos et mockups se mettent à jour quand vous le demandez, avec l'aperçu de chaque changement.
+oracle-guide	Your own templates	Vos propres modèles
+oracle-guide	Reuse a guide for another brand: logos by role, colours by position.	Réutilisez une charte pour une autre marque : logos par rôle, couleurs par position.
+oracle-guide	PDF export	Export PDF
+oracle-guide	Bleed, crop marks and embedded fonts.	Fonds perdus, traits de coupe et polices incorporées.

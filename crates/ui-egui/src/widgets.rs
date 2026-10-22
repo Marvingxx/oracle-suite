@@ -85,7 +85,7 @@ pub fn eyebrow(ui: &mut Ui, index: &str, label: &str) {
 pub fn tag(ui: &mut Ui, text: &str, fill: Color32, ink: Color32) -> Response {
     let galley = caps(ui, text, theme::HUD_SIZE, theme::mono_bold(), theme::HUD_SPACING, ink);
     let (rect, resp) = ui.allocate_exact_size(galley.size() + vec2(16.0, 8.0), Sense::hover());
-    ui.painter().rect_filled(rect, CornerRadius::ZERO, fill);
+    ui.painter().rect_filled(rect, crate::theme::RADIUS_SM, fill);
     paint_centred(ui, rect, galley, ink);
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Label, true, text));
     resp
@@ -279,7 +279,7 @@ pub fn badge(ui: &mut Ui, text: &str, color: Color32) -> Response {
     let t = Tokens::get(ui.ctx());
     let galley = caps(ui, text, 10.0, theme::mono(), 1.0, color);
     let (rect, resp) = ui.allocate_exact_size(vec2(galley.size().x + 12.0, 20.0), Sense::hover());
-    ui.painter().rect(rect, CornerRadius::ZERO, t.sunken, t.hairline(), egui::StrokeKind::Inside);
+    ui.painter().rect(rect, crate::theme::RADIUS_SM, t.sunken, t.hairline(), egui::StrokeKind::Inside);
     paint_centred(ui, rect, galley, color);
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Label, true, text));
     resp
@@ -318,7 +318,7 @@ pub fn button(ui: &mut Ui, text: &str, kind: Kind, width: f32) -> Response {
     };
     // Disabled: the whole button at half strength, like the site's `opacity-50`.
     let fade = |c: Color32| if enabled { c } else { c.gamma_multiply(0.5) };
-    ui.painter().rect(rect, CornerRadius::ZERO, fade(fill), Stroke::new(stroke.width, fade(stroke.color)), egui::StrokeKind::Inside);
+    ui.painter().rect(rect, crate::theme::RADIUS, fade(fill), Stroke::new(stroke.width, fade(stroke.color)), egui::StrokeKind::Inside);
     paint_centred(ui, rect, galley, fade(color));
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, enabled, text));
     if enabled { resp.on_hover_cursor(egui::CursorIcon::PointingHand) } else { resp }
@@ -489,16 +489,6 @@ pub fn more_menu<R>(ui: &mut Ui, add_contents: impl FnOnce(&mut Ui) -> R) {
     });
 }
 
-/// ArtCraft's social accounts as a row of small monochrome icons (faint, brighter on hover).
-/// In a right-to-left layout they still read left to right.
-pub fn social_icons(ui: &mut Ui, size: f32) {
-    let links: Vec<IconLink> = artcraft_launcher_core::catalog::SOCIAL
-        .iter()
-        .map(|(name, url)| IconLink { name, label: (*name).to_string(), tip: crate::i18n::fmt(tl!("ArtCraft on {name}"), &[("name", name)]), url })
-        .collect();
-    icon_links(ui, size, &links);
-}
-
 /// One logo that opens a page: `name` picks the picture, `label` is what a screen reader says,
 /// `tip` is the hover text.
 pub struct IconLink<'a> {
@@ -506,12 +496,6 @@ pub struct IconLink<'a> {
     pub label: String,
     pub tip: String,
     pub url: &'a str,
-}
-
-/// The width [`icon_links`] takes for `count` logos `size` wide.
-pub fn icon_links_width(count: usize, size: f32) -> f32 {
-    let n = count as f32;
-    n * (size + 2.0 * crate::theme::ICON_LINK_PAD) + (n - 1.0).max(0.0) * crate::theme::ICON_LINK_GAP
 }
 
 /// A row of logo links, given in reading order; each is `size` wide, spaced by the theme's
@@ -545,12 +529,12 @@ fn icon_link(ui: &mut Ui, size: f32, link: &IconLink<'_>) {
 }
 
 /// An app's name as the site sets it: Archivo, with "Craft" in the app's colour.
-pub fn wordmark(ui: &mut Ui, app: &artcraft_launcher_core::CraftApp, size: f32) -> Response {
+pub fn wordmark(ui: &mut Ui, app: &oracle_suite_core::CraftApp, size: f32) -> Response {
     wordmark_in(ui, app, size, true)
 }
 
 /// [`wordmark`], with "Craft" in the app's colour or, when `in_colour` is false, in grey.
-pub fn wordmark_in(ui: &mut Ui, app: &artcraft_launcher_core::CraftApp, size: f32, in_colour: bool) -> Response {
+pub fn wordmark_in(ui: &mut Ui, app: &oracle_suite_core::CraftApp, size: f32, in_colour: bool) -> Response {
     let t = Tokens::get(ui.ctx());
     let (prefix, craft) = app.name.strip_suffix("Craft").map_or((app.name, ""), |p| (p, "Craft"));
     let mut job = egui::text::LayoutJob::default();

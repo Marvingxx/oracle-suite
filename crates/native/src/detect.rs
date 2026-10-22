@@ -1,7 +1,7 @@
-//! Finding Craft Apps that are already installed, however they got there.
+//! Finding Oracle apps that are already installed, however they got there.
 //!
 //! - macOS: `<App>.app` in `/Applications` or `~/Applications`, read from its `Info.plist`.
-//! - Windows: the Windows Installer's uninstall entries (`Learning Machines LLC`), and portable
+//! - Windows: the Windows Installer's uninstall entries (`Oracle`), and portable
 //!   copies the launcher unpacked.
 //! - Linux: AppImages in `~/Applications` (where the launcher and AppImageLauncher put them),
 //!   `~/AppImages` (Gear Lever) and `~/.local/bin`, Debian/RPM packages, Flatpaks, and tarball
@@ -10,7 +10,7 @@
 
 use std::path::{Path, PathBuf};
 
-use artcraft_launcher_core::{CraftApp, InstallSource, Installed, version};
+use oracle_suite_core::{CraftApp, InstallSource, Installed, version};
 
 use crate::manifest::Manifest;
 
@@ -59,7 +59,7 @@ fn from_manifest(app: &CraftApp, manifest: &Manifest) -> Option<Installed> {
     }
     // On macOS the bundle itself is the truth (the app may have updated itself).
     #[cfg(target_os = "macos")]
-    if rec.kind == artcraft_launcher_core::PackageKind::Dmg {
+    if rec.kind == oracle_suite_core::PackageKind::Dmg {
         return macos::read_bundle(app, &rec.path);
     }
     Some(Installed {
@@ -84,13 +84,13 @@ pub(crate) fn appimage_version(name: &str, stems: &[&str]) -> Option<Option<Stri
     if stems.iter().any(|s| base.eq_ignore_ascii_case(s)) {
         return Some(None);
     }
-    let parsed = artcraft_launcher_core::platform::parse_asset_name(&format!("{base}.AppImage"), stems)?;
-    (parsed.kind == artcraft_launcher_core::PackageKind::AppImage && parsed.token.starts_with("linux-")).then_some(Some(parsed.version))
+    let parsed = oracle_suite_core::platform::parse_asset_name(&format!("{base}.AppImage"), stems)?;
+    (parsed.kind == oracle_suite_core::PackageKind::AppImage && parsed.token.starts_with("linux-")).then_some(Some(parsed.version))
 }
 
 /// Who our Windows Installer packages name as their publisher.
 #[cfg_attr(not(windows), allow(dead_code))]
-const PUBLISHER: &str = "Learning Machines LLC";
+const PUBLISHER: &str = "Oracle";
 
 /// Whether an uninstall entry's `DisplayName` and `Publisher` are `app`'s, under any name its
 /// installers have registered.
@@ -186,7 +186,7 @@ pub mod windows {
 
     /// Reads VERSIONINFO without executing the downloaded application. The path is data in
     /// a child-only environment variable, never interpolated into PowerShell source.
-    pub fn executable_version(path: &std::path::Path) -> Option<artcraft_launcher_core::version::Version> {
+    pub fn executable_version(path: &std::path::Path) -> Option<oracle_suite_core::version::Version> {
         let path = std::fs::canonicalize(path).ok()?;
         let mut command = crate::process::command("powershell.exe");
         command.args([
@@ -200,7 +200,7 @@ pub mod windows {
     /// An MSI install found in the registry.
     pub struct MsiInstall {
         pub product_code: String,
-        pub version: Option<artcraft_launcher_core::version::Version>,
+        pub version: Option<oracle_suite_core::version::Version>,
         pub exe: Option<PathBuf>,
     }
 
@@ -284,11 +284,11 @@ pub mod linux {
     use crate::packages::{self, Package};
     use crate::process::capture;
 
-    /// Installed Craft App packages from every package manager on this system (dpkg, rpm,
+    /// Installed Oracle app packages from every package manager on this system (dpkg, rpm,
     /// pacman, Flatpak). Read once per detection pass.
     pub fn packages() -> Vec<Package> {
         let ours = |name: &str| {
-            artcraft_launcher_core::SUITE.iter().any(|a| {
+            oracle_suite_core::SUITE.iter().any(|a| {
                 [InstallSource::Deb, InstallSource::Rpm, InstallSource::Pacman, InstallSource::Flatpak]
                     .iter()
                     .any(|m| crate::packages::candidate_names(a, *m).iter().any(|n| n == name))
@@ -316,7 +316,7 @@ pub mod linux {
         if let Some(list) = crate::process::capture_flatpak(&["list", "--app", &arch, "--columns=application,version"], t) {
             let mut flatpaks = packages::parse_flatpak_list(&list);
             // Bundles built from a release tarball often list no version: ask Flatpak directly.
-            for (id, version) in flatpaks.iter_mut().filter(|(id, v)| v.is_empty() && id.starts_with("ai.storyteller.")) {
+            for (id, version) in flatpaks.iter_mut().filter(|(id, v)| v.is_empty() && id.starts_with("app.oracle.")) {
                 if let Some(v) = crate::process::capture_flatpak(&["info", &arch, id], t).as_deref().and_then(packages::parse_flatpak_info) {
                     *version = v;
                 }
@@ -456,14 +456,14 @@ mod linux_tests {
     #[test]
     fn ours_filter_matches_rpm_packages() {
         let ours = |name: &str| {
-            artcraft_launcher_core::SUITE.iter().any(|a| {
+            oracle_suite_core::SUITE.iter().any(|a| {
                 [InstallSource::Deb, InstallSource::Rpm, InstallSource::Pacman, InstallSource::Flatpak]
                     .iter()
                     .any(|m| crate::packages::candidate_names(a, *m).iter().any(|n| n == name))
             })
         };
         assert!(ours("photocraft"));
-        assert!(ours("ai.storyteller.photocraft"));
+        assert!(ours("app.oracle.photocraft"));
         assert!(!ours("unrelated-package"));
     }
 
@@ -497,16 +497,14 @@ mod linux_tests {
             std::fs::set_permissions(&bin, std::fs::Permissions::from_mode(0o755)).unwrap();
             bin
         };
-        let sound = write("soundcraft", "#!/bin/sh\necho 'SoundCraft 0.5.0'\n");
-        assert_eq!(linux::binary_version(&sound, CraftApp::by_id("soundcraft").unwrap()).unwrap().to_string(), "0.5.0");
-        let pdf = write("pdfcraft", "#!/bin/sh\necho 'printcraft 0.2.1'\n");
-        assert_eq!(linux::binary_version(&pdf, CraftApp::by_id("pdfcraft").unwrap()).unwrap().to_string(), "0.2.1");
+        let sound = write("oracle-vector", "#!/bin/sh\necho 'Oracle Vector 0.5.0'\n");
+        assert_eq!(linux::binary_version(&sound, CraftApp::by_id("oracle-vector").unwrap()).unwrap().to_string(), "0.5.0");
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use artcraft_launcher_core::SUITE;
+    use oracle_suite_core::SUITE;
 
     use super::*;
 
@@ -525,7 +523,7 @@ mod tests {
             "pdfcraft-0.3.0-linux-x86_64.deb",
             "pdfcraft-0.3.0-windows-x64.AppImage",
             "pdfcraft-cli-0.3.0-linux-x86_64.AppImage",
-            "photocraft-0.6.0-linux-x86_64.AppImage",
+            "oracle-edit-0.6.0-linux-x86_64.AppImage",
             "mypdfcraft.AppImage",
             "pdfcraft-latest.AppImage",
             ".appimage",
@@ -537,83 +535,43 @@ mod tests {
 
     #[test]
     fn parse_cli_version_accepts_id_display_name_and_former_id() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let sound = CraftApp::by_id("soundcraft").unwrap();
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert_eq!(parse_cli_version("photocraft 0.7.0 (dev build)", photo).unwrap().to_string(), "0.7.0");
-        assert_eq!(parse_cli_version("SoundCraft 0.5.0", sound).unwrap().to_string(), "0.5.0");
-        assert_eq!(parse_cli_version("printcraft 0.2.1", pdf).unwrap().to_string(), "0.2.1");
-        assert_eq!(parse_cli_version("PdfCraft 0.6.0", pdf).unwrap().to_string(), "0.6.0");
-        assert!(strip_cli_prefix("photocraft-cli 1.0.0", "photocraft").is_none());
+        let photo = CraftApp::by_id("oracle-edit").unwrap();
+        let sound = CraftApp::by_id("oracle-vector").unwrap();
+        assert_eq!(parse_cli_version("oracle-edit 0.7.0 (dev build)", photo).unwrap().to_string(), "0.7.0");
+        assert_eq!(parse_cli_version("Oracle Vector 0.5.0", sound).unwrap().to_string(), "0.5.0");
+        assert!(strip_cli_prefix("oracle-edit-cli 1.0.0", "oracle-edit").is_none());
     }
 
     #[cfg(target_os = "linux")]
     #[test]
     fn finds_appimages_in_every_folder_newest_first() {
-        let app = CraftApp::by_id("photocraft").unwrap();
+        let app = CraftApp::by_id("oracle-edit").unwrap();
         let root = tempfile::tempdir().unwrap();
         let (apps, gear, bin) = (root.path().join("Applications"), root.path().join("AppImages"), root.path().join("bin"));
         for d in [&apps, &gear, &bin] {
             std::fs::create_dir_all(d).unwrap();
         }
-        std::fs::write(apps.join("photocraft-0.5.0-linux-x86_64.AppImage"), b"").unwrap();
-        std::fs::write(apps.join("wordcraft-0.3.0-linux-x86_64.AppImage"), b"").unwrap();
-        std::fs::write(gear.join("photocraft.appimage"), b"").unwrap();
-        std::fs::write(bin.join("photocraft-0.6.0-linux-x86_64.AppImage"), b"").unwrap();
-        std::fs::create_dir(bin.join("photocraft.AppImage")).unwrap();
+        std::fs::write(apps.join("oracle-edit-0.5.0-linux-x86_64.AppImage"), b"").unwrap();
+        std::fs::write(apps.join("oracle-vector-0.3.0-linux-x86_64.AppImage"), b"").unwrap();
+        std::fs::write(gear.join("oracle-edit.appimage"), b"").unwrap();
+        std::fs::write(bin.join("oracle-edit-0.6.0-linux-x86_64.AppImage"), b"").unwrap();
+        std::fs::create_dir(bin.join("oracle-edit.AppImage")).unwrap();
         let found = linux::appimages_in(app, &[apps.clone(), gear.clone(), bin.clone(), root.path().join("missing")]);
         let names: Vec<_> = found.iter().map(|(p, v)| (p.clone(), v.as_ref().map(ToString::to_string))).collect();
         assert_eq!(
             names,
             [
-                (bin.join("photocraft-0.6.0-linux-x86_64.AppImage"), Some("0.6.0".to_string())),
-                (apps.join("photocraft-0.5.0-linux-x86_64.AppImage"), Some("0.5.0".to_string())),
-                (gear.join("photocraft.appimage"), None),
+                (bin.join("oracle-edit-0.6.0-linux-x86_64.AppImage"), Some("0.6.0".to_string())),
+                (apps.join("oracle-edit-0.5.0-linux-x86_64.AppImage"), Some("0.5.0".to_string())),
+                (gear.join("oracle-edit.appimage"), None),
             ]
         );
     }
 
-    const LEARNING_MACHINES: &str = "Learning Machines LLC";
+    const LEARNING_MACHINES: &str = "Oracle";
 
     fn roots() -> Vec<PathBuf> {
         vec![PathBuf::from(r"C:\Program Files"), PathBuf::from(r"C:\Program Files (x86)")]
-    }
-
-    #[test]
-    fn pdfcraft_matches_its_former_printcraft_installer_name() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert!(is_installer_entry(pdf, "PrintCraft", LEARNING_MACHINES), "a PrintCraft entry from {LEARNING_MACHINES} should be PdfCraft's");
-    }
-
-    #[test]
-    fn pdfcraft_still_matches_its_own_installer_name() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert!(is_installer_entry(pdf, "PdfCraft", LEARNING_MACHINES));
-    }
-
-    #[test]
-    fn printcraft_entries_match_nothing_else() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert!(!is_installer_entry(pdf, "PrintCraft", "Some Other Publisher"));
-        assert!(!is_installer_entry(pdf, "PhotoCraft", LEARNING_MACHINES));
-        for a in SUITE.iter().filter(|a| a.id != "pdfcraft") {
-            assert!(!is_installer_entry(a, "PrintCraft", LEARNING_MACHINES), "PrintCraft matched {}", a.name);
-        }
-    }
-
-    #[test]
-    fn pdfcraft_exe_is_sought_under_every_name_it_has_shipped_as() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        let location = PathBuf::from(r"D:\Apps\PrintCraft");
-        let roots = roots();
-        let mut want = vec![location.join("pdfcraft.exe"), location.join("printcraft.exe")];
-        for root in &roots {
-            for dir in ["PdfCraft", "PrintCraft"] {
-                want.push(root.join(dir).join("pdfcraft.exe"));
-                want.push(root.join(dir).join("printcraft.exe"));
-            }
-        }
-        assert_eq!(exe_candidates(pdf, Some(&location), &roots), want);
     }
 
     #[test]

@@ -15,7 +15,7 @@
   timestamp server, ...). Optional overrides: WINDOWS_TIMESTAMP_URL, SIGNTOOL (path to signtool.exe).
 
 .EXAMPLE
-  pwsh packaging/windows/sign.ps1 dist/artcraft-launcher.exe dist/artcraft-launcher.msi
+  pwsh packaging/windows/sign.ps1 dist/oracle-suite.exe dist/oracle-suite.msi
 #>
 param(
   [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
@@ -55,8 +55,8 @@ if (-not $haveCert -and -not $haveAzure) {
 }
 
 $script:SignTool = Find-SignTool
-$common = @('sign', '/v', '/fd', 'SHA256', '/td', 'SHA256', '/d', 'ArtCraft Launcher', '/du', 'https://github.com/storytold/craft-launcher')
-$tmp = Join-Path ([IO.Path]::GetTempPath()) "artcraft-launcher-sign-$PID"
+$common = @('sign', '/v', '/fd', 'SHA256', '/td', 'SHA256', '/d', 'Oracle Suite', '/du', 'https://github.com/storytold/craft-launcher')
+$tmp = Join-Path ([IO.Path]::GetTempPath()) "oracle-suite-sign-$PID"
 New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 
 try {

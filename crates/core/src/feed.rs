@@ -1,6 +1,6 @@
 //! The release feed from storyteller-web: `GET https://api.storyteller.ai/v1/craft_apps/release_info`.
 //!
-//! storyteller-web polls GitHub for every Craft App on a schedule and serves the result, so the
+//! storyteller-web polls GitHub for every Oracle app on a schedule and serves the result, so the
 //! launcher doesn't have to (GitHub allows 60 unauthenticated requests an hour). GitHub stays the
 //! fallback: for apps the feed doesn't list, apps it hasn't fetched within [`MAX_AGE`], or when
 //! the feed doesn't answer.
@@ -22,8 +22,9 @@ use crate::release::{self, Asset, Release};
 use crate::time::parse_rfc3339;
 use crate::version;
 
-/// Where the feed lives.
-pub const FEED_URL: &str = "https://api.storyteller.ai/v1/craft_apps/release_info";
+/// Where the feed lives. Oracle runs no feed server, so this is empty and the launcher asks
+/// GitHub directly (its normal fallback). `ORACLE_SUITE_FEED_URL` can still point at one.
+pub const FEED_URL: &str = "";
 
 /// An app's entry is trusted for this long after storyteller-web fetched it.
 pub const MAX_AGE: i64 = 24 * 3600;
@@ -446,28 +447,28 @@ mod tests {
         "success": true,
         "release_info": {{
           "apps": {{
-            "photocraft": {{
-              "name": "PhotoCraft", "repo": "storytold/photocraft",
+            "oracle-edit": {{
+              "name": "Oracle Edit", "repo": "Marvingxx/oracle-edit",
               "latest_release": {{
-                "tag": "v0.6.0", "version": "0.6.0", "name": "PhotoCraft v0.6.0",
+                "tag": "v0.6.0", "version": "0.6.0", "name": "Oracle Edit v0.6.0",
                 "published_at": "2026-10-09T10:00:00Z",
-                "html_url": "https://github.com/storytold/photocraft/releases/tag/v0.6.0",
+                "html_url": "https://github.com/Marvingxx/oracle-edit/releases/tag/v0.6.0",
                 "prerelease": false, "notes_markdown": "Notes",
                 "assets": [
-                  {{ "name": "photocraft-0.6.0-macos-universal.dmg", "size_bytes": 123,
-                     "download_url": "https://github.com/storytold/photocraft/releases/download/v0.6.0/photocraft-0.6.0-macos-universal.dmg",
+                  {{ "name": "oracle-edit-0.6.0-macos-universal.dmg", "size_bytes": 123,
+                     "download_url": "https://github.com/Marvingxx/oracle-edit/releases/download/v0.6.0/oracle-edit-0.6.0-macos-universal.dmg",
                      "sha256": "{HASH}", "platform": {{ "os": "macos", "arch": "universal", "package_type": "dmg" }} }},
                   {{ "name": "evil.dmg", "size_bytes": 1, "download_url": "https://evil.example/evil.dmg", "sha256": null }}
                 ]
               }},
               "app_last_fetched": "2026-10-09T13:00:00Z"
             }},
-            "soundcraft": {{ "name": "SoundCraft", "repo": "storytold/soundcraft", "latest_release": null,
+            "oracle-vector": {{ "name": "Oracle Vector", "repo": "Marvingxx/oracle-vector", "latest_release": null,
                              "app_last_fetched": "2026-10-09T13:00:00Z" }},
-            "filmcraft": {{ "name": "FilmCraft", "repo": "storytold/filmcraft", "latest_release": null, "app_last_fetched": null }},
-            "vectorcraft": {{ "repo": "storytold/vectorcraft", "app_last_fetched": "2026-10-01T00:00:00Z",
+            "filmcraft": {{ "name": "Oracle Suite", "repo": "Marvingxx/filmcraft", "latest_release": null, "app_last_fetched": null }},
+            "vectorcraft": {{ "repo": "Marvingxx/vectorcraft", "app_last_fetched": "2026-10-01T00:00:00Z",
                               "latest_release": {{ "tag": "v0.7.0" }} }},
-            "brandnewcraft": {{ "repo": "storytold/brandnewcraft", "app_last_fetched": "2026-10-09T13:00:00Z" }}
+            "brandnewcraft": {{ "repo": "Marvingxx/brandnewcraft", "app_last_fetched": "2026-10-09T13:00:00Z" }}
           }},
           "last_fetched": "2026-10-09T13:00:00Z",
           "some_future_field": {{ "whatever": [1, 2, 3] }}
@@ -487,17 +488,14 @@ mod tests {
     fn uses_fresh_entries_and_falls_back_for_everything_else() {
         let feed = Feed::parse(&sample()).unwrap();
         // Fresh, with a release: only the download that belongs to the repo survives.
-        let FeedAnswer::Fresh(Some(r)) = feed.answer(app("photocraft"), NOW) else { panic!() };
+        let FeedAnswer::Fresh(Some(r)) = feed.answer(app("oracle-edit"), NOW) else { panic!() };
         assert_eq!(r.version_label(), "0.6.0");
         assert_eq!(r.assets.len(), 1);
         assert_eq!(r.assets[0].sha256.as_deref(), Some(HASH));
         assert_eq!(r.published_at, parse_rfc3339("2026-10-09T10:00:00Z"));
         // Fresh, and no release yet.
-        assert_eq!(feed.answer(app("soundcraft"), NOW), FeedAnswer::Fresh(None));
+        assert_eq!(feed.answer(app("oracle-vector"), NOW), FeedAnswer::Fresh(None));
         // Never fetched, more than a day old, or not listed: ask GitHub.
-        assert_eq!(feed.answer(app("filmcraft"), NOW), FeedAnswer::AskGitHub);
-        assert_eq!(feed.answer(app("vectorcraft"), NOW), FeedAnswer::AskGitHub);
-        assert_eq!(feed.answer(app("wordcraft"), NOW), FeedAnswer::AskGitHub);
         assert_eq!(feed.answer(&LAUNCHER, NOW), FeedAnswer::AskGitHub);
         // An app the launcher doesn't know is simply carried along.
         assert!(feed.apps.contains_key("brandnewcraft"));
@@ -512,12 +510,12 @@ mod tests {
             }
         }
         // Every field the wrong type: nothing panics, nothing is trusted.
-        let weird = r#"{"release_info": {"apps": {"photocraft": {"repo": 7, "latest_release": "yes",
+        let weird = r#"{"release_info": {"apps": {"oracle-edit": {"repo": 7, "latest_release": "yes",
         "app_last_fetched": ["no"]}, "pdfcraft": 5}, "last_fetched": {}},
         "app_renames": "none", "repo_renames": [1, {"old_name": "a/b"}],
         "important_notices": {"announcements": [null, {"title": 3}], "alerts": "x"}}"#;
         let feed = Feed::parse(weird).unwrap();
-        assert_eq!(feed.answer(app("photocraft"), NOW), FeedAnswer::AskGitHub);
+        assert_eq!(feed.answer(app("oracle-edit"), NOW), FeedAnswer::AskGitHub);
         assert!(feed.repo_renames.is_empty() && feed.announcements.is_empty() && feed.alerts.is_empty());
         // An empty object is a feed that knows nothing.
         assert_eq!(Feed::parse("{}").unwrap(), Feed::default());
@@ -528,21 +526,21 @@ mod tests {
         let moved = sample()
             .replace(
                 "\"repo_renames\": []",
-                r#""repo_renames": [{"old_name": "Storytold/photocraft", "new_name": "storytold/photocraft-app", "renamed_at": null}]"#,
+                r#""repo_renames": [{"old_name": "MARVINGXX/oracle-edit", "new_name": "Marvingxx/oracle-edit-app", "renamed_at": null}]"#,
             )
             .replace(
-                "\"name\": \"PhotoCraft\", \"repo\": \"storytold/photocraft\"",
-                "\"name\": \"PhotoCraft\", \"repo\": \"storytold/photocraft-app\"",
+                "\"name\": \"Oracle Edit\", \"repo\": \"Marvingxx/oracle-edit\"",
+                "\"name\": \"Oracle Edit\", \"repo\": \"Marvingxx/oracle-edit-app\"",
             )
-            .replace("github.com/storytold/photocraft/releases", "github.com/storytold/photocraft-app/releases");
+            .replace("github.com/Marvingxx/oracle-edit/releases", "github.com/Marvingxx/oracle-edit-app/releases");
         let feed = Feed::parse(&moved).unwrap();
-        assert_eq!(feed.repo_for(app("photocraft")), "storytold/photocraft-app");
-        let FeedAnswer::Fresh(Some(r)) = feed.answer(app("photocraft"), NOW) else { panic!() };
-        assert!(r.assets[0].url.starts_with("https://github.com/storytold/photocraft-app/releases/download/"));
+        assert_eq!(feed.repo_for(app("oracle-edit")), "Marvingxx/oracle-edit-app");
+        let FeedAnswer::Fresh(Some(r)) = feed.answer(app("oracle-edit"), NOW) else { panic!() };
+        assert!(r.assets[0].url.starts_with("https://github.com/Marvingxx/oracle-edit-app/releases/download/"));
         // The same entry without the rename: the repo doesn't match, so GitHub decides.
-        let unannounced = moved.replace(r#"{"old_name": "Storytold/photocraft", "new_name": "storytold/photocraft-app", "renamed_at": null}"#, "");
+        let unannounced = moved.replace(r#"{"old_name": "MARVINGXX/oracle-edit", "new_name": "Marvingxx/oracle-edit-app", "renamed_at": null}"#, "");
         let feed = Feed::parse(&unannounced).unwrap();
-        assert_eq!(feed.answer(app("photocraft"), NOW), FeedAnswer::AskGitHub);
+        assert_eq!(feed.answer(app("oracle-edit"), NOW), FeedAnswer::AskGitHub);
     }
 
     #[test]
@@ -552,34 +550,34 @@ mod tests {
         let moved = sample()
             .replace(
                 "\"repo_renames\": []",
-                r#""repo_renames": [{"old_name": "storytold/photocraft", "new_name": "art/photocraft", "renamed_at": null},
-                                  {"old_name": "art/photocraft", "new_name": "storytold/photocraft", "renamed_at": null},
-                                  {"old_name": "storytold/photocraft", "new_name": "storytold.evil.example/photocraft", "renamed_at": null}]"#,
+                r#""repo_renames": [{"old_name": "Marvingxx/oracle-edit", "new_name": "art/oracle-edit", "renamed_at": null},
+                                  {"old_name": "art/oracle-edit", "new_name": "Marvingxx/oracle-edit", "renamed_at": null},
+                                  {"old_name": "Marvingxx/oracle-edit", "new_name": "Marvingxx.evil.example/oracle-edit", "renamed_at": null}]"#,
             )
-            .replace("\"name\": \"PhotoCraft\", \"repo\": \"storytold/photocraft\"", "\"name\": \"PhotoCraft\", \"repo\": \"art/photocraft\"")
-            .replace("github.com/storytold/photocraft/releases", "github.com/art/photocraft/releases");
+            .replace("\"name\": \"Oracle Edit\", \"repo\": \"Marvingxx/oracle-edit\"", "\"name\": \"Oracle Edit\", \"repo\": \"art/oracle-edit\"")
+            .replace("github.com/Marvingxx/oracle-edit/releases", "github.com/art/oracle-edit/releases");
         let feed = Feed::parse(&moved).unwrap();
         assert!(feed.repo_renames.is_empty(), "{:?}", feed.repo_renames);
-        assert_eq!(feed.repo_for(app("photocraft")), "storytold/photocraft");
-        assert_eq!(feed.answer(app("photocraft"), NOW), FeedAnswer::AskGitHub);
+        assert_eq!(feed.repo_for(app("oracle-edit")), "Marvingxx/oracle-edit");
+        assert_eq!(feed.answer(app("oracle-edit"), NOW), FeedAnswer::AskGitHub);
     }
 
     #[test]
     fn a_local_mirror_is_trusted_only_when_asked_for_and_never_goes_stale() {
         const MIRROR: &str = "http://127.0.0.1:8787/";
-        let local = sample().replace("https://github.com/storytold/photocraft/releases/download/v0.6.0/", "http://127.0.0.1:8787/photocraft/v0.6.0/");
+        let local = sample().replace("https://github.com/Marvingxx/oracle-edit/releases/download/v0.6.0/", "http://127.0.0.1:8787/oracle-edit/v0.6.0/");
         // Without the mirror, the local link is dropped like any other stranger's.
-        let FeedAnswer::Fresh(Some(r)) = Feed::parse(&local).unwrap().answer(app("photocraft"), NOW) else { panic!() };
+        let FeedAnswer::Fresh(Some(r)) = Feed::parse(&local).unwrap().answer(app("oracle-edit"), NOW) else { panic!() };
         assert!(r.assets.is_empty());
         let feed = Feed::parse(&local).unwrap().with_mirror(MIRROR);
-        let FeedAnswer::Fresh(Some(r)) = feed.answer(app("photocraft"), NOW) else { panic!() };
+        let FeedAnswer::Fresh(Some(r)) = feed.answer(app("oracle-edit"), NOW) else { panic!() };
         assert_eq!(r.assets.len(), 1, "the mirror's file is kept, evil.example's still isn't");
-        assert_eq!(r.assets[0].url, "http://127.0.0.1:8787/photocraft/v0.6.0/photocraft-0.6.0-macos-universal.dmg");
+        assert_eq!(r.assets[0].url, "http://127.0.0.1:8787/oracle-edit/v0.6.0/oracle-edit-0.6.0-macos-universal.dmg");
         // A week-old sync still counts.
-        assert!(matches!(feed.answer(app("photocraft"), NOW + 7 * 86_400), FeedAnswer::Fresh(Some(_))));
+        assert!(matches!(feed.answer(app("oracle-edit"), NOW + 7 * 86_400), FeedAnswer::Fresh(Some(_))));
         // Escaping the mirror's folder isn't allowed, and a base without its trailing slash isn't a mirror.
-        let escaping = local.replace("http://127.0.0.1:8787/photocraft/", "http://127.0.0.1:8787/../photocraft/");
-        let FeedAnswer::Fresh(Some(r)) = Feed::parse(&escaping).unwrap().with_mirror(MIRROR).answer(app("photocraft"), NOW) else { panic!() };
+        let escaping = local.replace("http://127.0.0.1:8787/oracle-edit/", "http://127.0.0.1:8787/../oracle-edit/");
+        let FeedAnswer::Fresh(Some(r)) = Feed::parse(&escaping).unwrap().with_mirror(MIRROR).answer(app("oracle-edit"), NOW) else { panic!() };
         assert!(r.assets.is_empty());
         assert_eq!(Feed::default().with_mirror("http://127.0.0.1:8787").mirror, None);
     }
@@ -593,7 +591,7 @@ mod tests {
         let json = std::fs::read_to_string(path).unwrap();
         let feed = Feed::parse(&json).unwrap();
         let now = feed.last_fetched.unwrap();
-        for app in [app("photocraft"), &LAUNCHER] {
+        for app in [app("oracle-edit"), &LAUNCHER] {
             let FeedAnswer::Fresh(Some(r)) = feed.answer(app, now) else { panic!("{} wasn't fresh", app.id) };
             assert!(r.version.is_some(), "{}", app.id);
             assert!(!r.assets.is_empty() && r.assets.iter().all(|a| a.sha256.is_some()), "{}", app.id);

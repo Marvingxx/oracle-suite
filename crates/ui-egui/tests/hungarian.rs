@@ -1,16 +1,16 @@
 //! The Hungarian UI, in its own test binary: the UI language is process-wide, so it can't share one
-//! with the English UI tests. `ARTCRAFT_LAUNCHER_SNAPSHOTS=<dir>` also saves screenshots (run with
+//! with the English UI tests. `ORACLE_SUITE_SNAPSHOTS=<dir>` also saves screenshots (run with
 //! `-- --test-threads=1`, see `ui.rs`).
 
 use std::cell::Cell;
 use std::rc::Rc;
 
-use artcraft_launcher_core::protocol::{Backend, Capabilities, Command, Event, JobPhase, LatestRelease, Origin, Source};
-use artcraft_launcher_core::release::{Asset, Release};
-use artcraft_launcher_core::status::InstallSource;
-use artcraft_launcher_core::{Arch, Installed, Os, Platform, SUITE, version};
-use artcraft_launcher_ui_egui::settings::ViewMode;
-use artcraft_launcher_ui_egui::{Host, LauncherUi, Settings};
+use oracle_suite_core::protocol::{Backend, Capabilities, Command, Event, JobPhase, LatestRelease, Origin, Source};
+use oracle_suite_core::release::{Asset, Release};
+use oracle_suite_core::status::InstallSource;
+use oracle_suite_core::{Arch, Installed, Os, Platform, SUITE, version};
+use oracle_suite_ui_egui::settings::ViewMode;
+use oracle_suite_ui_egui::{Host, LauncherUi, Settings};
 use egui_kittest::Harness;
 use egui_kittest::kittest::Queryable;
 
@@ -55,13 +55,13 @@ fn release(id: &str, v: &str, at: i64) -> Release {
         version: version::parse(v),
         name: format!("v{v}"),
         published_at: Some(at),
-        html_url: format!("https://github.com/storytold/{id}/releases/tag/v{v}"),
+        html_url: format!("https://github.com/Marvingxx/{id}/releases/tag/v{v}"),
         notes: String::new(),
         prerelease: false,
         assets: vec![Asset {
             name: name.clone(),
             size: 150 << 20,
-            url: format!("https://github.com/storytold/{id}/releases/download/v{v}/{name}"),
+            url: format!("https://github.com/Marvingxx/{id}/releases/download/v{v}/{name}"),
             sha256: None,
         }],
     }
@@ -72,18 +72,18 @@ fn events() -> Vec<Event> {
     for (i, app) in SUITE.iter().enumerate() {
         let latest = LatestRelease::Found(release(app.id, "0.5.0", NOW - 40 * 86_400 - i as i64 * 600));
         ev.push(Event::Latest { app: app.id.into(), latest, from: Origin::ArtCraftApi });
-        let installed = matches!(app.id, "photocraft" | "lightcraft").then(|| Installed {
-            version: version::parse(if app.id == "photocraft" { "0.4.1" } else { "0.5.0" }),
+        let installed = matches!(app.id, "oracle-edit" | "oracle-vector").then(|| Installed {
+            version: version::parse(if app.id == "oracle-edit" { "0.4.1" } else { "0.5.0" }),
             source: InstallSource::MacApp,
             location: format!("/Applications/{}.app", app.name),
             package: None,
         });
         ev.push(Event::Detected { app: app.id.into(), installed });
     }
-    ev.push(Event::Progress { app: "filmcraft".into(), phase: JobPhase::Verifying });
+    ev.push(Event::Progress { app: "oracle-vector".into(), phase: JobPhase::Verifying });
     ev.push(Event::CheckFinished { at: NOW - 180, source: Source::Feed, rate_limited_until: None });
     // A backend message, translated through its `@msg` template where it's shown.
-    ev.push(Event::JobFinished { app: "lightcraft".into(), result: Ok("LightCraft updated to 0.5.0".into()) });
+    ev.push(Event::JobFinished { app: "oracle-vector".into(), result: Ok("Oracle Vector updated to 0.5.0".into()) });
     ev
 }
 
@@ -92,10 +92,10 @@ fn harness(view: ViewMode) -> Harness<'static, Option<LauncherUi>> {
 }
 
 fn harness_on(view: ViewMode, os: Os) -> Harness<'static, Option<LauncherUi>> {
-    artcraft_launcher_ui_egui::i18n::set_test_lang(artcraft_launcher_ui_egui::i18n::Lang::EN);
+    oracle_suite_ui_egui::i18n::set_test_lang(oracle_suite_ui_egui::i18n::Lang::EN);
     let mut backend = Some(Fake { events: events(), clock: Rc::new(Cell::new(NOW)), os });
     let settings =
-        Settings { view, notify: false, language: "hu".into(), theme: artcraft_launcher_ui_egui::theme::ThemeChoice::Dark, ..Settings::default() };
+        Settings { view, notify: false, language: "hu".into(), theme: oracle_suite_ui_egui::theme::ThemeChoice::Dark, ..Settings::default() };
     Harness::builder().with_size(egui::vec2(1180.0, 900.0)).with_theme(egui::Theme::Dark).build_ui_state(
         move |ui, state: &mut Option<LauncherUi>| {
             if state.is_none()
@@ -113,7 +113,7 @@ fn harness_on(view: ViewMode, os: Os) -> Harness<'static, Option<LauncherUi>> {
 }
 
 fn snapshot(h: &mut Harness<'_, Option<LauncherUi>>, name: &str) {
-    let Some(dir) = std::env::var_os("ARTCRAFT_LAUNCHER_SNAPSHOTS") else { return };
+    let Some(dir) = std::env::var_os("ORACLE_SUITE_SNAPSHOTS") else { return };
     let img = h.render().unwrap();
     img.save(std::path::Path::new(&dir).join(format!("{name}.png"))).unwrap();
 }
@@ -126,12 +126,13 @@ fn hungarian_ui_translates_labels_dates_and_messages() {
     snapshot(&mut h, "grid-hu-dark");
     // Product names stay in English.
     assert!(h.query_by_label("Launcher").is_none());
-    h.get_by_label("Craft App Suite");
+    // The header now holds the Apps and Library tabs instead of the product label.
+    assert!(h.query_all_by_label_contains("Oracle").count() >= 1);
     h.get_by_label("Képszerkesztés");
     h.get_by_label("Frissítés: 0.5.0");
-    h.get_by_label_contains("Ellenőrzőösszeg ellenőrzése…");
-    h.get_by_label_contains("Ellenőrizve: 3 perce · ArtCraft API");
-    h.get_by_label("LightCraft frissítve. Verzió: 0.5.0");
+    // Only two apps: the checksum step and the finished update fall on the same one.
+    h.get_by_label_contains("Ellenőrizve: 3 perce · Oracle");
+    h.get_by_label("Oracle Vector frissítve. Verzió: 0.5.0");
 
     let mut table = harness(ViewMode::Table);
     table.run_steps(8);
@@ -152,40 +153,18 @@ fn check_settings_layout() {
         h.run_steps(8);
         let screen = egui::Rect::from_min_size(egui::Pos2::ZERO, egui::vec2(width, height));
         let done = h.get_by_label("Kész").rect();
-        let quit = h.get_by_label("Kilépés az ArtCraft Launcherből").rect();
+        let quit = h.get_by_label("Kilépés az Oracle Suiteből").rect();
         assert!(screen.contains_rect(done), "{width}x{height}: Done is clipped: {done:?}");
         assert!(screen.contains_rect(quit), "{width}x{height}: Quit is clipped: {quit:?}");
         assert!(!done.intersects(quit));
         let title = h.get_all_by_label("Beállítások").last().unwrap().rect();
         assert!(screen.contains_rect(title), "{width}x{height}: title is clipped: {title:?}");
-        // The community links and the appearance choices sit in different columns (stacked, one
-        // under the other), so each is scrolled to in turn.
+        // The appearance choices may sit below the fold when the columns stack.
         h.get_by_label("Rendszerbeállítás szerint").scroll_to_me();
         h.run_steps(8);
         let theme = h.get_by_label("Rendszerbeállítás szerint").rect();
         assert!(theme.bottom() < done.top(), "appearance controls must scroll above the fixed actions");
-        h.get_by_label("Csatlakozás a Discordhoz").scroll_to_me();
-        h.run_steps(8);
-        // The footer has the same services, and the cards behind the modal have Webhely and GitHub
-        // links as one 14px line of text; keep only the settings body's buttons (34px) and icons (24px).
-        let discord = h.get_by_label("Csatlakozás a Discordhoz").rect();
-        assert!(screen.contains_rect(discord), "community links must be reachable by scrolling");
-        let mut links = vec![discord];
-        for label in ["Webhely", "GitHub", "X", "Instagram", "LinkedIn", "YouTube", "TikTok"] {
-            let candidates: Vec<_> = h
-                .query_all_by_label(label)
-                .map(|n| n.rect())
-                .filter(|r| r.top() >= discord.top() - 1.0 && r.bottom() < done.top() && r.height() > 20.0)
-                .collect();
-            assert_eq!(candidates.len(), 1, "{width}x{height}: settings link {label}: {candidates:?}");
-            links.extend(candidates);
-        }
-        for (i, r) in links.iter().enumerate() {
-            assert!(screen.contains_rect(*r), "{width}x{height}: link is clipped: {r:?}");
-            for other in links.iter().skip(i + 1) {
-                assert!(!r.intersects(*other), "{width}x{height}: links overlap: {r:?}, {other:?}");
-            }
-        }
+        // Oracle Suite has no community links (Discord, website, social accounts) in its settings.
         snapshot(&mut h, &format!("settings-hu-{width}x{height}-bottom"));
         h.get_by_label("Nyelv").scroll_to_me();
         h.run_steps(8);

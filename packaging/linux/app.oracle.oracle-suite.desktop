@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Oracle Suite
+GenericName=App Launcher
+Comment=Install, update and launch the Oracle Suite
+Exec=oracle-suite
+TryExec=oracle-suite
+Icon=app.oracle.oracle-suite
+Terminal=false
+StartupNotify=true
+StartupWMClass=oracle-suite
+Categories=Utility;PackageManager;
+Keywords=oracle;launcher;installer;updater;library;apps;

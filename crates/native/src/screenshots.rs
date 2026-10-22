@@ -4,7 +4,7 @@
 
 use std::path::Path;
 
-use artcraft_launcher_core::details::{AppDetails, MAX_SCREENSHOT_BYTES, looks_like_jpeg};
+use oracle_suite_core::details::{AppDetails, MAX_SCREENSHOT_BYTES, looks_like_jpeg};
 
 use crate::http::Http;
 use crate::paths::{Paths, write_atomic};
@@ -135,7 +135,14 @@ mod tests {
     #[test]
     fn saved_pictures_need_no_network_and_a_failure_ends_the_run() {
         let paths = Paths::under(tempfile::tempdir().unwrap().path());
-        let page = AppDetails::by_id("photocraft").unwrap();
+        // Oracle's pages have no pictures yet, so the test brings its own page.
+        const SHOTS: [oracle_suite_core::details::Shot; 4] = [
+            oracle_suite_core::details::Shot { key: "one", caption: "One" },
+            oracle_suite_core::details::Shot { key: "two", caption: "Two" },
+            oracle_suite_core::details::Shot { key: "three", caption: "Three" },
+            oracle_suite_core::details::Shot { key: "four", caption: "Four" },
+        ];
+        let page = &AppDetails { shots: &SHOTS, ..*AppDetails::by_id("oracle-edit").unwrap() };
         // The second picture is saved already; the first and the others need the network, which is not there.
         let second = paths.screenshot(page.id, page.shots[1].key);
         write_atomic(&second, &jpeg()).unwrap();

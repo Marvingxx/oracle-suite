@@ -1,9 +1,9 @@
-//! ArtCraft Launcher's interface: the Craft App Suite as a grid of cards or a table, with
+//! Oracle Suite's interface: the Oracle Suite as a grid of cards or a table, with
 //! install, update, open and remove, shared by the desktop and web builds.
 //!
 //! The UI is thin: it draws [`model::AppEntry`]s and sends
-//! [`Command`](artcraft_launcher_core::protocol::Command)s to a
-//! [`Backend`](artcraft_launcher_core::protocol::Backend). The shell supplies a [`Host`] for the
+//! [`Command`](oracle_suite_core::protocol::Command)s to a
+//! [`Backend`](oracle_suite_core::protocol::Backend). The shell supplies a [`Host`] for the
 //! things only it can do (notifications, the tray, quitting).
 
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
@@ -36,7 +36,9 @@ pub mod theme;
 mod views;
 mod widgets;
 
-pub use app::{Host, LauncherUi, TitleBar};
+pub use app::{Host, LauncherUi, Section, TitleBar};
+#[cfg(not(target_arch = "wasm32"))]
+pub use oracle_library_ui;
 pub use i18n::{
     Lang, LangInfo, current, detect_system_lang_in_background, fmt, has, lang_from_tag, message, msg, set_current, set_system_locales, system_lang,
     t, t_id, tn, tr, tr_ctx, tr_id, trn,

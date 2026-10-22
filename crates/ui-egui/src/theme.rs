@@ -10,6 +10,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::i18n::Lang;
 
+/// Oracle's slight rounding: buttons, fields, cards, menus.
+pub const RADIUS: CornerRadius = CornerRadius::same(4);
+/// Small chips and badges.
+pub const RADIUS_SM: CornerRadius = CornerRadius::same(3);
+/// Windows, dialogs and the details drawer.
+pub const RADIUS_LG: CornerRadius = CornerRadius::same(6);
+
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ThemeChoice {
     /// Follow the system's light or dark setting.
@@ -54,9 +61,9 @@ pub struct Tokens {
     pub line: Color32,
     /// Outlined buttons and stronger rules.
     pub line_strong: Color32,
-    /// The brand blue, for surfaces.
+    /// The brand red (#d31c3b), for surfaces.
     pub accent: Color32,
-    /// The brand blue, for text and icons.
+    /// The brand red, for text and icons.
     pub accent_ink: Color32,
     /// Primary buttons and hover inversion.
     pub invert_bg: Color32,
@@ -87,8 +94,8 @@ impl Tokens {
         faint: ink_alpha(0xf2f1ee, 97),
         line: ink_alpha(0xf2f1ee, 38),
         line_strong: ink_alpha(0xf2f1ee, 102),
-        accent: hex(0x2d81ff),
-        accent_ink: hex(0x74aaff),
+        accent: hex(0xd31c3b),
+        accent_ink: hex(0xf0566f),
         invert_bg: hex(0xffffff),
         invert_fg: hex(0x0b0b0c),
         // PdfCraft's and LightCraft's inks, so status colours come from the site's palette.
@@ -107,8 +114,8 @@ impl Tokens {
         faint: ink_alpha(0x101014, 107),
         line: ink_alpha(0x101014, 41),
         line_strong: ink_alpha(0x101014, 102),
-        accent: hex(0x2d81ff),
-        accent_ink: hex(0x1659c4),
+        accent: hex(0xd31c3b),
+        accent_ink: hex(0xa3122b),
         invert_bg: hex(0x101014),
         invert_fg: hex(0xf2f1ee),
         good: hex(0x0a7563),
@@ -125,7 +132,7 @@ impl Tokens {
     }
 
     /// An app's text colour (`--app-ink`): readable on this appearance's background.
-    pub fn app_ink(&self, app: &artcraft_launcher_core::CraftApp) -> Color32 {
+    pub fn app_ink(&self, app: &oracle_suite_core::CraftApp) -> Color32 {
         rgb(if self.dark { app.ink_dark } else { app.ink_light })
     }
 }
@@ -175,8 +182,8 @@ fn visuals(t: &Tokens) -> Visuals {
     v.faint_bg_color = t.sunken;
     v.code_bg_color = t.sunken;
     v.window_stroke = Stroke::new(1.0, t.line_strong);
-    v.window_corner_radius = CornerRadius::ZERO;
-    v.menu_corner_radius = CornerRadius::ZERO;
+    v.window_corner_radius = RADIUS_LG;
+    v.menu_corner_radius = RADIUS;
     v.window_shadow = shadow(t);
     v.popup_shadow = shadow(t);
     v.override_text_color = Some(t.ink);
@@ -195,7 +202,7 @@ fn visuals(t: &Tokens) -> Visuals {
         w.bg_fill = fill;
         w.weak_bg_fill = fill;
         w.bg_stroke = Stroke::new(1.0, stroke);
-        w.corner_radius = CornerRadius::ZERO;
+        w.corner_radius = RADIUS;
         w.fg_stroke = Stroke::new(1.0, fg);
         w.expansion = 0.0;
     }
@@ -296,20 +303,25 @@ type Face<'a> = (&'a str, &'static [u8], &'a [([u8; 4], f32)], FontFamily);
 /// `cjk`: the CJK language to draw, whose system font is added behind everything else, or `None`
 /// for a language that needs no CJK font.
 pub fn install_fonts(ctx: &egui::Context, cjk: Option<Lang>) {
+    // Lexend (OFL-1.1): body, headings and the upper-case labels.
+    const LEXEND: &[u8] = include_bytes!("../../../assets/fonts/Lexend-Variable.ttf");
+    // Inter stands behind Lexend for the symbols Lexend lacks (arrows such as →).
     const INTER: &[u8] = include_bytes!("../../../assets/fonts/Inter-Variable.ttf");
-    const ARCHIVO: &[u8] = include_bytes!("../../../assets/fonts/Archivo-Variable.ttf");
     const GEIST_MONO: &[u8] = include_bytes!("../../../assets/fonts/GeistMono-Variable.ttf");
     let mut fonts = FontDefinitions::default();
     // egui's own fonts stay behind ours, for symbols and emoji ours don't have.
-    let fallback: Vec<String> = fonts.families.get(&FontFamily::Proportional).cloned().unwrap_or_default();
+    let mut fallback: Vec<String> = fonts.families.get(&FontFamily::Proportional).cloned().unwrap_or_default();
+    let inter = FontTweak { coords: VariationCoords::new([(*b"wght", 400.0), (*b"opsz", 14.0)]), subpixel_binning: Some(false), ..Default::default() };
+    fonts.font_data.insert("Inter-Symbols".to_owned(), Arc::new(FontData::from_static(INTER).tweak(inter)));
+    fallback.insert(0, "Inter-Symbols".to_owned());
     let faces: [Face<'_>; 7] = [
-        ("Inter", INTER, &[(*b"wght", 400.0), (*b"opsz", 14.0)], FontFamily::Proportional),
-        ("Inter-Medium", INTER, &[(*b"wght", 500.0), (*b"opsz", 14.0)], medium()),
-        ("Inter-SemiBold", INTER, &[(*b"wght", 600.0), (*b"opsz", 14.0)], semibold()),
-        ("Archivo-Display", ARCHIVO, &[(*b"wght", 620.0), (*b"wdth", 118.0)], display()),
+        ("Lexend", LEXEND, &[(*b"wght", 400.0)], FontFamily::Proportional),
+        ("Lexend-Medium", LEXEND, &[(*b"wght", 500.0)], medium()),
+        ("Lexend-SemiBold", LEXEND, &[(*b"wght", 600.0)], semibold()),
+        ("Lexend-Display", LEXEND, &[(*b"wght", 600.0)], display()),
         ("GeistMono", GEIST_MONO, &[(*b"wght", 400.0)], FontFamily::Monospace),
-        ("GeistMono-Medium", GEIST_MONO, &[(*b"wght", 500.0)], mono()),
-        ("GeistMono-Bold", GEIST_MONO, &[(*b"wght", 700.0)], mono_bold()),
+        ("Lexend-Label", LEXEND, &[(*b"wght", 500.0)], mono()),
+        ("Lexend-LabelBold", LEXEND, &[(*b"wght", 650.0)], mono_bold()),
     ];
     for (name, bytes, coords, family) in faces {
         // No subpixel binning: these fonts carry no hinting instructions, so a glyph drawn at a

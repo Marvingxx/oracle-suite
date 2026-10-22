@@ -1,4 +1,4 @@
-//! The Craft App Suite: the thirteen apps the launcher knows about.
+//! The Oracle Suite: the apps the launcher knows about.
 //!
 //! The list is data so a later version can fetch it from an API; [`SUITE`] is the built-in copy.
 //!
@@ -29,9 +29,9 @@ pub struct CraftApp {
 }
 
 impl CraftApp {
-    /// `ai.storyteller.<id>`: macOS bundle id, Flatpak id and Linux desktop-file id.
+    /// `app.oracle.<id>`: macOS bundle id, Flatpak id and Linux desktop-file id.
     pub fn bundle_id(&self) -> String {
-        format!("ai.storyteller.{}", self.id)
+        format!("app.oracle.{}", self.id)
     }
 
     pub fn releases_url(&self) -> String {
@@ -42,9 +42,9 @@ impl CraftApp {
         format!("https://github.com/{}", self.repo)
     }
 
-    /// The app's page on getartcraft.com.
+    /// The app's page: its repository until Oracle has a website.
     pub fn website(&self) -> String {
-        format!("https://getartcraft.com/apps/{}", self.id)
+        self.repo_url()
     }
 
     /// Asset stems this app's releases may use, current first.
@@ -72,141 +72,78 @@ const fn app(
     CraftApp { id, name, tagline, color, ink_light, ink_dark, repo, former_ids: &[], former_names: &[] }
 }
 
-/// The Craft App Suite, in display order matching getartcraft.com:
-pub const SUITE: [CraftApp; 13] = [
-    app("photocraft", "PhotoCraft", "Image editing", [[0x2f, 0x7b, 0xf5], [0x1a, 0x5b, 0xc4], [0x7f, 0xb0, 0xff]], "storytold/photocraft"),
-    app("vectorcraft", "VectorCraft", "Vector illustration", [[0xe8, 0x57, 0x3f], [0xb8, 0x3a, 0x24], [0xff, 0x8a, 0x70]], "storytold/vectorcraft"),
+/// The Oracle Suite, in display order.
+pub const SUITE: [CraftApp; 5] = [
+    app("oracle-edit", "Oracle Edit", "Image editing", [[0xd3, 0x1c, 0x3b], [0xa3, 0x12, 0x2b], [0xf0, 0x56, 0x6f]], "Marvingxx/oracle-edit"),
     app(
-        "filmcraft",
-        "FilmCraft",
-        "Video editing, color and sound",
-        [[0x8b, 0x5c, 0xf6], [0x6a, 0x3f, 0xd6], [0xb6, 0x9c, 0xff]],
-        "storytold/filmcraft",
+        "oracle-vector",
+        "Oracle Vector",
+        "Vector illustration",
+        [[0xff, 0x6a, 0x3d], [0xb8, 0x45, 0x1f], [0xff, 0x9a, 0x78]],
+        "Marvingxx/oracle-vector",
     ),
-    app(
-        "lightcraft",
-        "LightCraft",
-        "Photo library and raw development",
-        [[0xf2, 0xa5, 0x16], [0x8a, 0x58, 0x00], [0xff, 0xc1, 0x4d]],
-        "storytold/lightcraft",
-    ),
-    CraftApp {
-        former_ids: &["printcraft"],
-        former_names: &["PrintCraft"],
-        ..app(
-            "pdfcraft",
-            "PdfCraft",
-            "Reading, organizing and protecting PDFs",
-            [[0x12, 0xa5, 0x8a], [0x0a, 0x75, 0x63], [0x3f, 0xd6, 0xb8]],
-            "storytold/pdfcraft",
-        )
-    },
-    app(
-        "effectcraft",
-        "EffectCraft",
-        "Motion graphics and visual effects",
-        [[0xe0, 0x36, 0x8f], [0xb0, 0x20, 0x6c], [0xff, 0x7a, 0xb8]],
-        "storytold/effectcraft",
-    ),
-    app(
-        "designcraft",
-        "DesignCraft",
-        "Page layout and publishing",
-        [[0x7b, 0xb5, 0x1c], [0x45, 0x70, 0x08], [0xa6, 0xe0, 0x4a]],
-        "storytold/designcraft",
-    ),
-    app(
-        "figcraft",
-        "FigCraft",
-        "Interface design and prototyping",
-        [[0x02, 0xda, 0x96], [0x04, 0x7a, 0x56], [0x4f, 0xe8, 0xb6]],
-        "storytold/figcraft",
-    ),
-    app("wordcraft", "WordCraft", "Writing and document design", [[0x3f, 0x5f, 0xe0], [0x2a, 0x44, 0xb8], [0x8e, 0xa2, 0xff]], "storytold/wordcraft"),
-    app(
-        "soundcraft",
-        "SoundCraft",
-        "Recording, editing and mixing audio",
-        [[0x1f, 0xa5, 0xc9], [0x0e, 0x72, 0x90], [0x5f, 0xd0, 0xee]],
-        "storytold/soundcraft",
-    ),
-    app(
-        "deckcraft",
-        "DeckCraft",
-        "Presentations and slide shows",
-        [[0xf0, 0x7a, 0x1e], [0xa8, 0x4f, 0x0a], [0xff, 0xa0, 0x60]],
-        "storytold/deckcraft",
-    ),
-    app(
-        "cadcraft",
-        "CADCraft",
-        "Computer-aided design and drafting",
-        [[0x3e, 0xa6, 0xe8], [0x1a, 0x6f, 0xa8], [0x7c, 0xc8, 0xff]],
-        "storytold/cadcraft",
-    ),
-    app("gridcraft", "GridCraft", "Spreadsheets and data", [[0x1f, 0x9d, 0x55], [0x12, 0x70, 0x3a], [0x4f, 0xd6, 0x8a]], "storytold/gridcraft"),
+    app("oracle-brand-kit", "Oracle Brand Kit", "Brand identity and client deliveries", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand-kit"),
+    app("oracle-mockup-studio", "Oracle Mockup Studio", "2D mockups", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-mockup-studio"),
+    app("oracle-guide", "Oracle Brand Guide", "Brand guidelines and page layout", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-guide"),
 ];
 
-/// ArtCraft's website.
-pub const WEBSITE_URL: &str = "https://getartcraft.com";
-/// The GitHub account every Craft App's repository lives under: the only one the launcher
+/// Oracle's website. Until there is one, the suite's GitHub account.
+pub const WEBSITE_URL: &str = GITHUB_URL;
+/// The GitHub account every Oracle app's repository lives under: the only one the launcher
 /// installs from, whatever the release feed says.
-pub const GITHUB_OWNER: &str = "storytold";
-/// ArtCraft on GitHub: every Craft App's source.
-pub const GITHUB_URL: &str = "https://github.com/storytold";
-/// ArtCraft's social accounts: (service, URL). Shown as small icons, less prominent than Discord.
-pub const SOCIAL: [(&str, &str); 5] = [
-    ("X", "https://x.com/get_artcraft"),
-    ("Instagram", "https://www.instagram.com/officialartcraftstudios"),
-    ("LinkedIn", "https://www.linkedin.com/company/artcraft-ai"),
-    ("YouTube", "https://www.youtube.com/@OfficialArtcraftStudios"),
-    ("TikTok", "https://www.tiktok.com/@artcraft.studios"),
-];
+///
+/// Releases are published from these repositories (`Marvingxx/oracle-edit`, …); a repository
+/// that doesn't exist yet simply has no release.
+pub const GITHUB_OWNER: &str = "Marvingxx";
+/// Oracle on GitHub: every Oracle app's source.
+pub const GITHUB_URL: &str = "https://github.com/Marvingxx";
+/// Oracle's social accounts: (service, URL). None yet.
+pub const SOCIAL: [(&str, &str); 0] = [];
 
-/// The ArtCraft community on Discord.
-pub const DISCORD_URL: &str = "https://discord.gg/artcraft";
-/// Deep link into the Discord application for the ArtCraft server invite.
-pub const DISCORD_APP_URL: &str = "discord://-/invite/artcraft";
+/// Oracle has no Discord community yet; kept so the shell's link plumbing still compiles.
+pub const DISCORD_URL: &str = GITHUB_URL;
+/// Deep link into the Discord application; unused while [`DISCORD_URL`] is not a Discord invite.
+pub const DISCORD_APP_URL: &str = GITHUB_URL;
 
-/// ArtCraft Launcher itself, described like a Craft App so it can update itself with the same
-/// machinery (asset names `artcraft-launcher-<ver>-…`, bundle id `ai.storyteller.artcraft-launcher`,
-/// `ArtCraft Launcher.app`). Not part of [`SUITE`].
+/// Oracle Suite itself, described like an Oracle app so it can update itself with the same
+/// machinery (asset names `oracle-suite-<ver>-…`, bundle id `app.oracle.oracle-suite`,
+/// `Oracle Suite.app`). Not part of [`SUITE`].
 pub const LAUNCHER: CraftApp = app(
-    "artcraft-launcher",
-    "ArtCraft Launcher",
-    "Installs and updates the Craft App Suite",
-    [[0x0b, 0x0b, 0x0c], [0x0b, 0x0b, 0x0c], [0xf2, 0xf1, 0xee]],
-    "storytold/craft-launcher",
+    "oracle-suite",
+    "Oracle Suite",
+    "Installs and updates the Oracle apps",
+    [[0xd3, 0x1c, 0x3b], [0xa3, 0x12, 0x2b], [0xf0, 0x56, 0x6f]],
+    "Marvingxx/oracle-suite",
 );
 
 /// The launcher's own repo, checked so it can say when a newer launcher is out.
-pub const LAUNCHER_REPO: &str = "storytold/craft-launcher";
+pub const LAUNCHER_REPO: &str = "Marvingxx/oracle-suite";
 /// The launcher's own asset stem.
-pub const LAUNCHER_ID: &str = "artcraft-launcher";
+pub const LAUNCHER_ID: &str = "oracle-suite";
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn suite_has_thirteen_apps_with_unique_ids() {
-        assert_eq!(SUITE.len(), 13);
+    fn suite_apps_have_unique_ids_under_the_owner() {
         let mut ids: Vec<_> = SUITE.iter().map(|a| a.id).collect();
         ids.sort_unstable();
         ids.dedup();
         assert_eq!(ids.len(), SUITE.len());
         for a in &SUITE {
-            assert_eq!(a.repo, format!("storytold/{}", a.id));
-            assert_eq!(a.name.to_lowercase(), a.id);
+            assert_eq!(a.repo, format!("{GITHUB_OWNER}/{}", a.id));
+            // The Brand Guide keeps its fork's short id (`oracle-guide`: binaries, file extension).
+            if a.id != "oracle-guide" {
+                assert_eq!(a.name.to_lowercase().replace(' ', "-"), a.id);
+            }
         }
     }
 
     #[test]
-    fn pdfcraft_also_answers_to_printcraft() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert_eq!(pdf.stems().collect::<Vec<_>>(), ["pdfcraft", "printcraft"]);
-        assert_eq!(pdf.names().collect::<Vec<_>>(), ["PdfCraft", "PrintCraft"]);
-        assert_eq!(pdf.website(), "https://getartcraft.com/apps/pdfcraft");
-        assert_eq!(CraftApp::by_id("wordcraft").unwrap().website(), "https://getartcraft.com/apps/wordcraft");
+    fn website_falls_back_to_the_repository() {
+        let edit = CraftApp::by_id("oracle-edit").unwrap();
+        assert_eq!(edit.website(), "https://github.com/Marvingxx/oracle-edit");
+        assert_eq!(edit.bundle_id(), "app.oracle.oracle-edit");
     }
 }

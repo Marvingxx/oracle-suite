@@ -3,12 +3,12 @@
 //! and screenshots come from `core::details`; the live facts (version, date, download size, release
 //! notes) from the app's latest GitHub release.
 
-use artcraft_launcher_core::CraftApp;
+use oracle_suite_core::CraftApp;
 use std::sync::Arc;
 
-use artcraft_launcher_core::details::AppDetails;
-use artcraft_launcher_core::platform::pick_asset;
-use artcraft_launcher_core::protocol::Command;
+use oracle_suite_core::details::AppDetails;
+use oracle_suite_core::platform::pick_asset;
+use oracle_suite_core::protocol::Command;
 use egui::{Color32, CornerRadius, Id, Margin, Order, Rect, RichText, Sense, Stroke, Ui, emath::easing, pos2, vec2};
 
 use crate::app::LauncherUi;
@@ -128,9 +128,9 @@ impl LauncherUi {
         egui::Area::new(Id::new("details-drawer")).order(Order::Foreground).fixed_pos(panel.min).constrain(false).show(ctx, |ui| {
             ui.set_opacity(k.clamp(0.0, 1.0));
             let painter = ui.painter();
-            painter.add(theme::shadow(&t).as_shape(panel, CornerRadius::ZERO));
-            painter.rect_filled(panel, CornerRadius::ZERO, t.bg);
-            painter.rect_stroke(panel, CornerRadius::ZERO, Stroke::new(1.0, t.line_strong), egui::StrokeKind::Inside);
+            painter.add(theme::shadow(&t).as_shape(panel, theme::RADIUS_LG));
+            painter.rect_filled(panel, theme::RADIUS_LG, t.bg);
+            painter.rect_stroke(panel, theme::RADIUS_LG, Stroke::new(1.0, t.line_strong), egui::StrokeKind::Inside);
 
             ui.set_min_size(panel.size());
             ui.set_max_size(panel.size());
@@ -159,7 +159,7 @@ impl LauncherUi {
                                 ui.set_width(left_w);
                                 ui.spacing_mut().item_spacing.y = 8.0;
                                 for p in details.paragraphs() {
-                                    ui.add(egui::Label::new(RichText::new(p).size(14.5).color(t.ink)).wrap());
+                                    ui.add(egui::Label::new(RichText::new(crate::i18n::tr_ctx(crate::i18n::current(), details.id, p)).size(14.5).color(t.ink)).wrap());
                                 }
                                 ui.add_space(14.0);
                                 features(ui, details, entry.app, &t);
@@ -183,7 +183,7 @@ impl LauncherUi {
                                 self.gallery(ui, details, &t, app_color);
                                 ui.add_space(8.0);
                                 for p in details.paragraphs() {
-                                    ui.add(egui::Label::new(RichText::new(p).size(14.5).color(t.ink)).wrap());
+                                    ui.add(egui::Label::new(RichText::new(crate::i18n::tr_ctx(crate::i18n::current(), details.id, p)).size(14.5).color(t.ink)).wrap());
                                 }
                             });
                             ui.vertical(|ui| {
@@ -201,7 +201,7 @@ impl LauncherUi {
                         self.gallery(ui, details, &t, app_color);
                         ui.add_space(8.0);
                         for p in details.paragraphs() {
-                            ui.add(egui::Label::new(RichText::new(p).size(14.5).color(t.ink)).wrap());
+                            ui.add(egui::Label::new(RichText::new(crate::i18n::tr_ctx(crate::i18n::current(), details.id, p)).size(14.5).color(t.ink)).wrap());
                         }
                         ui.add_space(14.0);
                         features(ui, details, entry.app, &t);
@@ -221,7 +221,7 @@ impl LauncherUi {
     fn neighbour_apps(&self, id: &str) -> (Option<String>, Option<String>) {
         let mut ids: Vec<&str> = self.visible_ids().into_iter().filter(|i| AppDetails::by_id(i).is_some()).collect();
         if !ids.contains(&id) {
-            ids = artcraft_launcher_core::SUITE.iter().map(|a| a.id).filter(|i| AppDetails::by_id(i).is_some()).collect();
+            ids = oracle_suite_core::SUITE.iter().map(|a| a.id).filter(|i| AppDetails::by_id(i).is_some()).collect();
         }
         let Some(at) = ids.iter().position(|i| *i == id) else { return (None, None) };
         if ids.len() < 2 {
@@ -316,7 +316,7 @@ impl LauncherUi {
                     ui.set_width(text_w);
                     ui.spacing_mut().item_spacing.y = 5.0;
                     widgets::wordmark(ui, app, theme::PAGE_TITLE);
-                    ui.add(egui::Label::new(RichText::new(details.headline).size(15.0).color(t.ink)).wrap());
+                    ui.add(egui::Label::new(RichText::new(crate::i18n::tr_ctx(crate::i18n::current(), details.id, details.headline)).size(15.0).color(t.ink)).wrap());
                     // "Version 0.5.0 · Oct 8, 2026", or the installed-versus-latest line.
                     let version = crate::views::version_line(entry, &status);
                     if !version.trim().is_empty() {
@@ -561,9 +561,9 @@ fn features(ui: &mut Ui, details: &AppDetails, app: &CraftApp, t: &Tokens) {
             ui.spacing_mut().item_spacing.y = 3.0;
             ui.horizontal(|ui| {
                 widgets::hud(ui, &format!("{:02}", i + 1), t.app_ink(app));
-                ui.label(RichText::new(f.title).size(15.0).family(theme::semibold()).color(t.ink_strong));
+                ui.label(RichText::new(crate::i18n::tr_ctx(crate::i18n::current(), details.id, f.title)).size(15.0).family(theme::semibold()).color(t.ink_strong));
             });
-            ui.add(egui::Label::new(RichText::new(f.text).size(13.5).color(t.muted)).wrap());
+            ui.add(egui::Label::new(RichText::new(crate::i18n::tr_ctx(crate::i18n::current(), details.id, f.text)).size(13.5).color(t.muted)).wrap());
         });
     }
 }
