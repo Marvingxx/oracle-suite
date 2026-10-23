@@ -2,6 +2,9 @@
 //! commands the buttons send. `ORACLE_SUITE_SNAPSHOTS=<dir>` also saves screenshots; run that
 //! with `-- --test-threads=1`, as rendering on several threads at once can crash Vulkan loaders
 //! older than 1.4.350 (KhronosGroup/Vulkan-Loader#1863).
+// Some fake-backend helpers (Discord links, pictures, fetch counts) lost their tests when the
+// Oracle rebrand removed those features; they stay for tests that may come back.
+#![allow(dead_code)]
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;

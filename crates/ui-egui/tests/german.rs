@@ -138,7 +138,7 @@ fn snapshot(h: &mut Harness<'_, Option<LauncherUi>>, name: &str) {
 // One test: the UI language is process-wide.
 #[test]
 fn german_switches_persists_and_keeps_install_actions() {
-    let (mut h, sent) = harness_language(ViewMode::Grid, egui::Theme::Dark, true, "en");
+    let (mut h, _sent) = harness_language(ViewMode::Grid, egui::Theme::Dark, true, "en");
     h.run_steps(6);
     h.get_by_label("Settings").click();
     h.run_steps(3);
