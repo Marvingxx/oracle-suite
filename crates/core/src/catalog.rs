@@ -82,8 +82,8 @@ pub const SUITE: [CraftApp; 5] = [
         [[0xff, 0x6a, 0x3d], [0xb8, 0x45, 0x1f], [0xff, 0x9a, 0x78]],
         "Marvingxx/oracle-vector",
     ),
-    app("oracle-brand-kit", "Oracle Brand Kit", "Brand identity and client deliveries", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand-kit"),
-    app("oracle-mockup-studio", "Oracle Mockup Studio", "2D mockups", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-mockup-studio"),
+    app("oracle-brand-kit", "Oracle Brand Kit", "Brand identity and client deliveries", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
+    app("oracle-mockup-studio", "Oracle Mockup Studio", "2D mockups", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
     app("oracle-guide", "Oracle Brand Guide", "Brand guidelines and page layout", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-guide"),
 ];
 
@@ -132,7 +132,10 @@ mod tests {
         ids.dedup();
         assert_eq!(ids.len(), SUITE.len());
         for a in &SUITE {
-            assert_eq!(a.repo, format!("{GITHUB_OWNER}/{}", a.id));
+            // Each app's repo is its id, except Brand Kit and Mockup Studio, built from one repo
+            // (`oracle-brand`) whose releases carry both apps' packages.
+            let repo = if matches!(a.id, "oracle-brand-kit" | "oracle-mockup-studio") { "oracle-brand" } else { a.id };
+            assert_eq!(a.repo, format!("{GITHUB_OWNER}/{repo}"));
             // The Brand Guide keeps its fork's short id (`oracle-guide`: binaries, file extension).
             if a.id != "oracle-guide" {
                 assert_eq!(a.name.to_lowercase().replace(' ', "-"), a.id);
