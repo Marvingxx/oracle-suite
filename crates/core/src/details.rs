@@ -69,7 +69,7 @@ pub fn looks_like_jpeg(bytes: &[u8]) -> bool {
 /// Where every Oracle app runs.
 const PLATFORMS: &str = "macOS, Windows, Linux, FreeBSD, web";
 
-pub const DETAILS: [AppDetails; 5] = [
+pub const DETAILS: [AppDetails; 6] = [
     AppDetails {
         id: "oracle-edit",
         headline: "The image editor you already know how to use.",
@@ -146,6 +146,19 @@ pub const DETAILS: [AppDetails; 5] = [
             feature("Linked blocks", "Colour values, typefaces, rules, logos and mockups update when you ask, with a preview of every change."),
             feature("Your own templates", "Reuse a guide for another brand: logos by role, colours by position."),
             feature("PDF export", "Bleed, crop marks and embedded fonts."),
+        ],
+        shots: &[],
+        platforms: "Windows",
+    },
+    AppDetails {
+        id: "oracle-motion",
+        headline: "Motion graphics and visual effects, in the Oracle suite.",
+        about: "Compositions, layers, keyframes, effects, expressions, 3D cameras and lights, and a render queue, forked \
+                from EffectCraft. Your Oracle Vector logos and Oracle Edit pictures come in from the library.",
+        features: &[
+            feature("Animate anything", "Every property keyframes, with the graph editor, easing and expressions."),
+            feature("Effects and compositing", "Hundreds of effects, masks, track mattes and blending modes."),
+            feature("Render queue", "Video, image sequences and Lottie, from the same project."),
         ],
         shots: &[],
         platforms: "Windows",

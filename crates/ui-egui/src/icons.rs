@@ -10,6 +10,7 @@ pub fn app(id: &str) -> Option<ImageSource<'static>> {
         "oracle-brand-kit" => egui::include_image!("../../../assets/app-icons/oracle-brand-kit.png"),
         "oracle-mockup-studio" => egui::include_image!("../../../assets/app-icons/oracle-mockup-studio.png"),
         "oracle-guide" => egui::include_image!("../../../assets/app-icons/oracle-guide.png"),
+        "oracle-motion" => egui::include_image!("../../../assets/app-icons/oracle-motion.png"),
         _ => return None,
     })
 }

@@ -73,7 +73,7 @@ const fn app(
 }
 
 /// The Oracle Suite, in display order.
-pub const SUITE: [CraftApp; 5] = [
+pub const SUITE: [CraftApp; 6] = [
     app("oracle-edit", "Oracle Edit", "Image editing", [[0xd3, 0x1c, 0x3b], [0xa3, 0x12, 0x2b], [0xf0, 0x56, 0x6f]], "Marvingxx/oracle-edit"),
     app(
         "oracle-vector",
@@ -85,6 +85,7 @@ pub const SUITE: [CraftApp; 5] = [
     app("oracle-brand-kit", "Oracle Brand Kit", "Brand identity and client deliveries", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
     app("oracle-mockup-studio", "Oracle Mockup Studio", "2D mockups", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
     app("oracle-guide", "Oracle Brand Guide", "Brand guidelines and page layout", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-guide"),
+    app("oracle-motion", "Oracle Motion", "Motion graphics and compositing", [[0x8a, 0x3f, 0xfc], [0x5f, 0x24, 0xc4], [0xb0, 0x85, 0xff]], "Marvingxx/oracle-motion"),
 ];
 
 /// Oracle's website. Until there is one, the suite's GitHub account.

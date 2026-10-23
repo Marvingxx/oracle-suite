@@ -23,6 +23,7 @@ pub fn meta(app: &CraftApp) -> (&'static str, Option<&'static str>) {
         "oracle-vector" => ("Graphics;2DGraphics;VectorGraphics;", None),
         "oracle-brand-kit" | "oracle-mockup-studio" => ("Graphics;2DGraphics;", None),
         "oracle-guide" => ("Graphics;Publishing;", None),
+        "oracle-motion" => ("AudioVideo;Video;Graphics;", None),
         _ => ("Graphics;", None),
     }
 }
