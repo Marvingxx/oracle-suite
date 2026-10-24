@@ -13,6 +13,7 @@ pub fn app(id: &str) -> Option<ImageSource<'static>> {
         "oracle-motion" => egui::include_image!("../../../assets/app-icons/oracle-motion.png"),
         "oracle-video" => egui::include_image!("../../../assets/app-icons/oracle-video.png"),
         "oracle-assets" => egui::include_image!("../../../assets/app-icons/oracle-assets.png"),
+        "oracle-font" => egui::include_image!("../../../assets/app-icons/oracle-font.png"),
         _ => return None,
     })
 }

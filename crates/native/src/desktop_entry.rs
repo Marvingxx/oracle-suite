@@ -26,6 +26,7 @@ pub fn meta(app: &CraftApp) -> (&'static str, Option<&'static str>) {
         "oracle-motion" => ("AudioVideo;Video;Graphics;", None),
         "oracle-video" => ("AudioVideo;Video;AudioVideoEditing;", None),
         "oracle-assets" => ("Graphics;Utility;", None),
+        "oracle-font" => ("Graphics;Utility;", None),
         _ => ("Graphics;", None),
     }
 }

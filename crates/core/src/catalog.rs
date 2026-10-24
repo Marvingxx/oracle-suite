@@ -73,7 +73,7 @@ const fn app(
 }
 
 /// The Oracle Suite, in display order.
-pub const SUITE: [CraftApp; 8] = [
+pub const SUITE: [CraftApp; 9] = [
     app("oracle-edit", "Oracle Edit", "Image editing", [[0xd3, 0x1c, 0x3b], [0xa3, 0x12, 0x2b], [0xf0, 0x56, 0x6f]], "Marvingxx/oracle-edit"),
     app(
         "oracle-vector",
@@ -88,6 +88,7 @@ pub const SUITE: [CraftApp; 8] = [
     app("oracle-motion", "Oracle Motion", "Motion graphics and compositing", [[0x8a, 0x3f, 0xfc], [0x5f, 0x24, 0xc4], [0xb0, 0x85, 0xff]], "Marvingxx/oracle-motion"),
     app("oracle-video", "Oracle Video", "Video editing", [[0x1f, 0x6f, 0xeb], [0x14, 0x4f, 0xb0], [0x6a, 0xa4, 0xff]], "Marvingxx/oracle-video"),
     app("oracle-assets", "Oracle Assets", "Your assets, outside the apps", [[0x0e, 0x8a, 0x6f], [0x0a, 0x63, 0x50], [0x4c, 0xc2, 0xa5]], "Marvingxx/oracle-brand"),
+    app("oracle-font", "Oracle Font", "Fonts and type tests", [[0x6d, 0x4a, 0xff], [0x4c, 0x2e, 0xc4], [0xa8, 0x94, 0xff]], "Marvingxx/oracle-brand"),
 ];
 
 /// Oracle's website. Until there is one, the suite's GitHub account.
@@ -137,7 +138,7 @@ mod tests {
         for a in &SUITE {
             // Each app's repo is its id, except Brand Kit and Mockup Studio, built from one repo
             // (`oracle-brand`) whose releases carry both apps' packages.
-            let repo = if matches!(a.id, "oracle-brand-kit" | "oracle-mockup-studio" | "oracle-assets") { "oracle-brand" } else { a.id };
+            let repo = if matches!(a.id, "oracle-brand-kit" | "oracle-mockup-studio" | "oracle-assets" | "oracle-font") { "oracle-brand" } else { a.id };
             assert_eq!(a.repo, format!("{GITHUB_OWNER}/{repo}"));
             // The Brand Guide keeps its fork's short id (`oracle-guide`: binaries, file extension).
             if a.id != "oracle-guide" {

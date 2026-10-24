@@ -69,7 +69,7 @@ pub fn looks_like_jpeg(bytes: &[u8]) -> bool {
 /// Where every Oracle app runs.
 const PLATFORMS: &str = "macOS, Windows, Linux, FreeBSD, web";
 
-pub const DETAILS: [AppDetails; 8] = [
+pub const DETAILS: [AppDetails; 9] = [
     AppDetails {
         id: "oracle-edit",
         headline: "The image editor you already know how to use.",
@@ -186,6 +186,19 @@ pub const DETAILS: [AppDetails; 8] = [
             feature("Find anything", "Search by word, format, section or tag, in French or English."),
             feature("Your brands", "Each Brand Kit brand as a collection: its logos, palette and fonts."),
             feature("Drag anywhere", "Drop an asset into an Oracle app or any other software."),
+        ],
+        shots: &[],
+        platforms: "Windows",
+    },
+    AppDetails {
+        id: "oracle-font",
+        headline: "Every font at hand, tried before use.",
+        about: "The system's fonts, the library's and the brands' from Brand Kit: a sample line in each, then a waterfall, \
+                a paragraph, the glyphs, side-by-side comparisons, heading and body pairings and the text on a brand's colours.",
+        features: &[
+            feature("Try them out", "Your own text in every font, variable axes included."),
+            feature("Pair and compare", "Headings with body text, several fonts side by side, contrast on brand colours."),
+            feature("Activate and share", "Activate a font without administrator rights, add it to the library or to a brand."),
         ],
         shots: &[],
         platforms: "Windows",

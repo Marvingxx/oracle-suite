@@ -164,6 +164,7 @@ oracle-guide	Brand guidelines and page layout	Chartes graphiques et mise en page
 oracle-motion	Motion graphics and compositing	Animation graphique et compositing
 oracle-video	Video editing	Montage vidéo
 oracle-assets	Your assets, outside the apps	Vos ressources, hors des logiciels
+oracle-font	Fonts and type tests	Polices et tests typographiques
 
 # Contextual: month abbreviations for date rendering
 month	Jan	janv.
@@ -436,3 +437,11 @@ oracle-assets	Your brands	Vos marques
 oracle-assets	Each Brand Kit brand as a collection: its logos, palette and fonts.	Chaque marque du Brand Kit en collection : ses logos, sa palette et ses polices.
 oracle-assets	Drag anywhere	Glisser partout
 oracle-assets	Drop an asset into an Oracle app or any other software.	Déposez une ressource dans une app Oracle ou n'importe quel logiciel.
+oracle-font	Every font at hand, tried before use.	Toutes vos polices sous la main, essayées avant usage.
+oracle-font	The system's fonts, the library's and the brands' from Brand Kit: a sample line in each, then a waterfall, a paragraph, the glyphs, side-by-side comparisons, heading and body pairings and the text on a brand's colours.	Les polices du système, de la Bibliothèque et des marques du Brand Kit : une ligne d'essai dans chacune, puis une cascade, un paragraphe, les glyphes, des comparaisons côte à côte, des paires titre et texte, et le texte sur les couleurs d'une marque.
+oracle-font	Try them out	Essayer
+oracle-font	Your own text in every font, variable axes included.	Votre texte dans chaque police, axes variables compris.
+oracle-font	Pair and compare	Associer et comparer
+oracle-font	Headings with body text, several fonts side by side, contrast on brand colours.	Titres et texte courant, plusieurs polices côte à côte, contraste sur les couleurs d'une marque.
+oracle-font	Activate and share	Activer et partager
+oracle-font	Activate a font without administrator rights, add it to the library or to a brand.	Activez une police sans droits administrateur, ajoutez-la à la Bibliothèque ou à une marque.
