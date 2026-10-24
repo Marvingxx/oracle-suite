@@ -42,7 +42,6 @@
 	Installed version	インストール済みバージョン
 	Latest version	最新バージョン
 	Newest release	最新リリース
-	Discord	Discord
 	GitHub	GitHub
 	Website	ウェブサイト
 	Classic apps	クラシックアプリ
@@ -101,7 +100,6 @@
 	Show the window on the current desktop	現在のデスクトップにウィンドウを表示
 	Start Oracle Suite when I log in	ログイン時に Oracle Suite を起動
 	Community	コミュニティ
-	Questions, ideas and news from the ArtCraft team	ArtCraft チームからの質問、アイデア、ニュース
 	Appearance	外観
 	Quit Oracle Suite	Oracle Suite を終了
 	Done	完了
@@ -128,7 +126,6 @@
 	Apps you hid	非表示にしたアプリ
 	Checked {ago} · using {sources}	最終確認: {ago} · 取得元: {sources}
 	{a} and {b}	{a} と {b}
-	Join the Discord	Discord に参加
 	Learn more	詳細を見る
 	Minimize	最小化
 	Maximize	最大化
@@ -169,6 +166,8 @@ oracle-brand-kit	Brand identity and client deliveries	ブランドアイデン�
 oracle-mockup-studio	2D mockups	2Dモックアップ
 oracle-guide	Brand guidelines and page layout	ブランドガイドラインとページレイアウト
 oracle-motion	Motion graphics and compositing	モーショングラフィックスとコンポジット
+oracle-video	Video editing	ビデオ編集
+oracle-assets	Your assets, outside the apps	アプリの外でアセットを
 
 # Contextual: month abbreviations for date rendering
 month	Jan	1月
@@ -189,8 +188,6 @@ month	Dec	12月
 	Installing for {platform}	{platform} にインストール
 	Downloads for {platform}	{platform} 用のダウンロード
 	No downloads for this system	このシステム用のダウンロードはありません
-	Join the ArtCraft community on Discord	Discord で ArtCraft コミュニティに参加
-	ArtCraft on {name}	{name} の ArtCraft
 	Couldn't open {name}: {e}	{name} を開けませんでした: {e}
 	Download cancelled	ダウンロードをキャンセルしました
 	Available to install	インストール可能
@@ -231,7 +228,6 @@ month	Dec	12月
 	Couldn't check for updates: {f}	更新を確認できませんでした: {f}
 	Website (coming soon)	ウェブサイト（近日公開）
 	GitHub repository	GitHub リポジトリ
-	ArtCraft	ArtCraft
 	Update 1 app	1 個のアプリを更新
 	Update all ({count})	すべて更新（{count}）
 	⊞  Grid	⊞  グリッド
@@ -326,7 +322,6 @@ filter	Installed	インストール済み
 @id	sort.installed	インストール済みバージョン
 @id	sort.latest	最新バージョン
 @id	sort.released	最新リリース
-@id	help.discord	Discord
 @id	help.github	GitHub
 @id	help.website	ウェブサイト
 @id	update.check	更新を確認
@@ -342,9 +337,6 @@ filter	Installed	インストール済み
 # Tray (menu bar) menu and tooltip
 	Show Oracle Suite	Oracle Suite を表示
 	Check for Updates	更新を確認
-	Visit getartcraft.com	getartcraft.com を開く
-	ArtCraft on GitHub	GitHub の ArtCraft
-	Join the ArtCraft Discord	ArtCraft Discord に参加
 @plural	Oracle Suite · {n} update available|Oracle Suite · {n} updates available	Oracle Suite · {n} 件の更新があります
 	Install folder	インストール先フォルダー
 	Default install folder	既定のインストール先フォルダー

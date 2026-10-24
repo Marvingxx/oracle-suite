@@ -44,9 +44,9 @@
     <!-- MSI caches this icon using its Id as the filename; keep the .exe extension (ICE50). -->
     <Icon Id="ArtCraftLauncherIcon.exe" SourceFile="$(var.IconPath)" />
     <Property Id="ARPPRODUCTICON" Value="ArtCraftLauncherIcon.exe" />
-    <Property Id="ARPURLINFOABOUT" Value="https://getartcraft.com/apps" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/Marvingxx/apps" />
     <Property Id="ARPURLUPDATEINFO" Value="https://github.com/storytold/craft-launcher/releases" />
-    <Property Id="ARPHELPLINK" Value="https://discord.gg/artcraft" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/Marvingxx/oracle-suite" />
 
     <StandardDirectory Id="LocalAppDataFolder">
       <Directory Id="LocalProgramsFolder" Name="Programs">
@@ -123,7 +123,7 @@
         <Control Id="DesktopShortcut" Type="CheckBox" X="20" Y="186" Width="330" Height="17" Property="INSTALLDESKTOPSHORTCUT" CheckBoxValue="1" Text="!(loc.ArtCraftDesktopShortcut)" />
       </Dialog>
     </UI>
-    <!-- Our own art, drawn by package.ps1 from the ArtCraft mark and the Oracle apps' icons. -->
+    <!-- Our own art, drawn by package.ps1 from the Oracle mark and the Oracle apps' icons. -->
     <WixVariable Id="WixUIBannerBmp" Value="$(var.BannerBmp)" />
     <WixVariable Id="WixUIDialogBmp" Value="$(var.DialogBmp)" />
 

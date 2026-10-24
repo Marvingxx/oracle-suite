@@ -995,19 +995,13 @@ pub(crate) mod linux {
     /// The app's 128 px icon, as bundled in `assets/app-icons`.
     fn icon_png(app: &CraftApp) -> Option<&'static [u8]> {
         Some(match app.id {
-            "photocraft" => include_bytes!("../../../assets/app-icons/photocraft.png"),
-            "vectorcraft" => include_bytes!("../../../assets/app-icons/vectorcraft.png"),
-            "filmcraft" => include_bytes!("../../../assets/app-icons/filmcraft.png"),
-            "lightcraft" => include_bytes!("../../../assets/app-icons/lightcraft.png"),
-            "pdfcraft" => include_bytes!("../../../assets/app-icons/pdfcraft.png"),
-            "effectcraft" => include_bytes!("../../../assets/app-icons/effectcraft.png"),
-            "designcraft" => include_bytes!("../../../assets/app-icons/designcraft.png"),
-            "wordcraft" => include_bytes!("../../../assets/app-icons/wordcraft.png"),
-            "deckcraft" => include_bytes!("../../../assets/app-icons/deckcraft.png"),
-            "gridcraft" => include_bytes!("../../../assets/app-icons/gridcraft.png"),
-            "cadcraft" => include_bytes!("../../../assets/app-icons/cadcraft.png"),
-            "soundcraft" => include_bytes!("../../../assets/app-icons/soundcraft.png"),
-            "figcraft" => include_bytes!("../../../assets/app-icons/figcraft.png"),
+            "oracle-edit" => include_bytes!("../../../assets/app-icons/oracle-edit.png"),
+            "oracle-vector" => include_bytes!("../../../assets/app-icons/oracle-vector.png"),
+            "oracle-brand-kit" => include_bytes!("../../../assets/app-icons/oracle-brand-kit.png"),
+            "oracle-mockup-studio" => include_bytes!("../../../assets/app-icons/oracle-mockup-studio.png"),
+            "oracle-guide" => include_bytes!("../../../assets/app-icons/oracle-guide.png"),
+            "oracle-motion" => include_bytes!("../../../assets/app-icons/oracle-motion.png"),
+            "oracle-video" => include_bytes!("../../../assets/app-icons/oracle-video.png"),
             _ => return None,
         })
     }

@@ -122,7 +122,7 @@ pub struct LauncherUi {
     pub(crate) launcher_job: Option<oracle_suite_core::protocol::JobPhase>,
     /// The new launcher is in place: quit so it can start.
     restart_requested: bool,
-    /// News from ArtCraft's release feed, shown inline until dismissed.
+    /// News from the release feed, shown inline until dismissed.
     pub(crate) announcements: Vec<oracle_suite_core::feed::Notice>,
     /// Alerts from the feed, shown as popups until acknowledged.
     pub(crate) alerts: Vec<oracle_suite_core::feed::Notice>,
@@ -757,15 +757,15 @@ impl LauncherUi {
         for e in &self.entries {
             if matches!(e.latest, Some(LatestRelease::Found(_) | LatestRelease::None)) {
                 match e.origin {
-                    Some(Origin::ArtCraftApi) => api = true,
+                    Some(Origin::FeedApi) => api = true,
                     Some(Origin::GitHub) => github = true,
                     None => {}
                 }
             }
         }
         match (api, github) {
-            (true, true) => Some(crate::i18n::fmt(tl!("{a} and {b}"), &[("a", Origin::ArtCraftApi.label()), ("b", Origin::GitHub.label())])),
-            (true, false) => Some(Origin::ArtCraftApi.label().to_string()),
+            (true, true) => Some(crate::i18n::fmt(tl!("{a} and {b}"), &[("a", Origin::FeedApi.label()), ("b", Origin::GitHub.label())])),
+            (true, false) => Some(Origin::FeedApi.label().to_string()),
             (false, true) => Some(Origin::GitHub.label().to_string()),
             (false, false) => None,
         }

@@ -151,10 +151,10 @@ fn events() -> Vec<Event> {
         ev.push(Event::Latest {
             app: (*id).into(),
             latest: LatestRelease::Found(release(id, v, NOW - 86_400 - i as i64 * 600)),
-            from: Origin::ArtCraftApi,
+            from: Origin::FeedApi,
         });
     }
-    ev.push(Event::Latest { app: "oracle-vector".into(), latest: LatestRelease::None, from: Origin::ArtCraftApi });
+    ev.push(Event::Latest { app: "oracle-vector".into(), latest: LatestRelease::None, from: Origin::FeedApi });
     let installed = [("oracle-edit", "0.4.1"), ("oracle-vector", "0.4.0")];
     for app in &SUITE {
         let inst = installed.iter().find(|(id, _)| *id == app.id).map(|(_, v)| Installed {
@@ -503,7 +503,7 @@ fn grid_shows_every_status_and_installs_on_click() {
     // The window has no title bar of its own here (the web build, and the tests).
     assert!(h.query_by_label("Close").is_none());
     assert!(h.query_all_by_label_contains("Discord").count() >= 1); // the footer icon (the header has none)
-    assert!(h.query_by_label("Join the ArtCraft community on Discord").is_none(), "no Discord link in the header");
+    assert!(h.query_by_label("Discord").is_none(), "no Discord link in the header");
     assert!(h.query_all_by_label("Coming soon").count() >= 1);
     h.get_by_label_contains("48 MB of 131 MB");
     h.get_by_label("Update all (2)").click();
@@ -999,8 +999,8 @@ fn feed_announcements_and_alerts_show_until_dismissed() {
     let sent = Rc::new(RefCell::new(Vec::new()));
     let mut evs = events();
     evs.push(Event::Notices {
-        announcements: vec![notice("a1", "Oracle Vector 1.0 is out", Some("https://getartcraft.com/news"))],
-        alerts: vec![notice("x1", "Security update", Some("https://getartcraft.com/security"))],
+        announcements: vec![notice("a1", "Oracle Vector 1.0 is out", Some("https://github.com/Marvingxx/news"))],
+        alerts: vec![notice("x1", "Security update", Some("https://github.com/Marvingxx/security"))],
     });
     let mut backend = Some(Fake { events: evs, sent, manage: true, pictures: Rc::default(), asked: Vec::new(), clock: Rc::new(Cell::new(NOW)) });
     let mut h = Harness::builder().with_size(egui::vec2(1180.0, 1200.0)).build_ui_state(

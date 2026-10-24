@@ -80,7 +80,7 @@ struct Shared {
     feed_failures: Mutex<u32>,
     /// When the feed last answered (Unix seconds).
     feed_ok_at: Mutex<Option<i64>>,
-    /// How often ArtCraft's API may be called.
+    /// How often the release feed's API may be called.
     feed_throttle: Mutex<FeedThrottle>,
     /// Apps whose details pictures are on their way (a second request meanwhile does nothing).
     pictures_busy: Mutex<std::collections::HashSet<&'static str>>,
@@ -154,8 +154,8 @@ impl NativeBackend {
         let now = crate::now();
         for app in &SUITE {
             let answer = match feed.as_ref().map(|f| f.answer(app, now)) {
-                Some(FeedAnswer::Fresh(Some(r))) => Some((LatestRelease::Found(r), Origin::ArtCraftApi)),
-                Some(FeedAnswer::Fresh(None)) => Some((LatestRelease::None, Origin::ArtCraftApi)),
+                Some(FeedAnswer::Fresh(Some(r))) => Some((LatestRelease::Found(r), Origin::FeedApi)),
+                Some(FeedAnswer::Fresh(None)) => Some((LatestRelease::None, Origin::FeedApi)),
                 _ => self.source.as_ref().and_then(|s| s.cached(&feed_repo(feed.as_ref(), app), pre)).map(|l| (l, Origin::GitHub)),
             };
             if let Some((latest, from)) = answer {
@@ -207,7 +207,7 @@ impl NativeBackend {
         });
     }
 
-    /// Looks up the latest releases: ArtCraft's release feed first (one request for every app),
+    /// Looks up the latest releases: the release feed first (one request for every app),
     /// GitHub for anything the feed can't vouch for (apps it doesn't list, entries more than a
     /// day old, or no answer at all), at most once an hour per app unless `force`.
     fn check(&self, force: bool) {
@@ -733,8 +733,8 @@ fn latest_for(
 ) -> (Option<LatestRelease>, Origin, Option<Source>) {
     if fallback.trust_feed {
         match feed.map(|f| f.answer(app, now)) {
-            Some(FeedAnswer::Fresh(Some(r))) => return (Some(LatestRelease::Found(r)), Origin::ArtCraftApi, Some(Source::Feed)),
-            Some(FeedAnswer::Fresh(None)) => return (Some(LatestRelease::None), Origin::ArtCraftApi, Some(Source::Feed)),
+            Some(FeedAnswer::Fresh(Some(r))) => return (Some(LatestRelease::Found(r)), Origin::FeedApi, Some(Source::Feed)),
+            Some(FeedAnswer::Fresh(None)) => return (Some(LatestRelease::None), Origin::FeedApi, Some(Source::Feed)),
             Some(FeedAnswer::AskGitHub) | None => {}
         }
     }
@@ -776,7 +776,7 @@ enum FeedFetch {
     Held,
 }
 
-/// Asks ArtCraft's release feed up to `attempts` times, as often as `throttle` allows (waiting at
+/// Asks the release feed up to `attempts` times, as often as `throttle` allows (waiting at
 /// most [`MAX_THROTTLE_WAIT`] for it), saving a good answer.
 fn fetch_feed(http: &Http, paths: &Paths, url: &str, throttle: &Mutex<FeedThrottle>, attempts: usize) -> FeedFetch {
     // No feed configured: nothing to ask, GitHub answers instead.
@@ -855,7 +855,7 @@ fn is_loopback(url: &str) -> bool {
 
 /// `ORACLE_SUITE_DOWNLOAD_BASE`: a mirror on this machine (`cargo xtask local serve`) that
 /// serves `release_info.json` and the builds it lists. While it's set, releases come only from
-/// there (never GitHub or ArtCraft's API), and its download links are trusted. Loopback only, so
+/// there (never GitHub or the release feed's API), and its download links are trusted. Loopback only, so
 /// nothing but the developer's own builds can be installed this way, and only in builds with the
 /// `local-mirror` feature: release builds ignore the variable.
 fn local_mirror() -> Option<String> {
@@ -874,7 +874,7 @@ fn local_mirror() -> Option<String> {
 }
 
 /// The local mirror's feed: `ORACLE_SUITE_FEED_URL` if set, else `release_info.json` beside
-/// the builds. Asked every check (it's on this machine), and never saved over ArtCraft's.
+/// the builds. Asked every check (it's on this machine), and never saved over the feed's.
 fn local_feed(http: &Http, base: &str) -> Option<Feed> {
     let url = std::env::var("ORACLE_SUITE_FEED_URL").ok().filter(|u| is_loopback(u)).unwrap_or_else(|| format!("{base}release_info.json"));
     match http.get_feed(&url) {
@@ -899,7 +899,7 @@ fn mirror_latest(app: &CraftApp, feed: Option<&Feed>, now: i64) -> (Option<Lates
         Some(FeedAnswer::Fresh(None) | FeedAnswer::AskGitHub) => LatestRelease::None,
         None => LatestRelease::Failed("the local mirror didn't answer".into()),
     };
-    (Some(latest), Origin::ArtCraftApi, Some(Source::Feed))
+    (Some(latest), Origin::FeedApi, Some(Source::Feed))
 }
 
 /// The last saved feed answer, if any.
@@ -1427,7 +1427,7 @@ mod tests {
         let Some(platform) = native_platform() else { return };
         let dir = tempfile::tempdir().unwrap();
         let mut backend = backend(dir.path(), platform, Some(Arc::new(Newer)));
-        // A check needs a client; with pre-releases on it asks only `Newer`, never ArtCraft's API.
+        // A check needs a client; with pre-releases on it asks only `Newer`, never the release feed's API.
         backend.http = Some(Http::new().unwrap());
         backend.shared.options.lock().unwrap().prereleases = true;
         keep_file(&backend);

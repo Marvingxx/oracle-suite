@@ -191,8 +191,8 @@ pub mod windows {
         let mut command = crate::process::command("powershell.exe");
         command.args([
             "-NoLogo", "-NoProfile", "-NonInteractive", "-Command",
-            "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; [System.Diagnostics.FileVersionInfo]::GetVersionInfo($env:ARTCRAFT_VERSION_FILE).ProductVersion",
-        ]).env("ARTCRAFT_VERSION_FILE", path);
+            "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; [System.Diagnostics.FileVersionInfo]::GetVersionInfo($env:ORACLE_VERSION_FILE).ProductVersion",
+        ]).env("ORACLE_VERSION_FILE", path);
         let output = crate::process::run_command(command, "powershell.exe", std::time::Duration::from_secs(5)).ok()?;
         version::parse(output.trim())
     }

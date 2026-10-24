@@ -38,7 +38,6 @@
 	Installed version	Version installée
 	Latest version	Dernière version
 	Newest release	Version la plus récente
-	Discord	Discord
 	GitHub	GitHub
 	Website	Site web
 	Classic apps	Applications classiques
@@ -97,7 +96,6 @@
 	Show the window on the current desktop	Afficher la fenêtre sur le bureau actuel
 	Start Oracle Suite when I log in	Lancer Oracle Suite à l'ouverture de session
 	Community	Communauté
-	Questions, ideas and news from the ArtCraft team	Questions, idées et actualités de l'équipe ArtCraft
 	Appearance	Apparence
 	Quit Oracle Suite	Quitter Oracle Suite
 	Done	Terminé
@@ -124,7 +122,6 @@
 	Apps you hid	Applications que vous avez masquées
 	Checked {ago} · using {sources}	Vérifié {ago} · via {sources}
 	{a} and {b}	{a} et {b}
-	Join the Discord	Rejoindre le Discord
 	Learn more	En savoir plus
 	Minimize	Réduire
 	Maximize	Agrandir
@@ -165,6 +162,8 @@ oracle-brand-kit	Brand identity and client deliveries	Identité de marque et liv
 oracle-mockup-studio	2D mockups	Mockups 2D
 oracle-guide	Brand guidelines and page layout	Chartes graphiques et mise en page
 oracle-motion	Motion graphics and compositing	Animation graphique et compositing
+oracle-video	Video editing	Montage vidéo
+oracle-assets	Your assets, outside the apps	Vos ressources, hors des logiciels
 
 # Contextual: month abbreviations for date rendering
 month	Jan	janv.
@@ -185,8 +184,6 @@ month	Dec	déc.
 	Installing for {platform}	Installation pour {platform}
 	Downloads for {platform}	Téléchargements pour {platform}
 	No downloads for this system	Aucun téléchargement pour ce système
-	Join the ArtCraft community on Discord	Rejoindre la communauté ArtCraft sur Discord
-	ArtCraft on {name}	ArtCraft sur {name}
 	Couldn't open {name}: {e}	Impossible d'ouvrir {name} : {e}
 	Download cancelled	Téléchargement annulé
 	Available to install	Disponible à l'installation
@@ -226,7 +223,6 @@ month	Dec	déc.
 	Downloads the new version, replaces this one and opens it again	Télécharge la nouvelle version, remplace celle-ci et la rouvre
 	Couldn't check for updates: {f}	Impossible de rechercher les mises à jour : {f}
 	GitHub repository	Dépôt GitHub
-	ArtCraft	ArtCraft
 	Update 1 app	Mettre à jour 1 application
 	Update all ({count})	Tout mettre à jour ({count})
 	⊞  Grid	⊞  Grille
@@ -308,7 +304,6 @@ filter	Installed	Installées
 @id	sort.installed	Version installée
 @id	sort.latest	Dernière version
 @id	sort.released	Version la plus récente
-@id	help.discord	Discord
 @id	help.github	GitHub
 @id	help.website	Site web
 @id	update.check	Rechercher des mises à jour
@@ -324,9 +319,6 @@ filter	Installed	Installées
 # Tray (menu bar) menu and tooltip
 	Show Oracle Suite	Afficher Oracle Suite
 	Check for Updates	Rechercher des mises à jour
-	Visit getartcraft.com	Visiter getartcraft.com
-	ArtCraft on GitHub	ArtCraft sur GitHub
-	Join the ArtCraft Discord	Rejoindre le Discord d'ArtCraft
 	App details	Détails de l'application
 	Close (Esc)	Fermer (Esc)
 	Features	Fonctionnalités
@@ -428,3 +420,19 @@ oracle-motion	Effects and compositing	Effets et compositing
 oracle-motion	Hundreds of effects, masks, track mattes and blending modes.	Des centaines d'effets, des masques, des caches et des modes de fusion.
 oracle-motion	Render queue	File de rendu
 oracle-motion	Video, image sequences and Lottie, from the same project.	Vidéo, séquences d'images et Lottie, depuis le même projet.
+oracle-video	Video editing, in the Oracle suite.	Le montage vidéo, dans la suite Oracle.
+oracle-video	Projects, bins, sequences and a multitrack timeline, trimming tools, effects, colour grading, scopes, audio mixing, captions and exports, forked from FilmCraft. Your Oracle Vector logos and Oracle Edit pictures come in from the library, and follow when you save them.	Projets, chutiers, séquences et une timeline multipiste, outils de raccord, effets, étalonnage, oscilloscopes, mixage audio, sous-titres et exports, issus de FilmCraft. Vos logos Oracle Vector et vos images Oracle Edit arrivent depuis la Bibliothèque, et suivent quand vous les enregistrez.
+oracle-video	Edit on a timeline	Monter sur une timeline
+oracle-video	Ripple, roll, slip and slide, multicam, nesting and markers.	Raccords par propagation, modification, glissement et coulissement, multicaméra, imbrication et marqueurs.
+oracle-video	Colour and sound	Couleur et son
+oracle-video	Grading with scopes, and an audio mixer with loudness meters.	Étalonnage avec oscilloscopes, et une console audio avec mesure de la sonie.
+oracle-video	Export	Export
+oracle-video	H.264, ProRes and image stills, from the same project.	H.264, ProRes et images fixes, depuis le même projet.
+oracle-assets	Your assets, outside the apps.	Vos ressources, hors des logiciels.
+oracle-assets	The Oracle Library as an app of its own: textures, brushes, fonts, vectors, mockups and the brands of Brand Kit, searched in French and English, with favourites and tags. Drag any of them to any app.	La Bibliothèque Oracle comme logiciel à part entière : textures, pinceaux, polices, vecteurs, mockups et les marques du Brand Kit, cherchés en français et en anglais, avec favoris et tags. Glissez-les dans n'importe quel logiciel.
+oracle-assets	Find anything	Tout retrouver
+oracle-assets	Search by word, format, section or tag, in French or English.	Par mot, format, section ou tag, en français ou en anglais.
+oracle-assets	Your brands	Vos marques
+oracle-assets	Each Brand Kit brand as a collection: its logos, palette and fonts.	Chaque marque du Brand Kit en collection : ses logos, sa palette et ses polices.
+oracle-assets	Drag anywhere	Glisser partout
+oracle-assets	Drop an asset into an Oracle app or any other software.	Déposez une ressource dans une app Oracle ou n'importe quel logiciel.

@@ -25,7 +25,6 @@
 	Installed version	已安装版本
 	Latest version	最新版本
 	Newest release	发布日期
-	Discord	Discord
 	GitHub	GitHub
 	Website	网站
 	Classic apps	经典应用
@@ -81,7 +80,6 @@
 	Show the window on the current desktop	在当前桌面显示窗口
 	Start Oracle Suite when I log in	登录时启动 Oracle Suite
 	Community	社区
-	Questions, ideas and news from the ArtCraft team	与 ArtCraft 团队交流问题、想法和动态
 	Appearance	外观
 	Quit Oracle Suite	退出 Oracle Suite
 	Done	完成
@@ -114,8 +112,6 @@ month	Dec	12月
 	Installing for {platform}	安装平台：{platform}
 	Downloads for {platform}	下载平台：{platform}
 	No downloads for this system	此系统暂无可用下载
-	Join the ArtCraft community on Discord	加入 Discord 上的 ArtCraft 社区
-	ArtCraft on {name}	ArtCraft 的 {name} 主页
 	Available to install	可安装
 	Available	可用
 	Installed · up to date	已安装 · 已是最新
@@ -151,7 +147,6 @@ month	Dec	12月
 	Downloads the new version, replaces this one and opens it again	下载新版本，替换当前版本并重新打开
 	Couldn't check for updates: {f}	无法检查更新：{f}
 	GitHub repository	GitHub 仓库
-	ArtCraft	ArtCraft
 	Update 1 app	更新 1 个应用
 	Update all ({count})	全部更新（{count}）
 	⊞  Grid	⊞  网格
@@ -208,7 +203,6 @@ filter	Installed	已安装
 @id	sort.installed	已安装版本
 @id	sort.latest	最新版本
 @id	sort.released	发布日期
-@id	help.discord	Discord
 @id	help.github	GitHub
 @id	help.website	网站
 @id	update.check	检查更新
@@ -223,7 +217,6 @@ filter	Installed	已安装
 	Update	更新
 	New	新
 	Classic	经典
-	Join the Discord	加入 Discord
 	Minimize	最小化
 	Maximize	最大化
 	Restore	还原
@@ -231,9 +224,6 @@ filter	Installed	已安装
 	Show in Explorer	在资源管理器中显示
 	Show Oracle Suite	显示 Oracle Suite
 	Check for Updates	检查更新
-	Visit getartcraft.com	访问 getartcraft.com
-	ArtCraft on GitHub	ArtCraft 的 GitHub 主页
-	Join the ArtCraft Discord	加入 ArtCraft Discord 社区
 @plural	Oracle Suite · {n} update available|Oracle Suite · {n} updates available	Oracle Suite · 有 {n} 个可用更新
 @plural	{n} app|{n} apps	{n} 个应用
 oracle-edit	Image editing	图像编辑
@@ -242,6 +232,8 @@ oracle-brand-kit	Brand identity and client deliveries	品牌识别与交付文�
 oracle-mockup-studio	2D mockups	2D 样机
 oracle-guide	Brand guidelines and page layout	品牌手册与页面排版
 oracle-motion	Motion graphics and compositing	动态图形与合成
+oracle-video	Video editing	视频剪辑
+oracle-assets	Your assets, outside the apps	在应用之外使用你的素材
 
 	Show in Files	在文件管理器中显示
 	Loading Oracle Suite…	正在加载 Oracle Suite…

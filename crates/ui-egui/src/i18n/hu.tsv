@@ -40,7 +40,6 @@
 	Installed version	Telepített verzió
 	Latest version	Legújabb verzió
 	Newest release	Legújabb kiadás
-	Discord	Discord
 	GitHub	GitHub
 	Website	Webhely
 	Classic apps	Eredeti alkalmazások
@@ -99,7 +98,6 @@
 	Show the window on the current desktop	Ablak megjelenítése az aktuális asztalon
 	Start Oracle Suite when I log in	Oracle Suite indítása bejelentkezéskor
 	Community	Közösség
-	Questions, ideas and news from the ArtCraft team	Kérdések, ötletek és hírek az ArtCraft csapatától
 	Appearance	Megjelenés
 	Quit Oracle Suite	Kilépés az Oracle Suiteből
 	Done	Kész
@@ -126,7 +124,6 @@
 	Apps you hid	Az általad elrejtett alkalmazások
 	Checked {ago} · using {sources}	Ellenőrizve: {ago} · {sources}
 	{a} and {b}	{a} és {b}
-	Join the Discord	Csatlakozás a Discordhoz
 	Learn more	További információ
 	Minimize	Kis méret
 	Maximize	Teljes méret
@@ -167,6 +164,8 @@ oracle-brand-kit	Brand identity and client deliveries	Arculat és ügyfélanyago
 oracle-mockup-studio	2D mockups	2D mockupok
 oracle-guide	Brand guidelines and page layout	Arculati kézikönyvek és tördelés
 oracle-motion	Motion graphics and compositing	Mozgógrafika és kompozitálás
+oracle-video	Video editing	Videóvágás
+oracle-assets	Your assets, outside the apps	Az eszközeid az alkalmazásokon kívül
 
 # Contextual: month abbreviations for date rendering
 month	Jan	jan.
@@ -187,8 +186,6 @@ month	Dec	dec.
 	Installing for {platform}	Telepítés {platform} rendszerre
 	Downloads for {platform}	Letöltések {platform} rendszerre
 	No downloads for this system	Nincsenek letöltések ehhez a rendszerhez
-	Join the ArtCraft community on Discord	Csatlakozz az ArtCraft közösségéhez a Discordon
-	ArtCraft on {name}	ArtCraft – {name}
 	Couldn't open {name}: {e}	{name} nem nyitható meg: {e}
 	Download cancelled	Letöltés megszakítva
 	Available to install	Telepíthető
@@ -229,7 +226,6 @@ month	Dec	dec.
 	Couldn't check for updates: {f}	Nem sikerült frissítéseket keresni: {f}
 	Website (coming soon)	Webhely (hamarosan)
 	GitHub repository	GitHub-tároló
-	ArtCraft	ArtCraft
 	Update 1 app	1 alkalmazás frissítése
 	Update all ({count})	Összes frissítése ({count})
 	⊞  Grid	⊞  Rács
@@ -324,7 +320,6 @@ filter	Installed	Telepítve
 @id	sort.installed	Telepített verzió
 @id	sort.latest	Legújabb verzió
 @id	sort.released	Legújabb kiadás
-@id	help.discord	Discord
 @id	help.github	GitHub
 @id	help.website	Webhely
 @id	update.check	Frissítések keresése
@@ -340,9 +335,6 @@ filter	Installed	Telepítve
 # Tray (menu bar) menu and tooltip
 	Show Oracle Suite	Oracle Suite megjelenítése
 	Check for Updates	Frissítések keresése
-	Visit getartcraft.com	getartcraft.com megnyitása
-	ArtCraft on GitHub	ArtCraft a GitHubon
-	Join the ArtCraft Discord	Csatlakozás az ArtCraft Discord-közösségéhez
 @plural	Oracle Suite · {n} update available|Oracle Suite · {n} updates available	Oracle Suite · {n} frissítés elérhető|Oracle Suite · {n} frissítés elérhető
 	Install folder	Telepítési mappa
 	Default install folder	Alapértelmezett telepítési mappa

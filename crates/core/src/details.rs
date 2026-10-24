@@ -69,7 +69,7 @@ pub fn looks_like_jpeg(bytes: &[u8]) -> bool {
 /// Where every Oracle app runs.
 const PLATFORMS: &str = "macOS, Windows, Linux, FreeBSD, web";
 
-pub const DETAILS: [AppDetails; 6] = [
+pub const DETAILS: [AppDetails; 8] = [
     AppDetails {
         id: "oracle-edit",
         headline: "The image editor you already know how to use.",
@@ -159,6 +159,33 @@ pub const DETAILS: [AppDetails; 6] = [
             feature("Animate anything", "Every property keyframes, with the graph editor, easing and expressions."),
             feature("Effects and compositing", "Hundreds of effects, masks, track mattes and blending modes."),
             feature("Render queue", "Video, image sequences and Lottie, from the same project."),
+        ],
+        shots: &[],
+        platforms: "Windows",
+    },
+    AppDetails {
+        id: "oracle-video",
+        headline: "Video editing, in the Oracle suite.",
+        about: "Projects, bins, sequences and a multitrack timeline, trimming tools, effects, colour grading, scopes, \
+                audio mixing, captions and exports, forked from FilmCraft. Your Oracle Vector logos and Oracle Edit \
+                pictures come in from the library, and follow when you save them.",
+        features: &[
+            feature("Edit on a timeline", "Ripple, roll, slip and slide, multicam, nesting and markers."),
+            feature("Colour and sound", "Grading with scopes, and an audio mixer with loudness meters."),
+            feature("Export", "H.264, ProRes and image stills, from the same project."),
+        ],
+        shots: &[],
+        platforms: "Windows",
+    },
+    AppDetails {
+        id: "oracle-assets",
+        headline: "Your assets, outside the apps.",
+        about: "The Oracle Library as an app of its own: textures, brushes, fonts, vectors, mockups and the brands of \
+                Brand Kit, searched in French and English, with favourites and tags. Drag any of them to any app.",
+        features: &[
+            feature("Find anything", "Search by word, format, section or tag, in French or English."),
+            feature("Your brands", "Each Brand Kit brand as a collection: its logos, palette and fonts."),
+            feature("Drag anywhere", "Drop an asset into an Oracle app or any other software."),
         ],
         shots: &[],
         platforms: "Windows",

@@ -38,7 +38,6 @@
 	Installed version	Установленная версия
 	Latest version	Последняя версия
 	Newest release	Новый релиз
-	Discord	Discord
 	GitHub	GitHub
 	Website	Веб-сайт
 	Classic apps	Классические приложения
@@ -97,7 +96,6 @@
 	Show the window on the current desktop	Показывать окно на текущем рабочем столе
 	Start Oracle Suite when I log in	Запускать Oracle Suite при входе в систему
 	Community	Сообщество
-	Questions, ideas and news from the ArtCraft team	Вопросы, идеи и новости от команды ArtCraft
 	Appearance	Внешний вид
 	Quit Oracle Suite	Выйти из Oracle Suite
 	Done	Готово
@@ -124,7 +122,6 @@
 	Apps you hid	Приложения, которые вы скрыли
 	Checked {ago} · using {sources}	Проверено {ago} · через {sources}
 	{a} and {b}	{a} и {b}
-	Join the Discord	Присоединиться к Discord
 	Learn more	Подробнее
 	Minimize	Свернуть
 	Maximize	Развернуть
@@ -165,6 +162,8 @@ oracle-brand-kit	Brand identity and client deliveries	Фирменный сти�
 oracle-mockup-studio	2D mockups	2D-мокапы
 oracle-guide	Brand guidelines and page layout	Брендбуки и вёрстка
 oracle-motion	Motion graphics and compositing	Моушн-графика и композитинг
+oracle-video	Video editing	Видеомонтаж
+oracle-assets	Your assets, outside the apps	Ваши ресурсы вне приложений
 
 # Contextual: month abbreviations for date rendering
 month	Jan	янв.
@@ -185,8 +184,6 @@ month	Dec	дек.
 	Installing for {platform}	Установка для {platform}
 	Downloads for {platform}	Скачивание для {platform}
 	No downloads for this system	Нет загрузок для этой системы
-	Join the ArtCraft community on Discord	Присоединиться к сообществу ArtCraft в Discord
-	ArtCraft on {name}	ArtCraft в {name}
 	Couldn't open {name}: {e}	Не удалось открыть {name}: {e}
 	Download cancelled	Скачивание отменено
 	Available to install	Доступно для установки
@@ -225,7 +222,6 @@ month	Dec	дек.
 	Downloads the new version, replaces this one and opens it again	Скачивает новую версию, заменяет текущую и открывает её заново
 	Couldn't check for updates: {f}	Не удалось проверить обновления: {f}
 	GitHub repository	Репозиторий GitHub
-	ArtCraft	ArtCraft
 	Update 1 app	Обновить 1 приложение
 	Update all ({count})	Обновить все ({count})
 	⊞  Grid	⊞  Сетка
@@ -306,7 +302,6 @@ filter	Installed	Установлены
 @id	sort.installed	Установленная версия
 @id	sort.latest	Последняя версия
 @id	sort.released	Новый релиз
-@id	help.discord	Discord
 @id	help.github	GitHub
 @id	help.website	Веб-сайт
 @id	update.check	Проверить обновления
@@ -322,9 +317,6 @@ filter	Installed	Установлены
 # Tray (menu bar) menu and tooltip
 	Show Oracle Suite	Показать Oracle Suite
 	Check for Updates	Проверить обновления
-	Visit getartcraft.com	Открыть getartcraft.com
-	ArtCraft on GitHub	ArtCraft на GitHub
-	Join the ArtCraft Discord	Присоединиться к Discord ArtCraft
 	App details	О приложении
 	Close (Esc)	Закрыть (Esc)
 	Features	Возможности

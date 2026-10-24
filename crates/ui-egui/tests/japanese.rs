@@ -75,10 +75,10 @@ fn events() -> Vec<Event> {
         ev.push(Event::Latest {
             app: (*id).into(),
             latest: LatestRelease::Found(release(id, v, NOW - 86_400 - i as i64 * 600)),
-            from: Origin::ArtCraftApi,
+            from: Origin::FeedApi,
         });
     }
-    ev.push(Event::Latest { app: "oracle-vector".into(), latest: LatestRelease::None, from: Origin::ArtCraftApi });
+    ev.push(Event::Latest { app: "oracle-vector".into(), latest: LatestRelease::None, from: Origin::FeedApi });
     let installed = [("oracle-edit", "0.4.1"), ("oracle-vector", "0.4.0")];
     for app in &SUITE {
         let inst = installed.iter().find(|(id, _)| *id == app.id).map(|(_, v)| Installed {

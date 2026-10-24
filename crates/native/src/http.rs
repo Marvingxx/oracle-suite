@@ -32,14 +32,14 @@ pub enum Fetched {
 #[derive(Clone)]
 pub struct Http {
     small: ureq::Agent,
-    /// ArtCraft's release feed: a short timeout, so a slow server never holds up a check.
+    /// the release feed: a short timeout, so a slow server never holds up a check.
     feed: ureq::Agent,
     no_redirect: ureq::Agent,
     download: ureq::Agent,
     token: Option<String>,
 }
 
-/// Why ArtCraft's release feed couldn't be read.
+/// Why the release feed couldn't be read.
 #[derive(Debug)]
 pub struct FeedError {
     pub why: String,
@@ -137,7 +137,7 @@ impl Http {
         }
     }
 
-    /// ArtCraft's release feed, or why it couldn't be read. Never takes more than ~10 seconds.
+    /// the release feed, or why it couldn't be read. Never takes more than ~10 seconds.
     pub fn get_feed(&self, url: &str) -> Result<String, FeedError> {
         let failed = |why: String| FeedError { why, throttled: false, retry_after: None };
         let mut resp =

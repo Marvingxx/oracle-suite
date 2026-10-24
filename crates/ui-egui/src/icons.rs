@@ -11,6 +11,8 @@ pub fn app(id: &str) -> Option<ImageSource<'static>> {
         "oracle-mockup-studio" => egui::include_image!("../../../assets/app-icons/oracle-mockup-studio.png"),
         "oracle-guide" => egui::include_image!("../../../assets/app-icons/oracle-guide.png"),
         "oracle-motion" => egui::include_image!("../../../assets/app-icons/oracle-motion.png"),
+        "oracle-video" => egui::include_image!("../../../assets/app-icons/oracle-video.png"),
+        "oracle-assets" => egui::include_image!("../../../assets/app-icons/oracle-assets.png"),
         _ => return None,
     })
 }
@@ -67,14 +69,8 @@ pub const ORACLE_LOGO_ASPECT: f32 = 677.25 / 108.0;
 /// A social service's logo (Simple Icons, white, for tinting), by its name in `catalog::SOCIAL`.
 pub fn social(service: &str) -> Option<ImageSource<'static>> {
     Some(match service {
-        "X" => egui::include_image!("../../../assets/social/x.svg"),
-        "YouTube" => egui::include_image!("../../../assets/social/youtube.svg"),
-        "TikTok" => egui::include_image!("../../../assets/social/tiktok.svg"),
-        "Instagram" => egui::include_image!("../../../assets/social/instagram.svg"),
         "GitHub" => egui::include_image!("../../../assets/social/github.svg"),
-        "Discord" => egui::include_image!("../../../assets/social/discord.svg"),
         "Website" => egui::include_image!("../../../assets/social/globe.svg"),
-        "LinkedIn" => egui::include_image!("../../../assets/social/linkedin.svg"),
         _ => return None,
     })
 }

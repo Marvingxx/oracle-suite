@@ -28,10 +28,9 @@
 
 
 <p align="center">
-  <img src="docs/screenshots/oracle-suite-grid.png" alt="Oracle Suite on macOS in the grid view (dark theme): a card for each Oracle app with its icon, status, version, release date and an Install or Open button" width="900">
+  <img src="docs/screenshots/oracle-suite-grid.png" alt="Oracle Suite on Windows: a card for each Oracle app with its icon, status, version, release date and an Install button" width="900">
 </p>
 <p align="center">
-  <img src="docs/screenshots/oracle-suite-table.png" alt="The same apps in the table view (light theme), with columns for each app's status, installed and latest versions, and release date" width="900"><br>
   <sub>Switch between the grid and a sortable table.</sub>
 </p>
 
@@ -236,14 +235,11 @@ Oracle Suite is part of **Oracle**, a personal creative suite, free and local:
 | **Oracle Brand Kit** · **Oracle Mockup Studio** | Brand identities and client deliveries · 2D mockups | [oracle-brand](https://github.com/Marvingxx/oracle-brand) |
 | **Oracle Brand Guide** | Brand guidelines and page layout | [oracle-guide](https://github.com/Marvingxx/oracle-guide) |
 
-Oracle Suite started as a fork of [craft-launcher](https://github.com/storytold/craft-launcher) by the ArtCraft
-team (MIT OR Apache-2.0), taken on 22 October 2026 and developed separately since. It is not
-affiliated with or endorsed by ArtCraft.
 
 ## Thanks
 
-The community built launchers for the Oracle Suite before we did, and Oracle Suite learned a
-lot from them. Thank you to their authors:
+Before Oracle Suite, the community built launchers for the Craft apps it comes from, and Oracle Suite
+learned a lot from them. Thank you to their authors:
 
 | Project | Author | What we learned from it |
 |---|---|---|
@@ -260,10 +256,17 @@ lot from them. Thank you to their authors:
 | [ArtCraft Hub Launcher](https://github.com/tinyplayerss/artcraft-hub-launcher) | [@tinyplayerss](https://github.com/tinyplayerss) | A friendly, one-window hub for the whole suite |
 | [CraftHub](https://github.com/MegaTheLEGEND/CraftHub) | [@MegaTheLEGEND](https://github.com/MegaTheLEGEND) | Serving the apps' web builds from a self-hosted launcher |
 
+## Sources
+
+Oracle Suite is built on [craft-launcher](https://github.com/storytold/craft-launcher) by storytold (MIT OR
+Apache-2.0), taken on 22 October 2026 and developed separately since; its code, rewritten or not, keeps
+that licence and the original notices (`NOTICE`, `LICENSE-*`). Every other source (fonts, icons,
+libraries, images) is listed with its author and licence in the attribution file.
+
 ## License and credits
 
 Oracle Suite is dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
-Copyright (c) 2026 ArtCraft Team and the Oracle Suite contributors. Required notices are in [NOTICE](NOTICE).
+Required notices are in [NOTICE](NOTICE).
 
 Bundled fonts, icons, images and other assets keep their own open licenses; each one is listed
 with its author, source and license in [ATTRIBUTION.md](ATTRIBUTION.md).
@@ -272,6 +275,5 @@ The app icons of the Oracle apps (`assets/app-icons/`) are each app's own icon, 
 from its repository and licensed like that app (MIT OR Apache-2.0).
 
 The Oracle name and logo in [`docs/brand/`](docs/brand/) are the project's brand marks and are not
-covered by this license (see [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)). The
-ArtCraft marks of the original project have been removed, as its brand license asks of forks.
+covered by this license (see [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)).
 

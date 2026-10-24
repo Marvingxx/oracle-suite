@@ -37,12 +37,12 @@ impl Paths {
         self.cache.join("releases.json")
     }
 
-    /// The last answer from ArtCraft's release feed, for an instant first paint and as a fallback.
+    /// The last answer from the release feed, for an instant first paint and as a fallback.
     pub fn feed_cache(&self) -> PathBuf {
         self.cache.join("feed.json")
     }
 
-    /// How long to hold off calling ArtCraft's API (after failures or HTTP 429), across restarts.
+    /// How long to hold off calling the release feed's API (after failures or HTTP 429), across restarts.
     pub fn feed_throttle(&self) -> PathBuf {
         self.cache.join("feed-throttle.json")
     }

@@ -143,7 +143,7 @@ impl Feed {
     }
 
     /// The repo to ask GitHub about for `app`, following the feed's repo renames. Always under
-    /// [`GITHUB_OWNER`]: the feed can move an app within ArtCraft's account, never out of it.
+    /// [`GITHUB_OWNER`]: the feed can move an app within the Oracle account, never out of it.
     pub fn repo_for(&self, app: &CraftApp) -> String {
         let mut repo = app.repo.to_string();
         // Follow a chain of moves (a → b → c), without looping forever.
@@ -609,7 +609,7 @@ mod tests {
             .replace(
                 "\"alerts\": []",
                 r#""alerts": [
-            {"title": "Security update", "body": "Update PdfCraft now.", "maybe_web_link": "https://getartcraft.com/security", "created_at": null},
+            {"title": "Security update", "body": "Update PdfCraft now.", "maybe_web_link": "https://github.com/Marvingxx/security", "created_at": null},
             {"title": "Bad link", "body": "x", "maybe_web_link": "javascript:alert(1)"}]"#,
             )
             .replace(
@@ -619,7 +619,7 @@ mod tests {
             );
         let feed = Feed::parse(&with_notices).unwrap();
         assert_eq!(feed.alerts.len(), 2);
-        assert_eq!(feed.alerts[0].link.as_deref(), Some("https://getartcraft.com/security"));
+        assert_eq!(feed.alerts[0].link.as_deref(), Some("https://github.com/Marvingxx/security"));
         assert_eq!(feed.alerts[1].link, None, "only web links are kept");
         let titles: Vec<&str> = feed.announcements.iter().map(|n| n.title.as_str()).collect();
         assert_eq!(titles, ["New: CADCraft 1.0", "PdfCraft is now DocuCraft"]);

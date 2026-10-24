@@ -31,7 +31,7 @@ xtask/                                  cargo xtask ci | wasm | version | ico
 packaging/                              macOS, Windows, Linux, FreeBSD and web packaging scripts
 assets/app-icon/                        the launcher's own icon (master SVG, renders, tray icons)
 assets/app-icons/                       the Oracle apps' icons, copied from each app's repo
-assets/fonts/                           Archivo, Inter, Geist Mono (OFL-1.1): getartcraft.com's faces
+assets/fonts/                           Archivo, Inter, Geist Mono (OFL-1.1): GitHub's faces
 ```
 
 Layering: `core` depends on no other workspace crate and must build for `wasm32-unknown-unknown`.
@@ -63,7 +63,7 @@ settings file must produce an error the user can act on, never a panic. Shared s
   release builds never enable.
 - Verify each download against the release's `SHA256SUMS.txt` before running or installing it.
 - The details drawer's pictures are the one other download: JPEGs only, from a pinned tag of
-  `https://raw.githubusercontent.com/storytold/craft-launcher-assets/` (`core::details`),
+  `https://raw.githubusercontent.com/Marvingxx/oracle-suite-assets/` (`core::details`),
   capped at 2 MB each, cached, and never run. Pictures are not bundled in this repo.
 - Never run an installer with elevated rights silently; tell the user what is about to happen.
 - Never delete a user's files outside what the launcher itself installed.
@@ -75,7 +75,7 @@ settings file must produce an error the user can act on, never a panic. Shared s
 
 ### Look and feel
 
-The UI matches the apps page on getartcraft.com (`artcraft-website-next` in `artcraft-services`):
+The UI follows the Oracle look:
 hard square corners, 1 px hairlines instead of shadows, Archivo (620, 118 % width) for headings
 and app names, Inter for body text, upper-case Geist Mono labels and buttons, and the site's
 colour tokens by name (`theme::Tokens`). Build new UI from `widgets.rs`; never hard-code a colour.
@@ -100,11 +100,11 @@ only; English where there is none): never bundle a CJK font, they are 10 MB and 
 ### Other rules
 
 1. **Assets need attribution.** Every bundled asset gets a row in `ATTRIBUTION.md` (path, title,
-   author, source, license) in the same change. The ArtCraft name, logo and "A" mark in
-   `docs/brand/` (the header logo and the tray icon) are trademarks, **not MIT/Apache**
-   (`docs/brand/LICENSE-brand.txt`): use them exactly as supplied, never redraw or recolor them.
-2. **Icons are generated.** The app icon and the tray icon are the supplied ArtCraft "A" mark from
-   `docs/brand/` (a trademark, not MIT/Apache); never edit the renders by hand. Run `packaging/icons.sh` (needs `resvg`; runs on any OS) and commit the outputs.
+   author, source, license) in the same change. The Oracle name, logo and mark in
+   `docs/brand/` (the header logo and the tray icon) are the project's brand marks, **not MIT/Apache**
+   (`docs/brand/LICENSE-brand.txt`).
+2. **Icons are generated.** The app icon and the tray icon are the Oracle mark from
+   `docs/brand/` (a brand mark, not MIT/Apache); never edit the renders by hand. Run `packaging/icons.sh` (needs `resvg`; runs on any OS) and commit the outputs.
    `assets/app-icons/` is copied verbatim from each app's repo (`assets/app-icon/hicolor/128x128/apps/app.oracle.<app>.png`);
    refresh it from there, never redraw.
 3. **Never break wasm.** `cargo xtask wasm` must pass. File-system, process and OS code is

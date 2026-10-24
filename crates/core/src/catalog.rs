@@ -14,7 +14,7 @@ pub struct CraftApp {
     pub name: &'static str,
     /// What it's for, in a few words (English; the UI translates it by app id).
     pub tagline: &'static str,
-    /// Brand colour (sRGB), for surfaces: getartcraft.com's `--app`.
+    /// Brand colour (sRGB), for surfaces: the app's own colour.
     pub color: [u8; 3],
     /// The brand colour for text on a light background (the site's light `--app-ink`).
     pub ink_light: [u8; 3],
@@ -73,7 +73,7 @@ const fn app(
 }
 
 /// The Oracle Suite, in display order.
-pub const SUITE: [CraftApp; 6] = [
+pub const SUITE: [CraftApp; 8] = [
     app("oracle-edit", "Oracle Edit", "Image editing", [[0xd3, 0x1c, 0x3b], [0xa3, 0x12, 0x2b], [0xf0, 0x56, 0x6f]], "Marvingxx/oracle-edit"),
     app(
         "oracle-vector",
@@ -86,6 +86,8 @@ pub const SUITE: [CraftApp; 6] = [
     app("oracle-mockup-studio", "Oracle Mockup Studio", "2D mockups", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
     app("oracle-guide", "Oracle Brand Guide", "Brand guidelines and page layout", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-guide"),
     app("oracle-motion", "Oracle Motion", "Motion graphics and compositing", [[0x8a, 0x3f, 0xfc], [0x5f, 0x24, 0xc4], [0xb0, 0x85, 0xff]], "Marvingxx/oracle-motion"),
+    app("oracle-video", "Oracle Video", "Video editing", [[0x1f, 0x6f, 0xeb], [0x14, 0x4f, 0xb0], [0x6a, 0xa4, 0xff]], "Marvingxx/oracle-video"),
+    app("oracle-assets", "Oracle Assets", "Your assets, outside the apps", [[0x0e, 0x8a, 0x6f], [0x0a, 0x63, 0x50], [0x4c, 0xc2, 0xa5]], "Marvingxx/oracle-brand"),
 ];
 
 /// Oracle's website. Until there is one, the suite's GitHub account.
@@ -135,7 +137,7 @@ mod tests {
         for a in &SUITE {
             // Each app's repo is its id, except Brand Kit and Mockup Studio, built from one repo
             // (`oracle-brand`) whose releases carry both apps' packages.
-            let repo = if matches!(a.id, "oracle-brand-kit" | "oracle-mockup-studio") { "oracle-brand" } else { a.id };
+            let repo = if matches!(a.id, "oracle-brand-kit" | "oracle-mockup-studio" | "oracle-assets") { "oracle-brand" } else { a.id };
             assert_eq!(a.repo, format!("{GITHUB_OWNER}/{repo}"));
             // The Brand Guide keeps its fork's short id (`oracle-guide`: binaries, file extension).
             if a.id != "oracle-guide" {

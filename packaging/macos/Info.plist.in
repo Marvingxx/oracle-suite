@@ -44,6 +44,6 @@
   <key>NSRequiresAquaSystemAppearance</key>
   <false/>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright © 2026 ArtCraft Team and the Oracle Suite contributors. MIT OR Apache-2.0.</string>
+  <string>Oracle Suite. MIT OR Apache-2.0.</string>
 </dict>
 </plist>

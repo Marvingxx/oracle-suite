@@ -40,7 +40,6 @@
 	Installed version	Installierte Version
 	Latest version	Neueste Version
 	Newest release	Neueste Veröffentlichung
-	Discord	Discord
 	GitHub	GitHub
 	Website	Website
 	Classic apps	Klassische Apps
@@ -99,7 +98,6 @@
 	Show the window on the current desktop	Fenster auf dem aktuellen Schreibtisch zeigen
 	Start Oracle Suite when I log in	Oracle Suite bei der Anmeldung starten
 	Community	Community
-	Questions, ideas and news from the ArtCraft team	Fragen, Ideen und Neuigkeiten vom ArtCraft-Team
 	Appearance	Erscheinungsbild
 	Quit Oracle Suite	Oracle Suite beenden
 	Done	Fertig
@@ -126,7 +124,6 @@
 	Apps you hid	Apps, die du ausgeblendet hast
 	Checked {ago} · using {sources}	Zuletzt geprüft: {ago} · über {sources}
 	{a} and {b}	{a} und {b}
-	Join the Discord	Dem Discord beitreten
 	Learn more	Mehr erfahren
 	Minimize	Minimieren
 	Maximize	Maximieren
@@ -167,6 +164,8 @@ oracle-brand-kit	Brand identity and client deliveries	Markenidentität und Kunde
 oracle-mockup-studio	2D mockups	2D-Mockups
 oracle-guide	Brand guidelines and page layout	Markenrichtlinien und Seitenlayout
 oracle-motion	Motion graphics and compositing	Motion Graphics und Compositing
+oracle-video	Video editing	Videoschnitt
+oracle-assets	Your assets, outside the apps	Ihre Assets, außerhalb der Apps
 
 # Contextual: month abbreviations for date rendering
 month	Jan	Jan.
@@ -187,8 +186,6 @@ month	Dec	Dez.
 	Installing for {platform}	Installation für {platform}
 	Downloads for {platform}	Downloads für {platform}
 	No downloads for this system	Keine Downloads für dieses System
-	Join the ArtCraft community on Discord	Tritt der ArtCraft-Community auf Discord bei
-	ArtCraft on {name}	ArtCraft auf {name}
 	Couldn't open {name}: {e}	{name} konnte nicht geöffnet werden: {e}
 	Download cancelled	Download abgebrochen
 	Available to install	Installierbar
@@ -228,7 +225,6 @@ month	Dec	Dez.
 	Downloads the new version, replaces this one and opens it again	Lädt die neue Version herunter, ersetzt diese und öffnet sie erneut
 	Couldn't check for updates: {f}	Updates konnten nicht geprüft werden: {f}
 	GitHub repository	GitHub-Repository
-	ArtCraft	ArtCraft
 	Update 1 app	1 App aktualisieren
 	Update all ({count})	Alle aktualisieren ({count})
 	⊞  Grid	⊞  Raster
@@ -310,7 +306,6 @@ filter	Installed	Installiert
 @id	sort.installed	Installierte Version
 @id	sort.latest	Neueste Version
 @id	sort.released	Neueste Veröffentlichung
-@id	help.discord	Discord
 @id	help.github	GitHub
 @id	help.website	Website
 @id	update.check	Nach Updates suchen
@@ -326,9 +321,6 @@ filter	Installed	Installiert
 # Tray (menu bar) menu and tooltip
 	Show Oracle Suite	Oracle Suite anzeigen
 	Check for Updates	Nach Updates suchen
-	Visit getartcraft.com	getartcraft.com besuchen
-	ArtCraft on GitHub	ArtCraft auf GitHub
-	Join the ArtCraft Discord	Dem ArtCraft-Discord beitreten
 	App details	App-Details
 	Close (Esc)	Schließen (Esc)
 	Features	Funktionen
