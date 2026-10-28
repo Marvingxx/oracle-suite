@@ -10,6 +10,8 @@ use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 use std::sync::OnceLock;
 
+use egui_kittest::Harness;
+use egui_kittest::kittest::{NodeT, Queryable};
 use oracle_suite_core::details::AppDetails;
 use oracle_suite_core::protocol::{
     Backend, CANCELLED, Capabilities, Command, Event, INSTALL_CANCELLED, JobPhase, LatestRelease, Origin, PausedDownload, Source,
@@ -19,8 +21,6 @@ use oracle_suite_core::status::InstallSource;
 use oracle_suite_core::{Arch, Installed, Os, Platform, SUITE, version};
 use oracle_suite_ui_egui::settings::ViewMode;
 use oracle_suite_ui_egui::{Host, LauncherUi, Settings};
-use egui_kittest::Harness;
-use egui_kittest::kittest::{NodeT, Queryable};
 
 const NOW: i64 = 1_791_500_000;
 
@@ -121,6 +121,65 @@ impl Backend for PlatformFake {
 struct NoHost;
 impl Host for NoHost {}
 
+#[test]
+fn local_app_opens_existing_installation_in_grid_and_table_and_supports_search() {
+    use oracle_suite_ui_egui::settings::Filter;
+    struct LocalHost(Rc<RefCell<Vec<String>>>);
+    impl Host for LocalHost {
+        fn local_apps(&self) -> Vec<oracle_suite_ui_egui::LocalApp> {
+            vec![oracle_suite_ui_egui::LocalApp { id: "pratique".into(), name: "Pratique".into(), description: "Tutoriels et apprentissage".into() }]
+        }
+        fn launch_local_app(&mut self, id: &str) -> Result<(), String> {
+            self.0.borrow_mut().push(id.into());
+            Ok(())
+        }
+    }
+    oracle_suite_ui_egui::i18n::set_test_lang(oracle_suite_ui_egui::i18n::Lang::EN);
+    for view in [ViewMode::Grid, ViewMode::Table] {
+        let opened = Rc::new(RefCell::new(Vec::new()));
+        let mut host = LocalHost(opened.clone());
+        let sent = Rc::new(RefCell::new(Vec::new()));
+        let mut backend =
+            Some(Fake { events: vec![], sent: sent.clone(), manage: true, pictures: Rc::default(), asked: vec![], clock: Rc::new(Cell::new(NOW)) });
+        let mut h = Harness::builder().with_size(egui::vec2(1180.0, 900.0)).build_ui_state(
+            move |ui, state: &mut Option<LauncherUi>| {
+                if let Some(backend) = backend.take() {
+                    let settings =
+                        Settings { view, notify: false, hidden: SUITE.iter().map(|app| app.id.to_string()).collect(), ..Default::default() };
+                    *state = Some(LauncherUi::new(ui.ctx(), Box::new(backend), settings));
+                }
+                if let Some(launcher) = state {
+                    launcher.logic(ui.ctx(), &mut host);
+                    launcher.ui(ui, &mut host);
+                }
+            },
+            None,
+        );
+        h.run();
+        assert!(h.query_by_label("Pratique").is_some());
+        sent.borrow_mut().clear();
+        h.get_by_label("Open").click();
+        h.run();
+        assert_eq!(*opened.borrow(), vec!["pratique"]);
+        assert!(install_commands(&sent).is_empty(), "local launch must not request an installer or a remote launch");
+        if view == ViewMode::Grid {
+            snapshot(&mut h, "pratique-local-app");
+        }
+        h.state_mut().as_mut().unwrap().settings.filter = Filter::NotInstalled;
+        h.run();
+        assert!(h.query_by_label("Pratique").is_none());
+        h.state_mut().as_mut().unwrap().settings.filter = Filter::Installed;
+        h.run();
+        assert!(h.query_by_label("Pratique").is_some());
+        let search = h.get_by_role(egui::accesskit::Role::TextInput);
+        search.click();
+        search.type_text("unrelated application");
+        h.run();
+        assert!(h.query_by_label("Pratique").is_none());
+        assert!(h.query_by_label("No apps match").is_some());
+    }
+}
+
 fn release(id: &str, v: &str, at: i64) -> Release {
     let name = format!("{id}-{v}-macos-universal.dmg");
     Release {
@@ -143,10 +202,7 @@ fn release(id: &str, v: &str, at: i64) -> Release {
 /// A realistic mix: updates, up-to-date apps, a download in progress, one app with no release.
 fn events() -> Vec<Event> {
     let mut ev = Vec::new();
-    let versions = [
-        ("oracle-edit", "0.5.0"),
-        ("oracle-vector", "0.4.0"),
-    ];
+    let versions = [("oracle-edit", "0.5.0"), ("oracle-vector", "0.4.0")];
     for (i, (id, v)) in versions.iter().enumerate() {
         ev.push(Event::Latest {
             app: (*id).into(),
@@ -215,17 +271,7 @@ fn harness_with_title_bar(
 }
 
 fn harness_with_discord(discord_url: Option<&'static str>) -> (Harness<'static, Option<LauncherUi>>, Rc<RefCell<Vec<Command>>>) {
-    harness_full(
-        events(),
-        ViewMode::Grid,
-        egui::Theme::Dark,
-        true,
-        1.0,
-        oracle_suite_ui_egui::TitleBar::Native,
-        Rc::default(),
-        None,
-        discord_url,
-    )
+    harness_full(events(), ViewMode::Grid, egui::Theme::Dark, true, 1.0, oracle_suite_ui_egui::TitleBar::Native, Rc::default(), None, discord_url)
 }
 
 #[allow(clippy::too_many_arguments)] // Test fixture inputs vary independently across existing cases.
@@ -944,9 +990,7 @@ fn the_launcher_updates_itself_and_quits_to_restart() {
     h.run_steps(2);
     assert!(sent.borrow().contains(&Command::UpdateLauncher));
     // Downloading: the banner shows progress instead of the button.
-    shared_events
-        .borrow_mut()
-        .push(Event::Progress { app: "oracle-suite".into(), phase: JobPhase::Downloading { done: 5 << 20, total: 10 << 20 } });
+    shared_events.borrow_mut().push(Event::Progress { app: "oracle-suite".into(), phase: JobPhase::Downloading { done: 5 << 20, total: 10 << 20 } });
     h.run_steps(3);
     assert!(h.query_by_label("Update and restart").is_none());
     assert!(!quit.get());
@@ -1096,7 +1140,10 @@ fn automatic_updates_are_disabled_by_default() {
     );
     h.run_steps(4);
     let commands = sent.borrow().clone();
-    assert!(!commands.contains(&Command::Install { app: "oracle-edit".into() }), "oracle-edit should not be auto-installed when auto_update is false");
+    assert!(
+        !commands.contains(&Command::Install { app: "oracle-edit".into() }),
+        "oracle-edit should not be auto-installed when auto_update is false"
+    );
     assert!(!commands.contains(&Command::UpdateLauncher), "launcher should not be auto-updated when auto_update is false");
 }
 
@@ -1127,8 +1174,11 @@ fn the_footer_names_the_services_behind_what_is_on_screen() {
         label.unwrap_or_default()
     };
     assert_eq!(footer(Vec::new()), "Checked 3 min ago · using Oracle");
-    let from_github =
-        vec![Event::Latest { app: "oracle-vector".into(), latest: LatestRelease::Found(release("oracle-vector", "0.3.1", NOW)), from: Origin::GitHub }];
+    let from_github = vec![Event::Latest {
+        app: "oracle-vector".into(),
+        latest: LatestRelease::Found(release("oracle-vector", "0.3.1", NOW)),
+        from: Origin::GitHub,
+    }];
     assert_eq!(footer(from_github), "Checked 3 min ago · using Oracle and GitHub");
 }
 

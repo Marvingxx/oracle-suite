@@ -160,7 +160,7 @@ oracle-edit	Image editing	Retouche d'images
 oracle-vector	Vector illustration	Illustration vectorielle
 oracle-brand-kit	Brand identity and client deliveries	Identité de marque et livrables
 oracle-mockup-studio	2D mockups	Mockups 2D
-oracle-guide	Brand guidelines and page layout	Chartes graphiques et mise en page
+oracle-layout	Page layout, brand guidelines and presentations	Mise en page, chartes graphiques et présentations
 oracle-motion	Motion graphics and compositing	Animation graphique et compositing
 oracle-video	Video editing	Montage vidéo
 oracle-assets	Your assets, outside the apps	Vos ressources, hors des logiciels
@@ -405,14 +405,14 @@ oracle-mockup-studio	Real perspective	Une vraie perspective
 oracle-mockup-studio	A true four-corner perspective, with masks and objects that stay in front.	Une perspective exacte sur quatre coins, avec des masques et des objets qui restent devant.
 oracle-mockup-studio	PNG, JPEG, WebP	PNG, JPEG, WebP
 oracle-mockup-studio	At the photo's size or any width, one scene or a batch.	À la taille de la photo ou à la largeur voulue, une scène ou un lot.
-oracle-guide	Brand guidelines that follow your brand.	Des chartes graphiques qui suivent votre marque.
-oracle-guide	A page-layout app forked from DesignCraft, with master pages, styles and PDF export, whose colours, type, logos and mockups stay linked to your Brand Kit.	Une application de mise en page issue de DesignCraft, avec gabarits, styles et export PDF, dont les couleurs, typographies, logos et mockups restent liés à votre Brand Kit.
-oracle-guide	Linked blocks	Des blocs liés
-oracle-guide	Colour values, typefaces, rules, logos and mockups update when you ask, with a preview of every change.	Valeurs de couleur, typographies, règles, logos et mockups se mettent à jour quand vous le demandez, avec l'aperçu de chaque changement.
-oracle-guide	Your own templates	Vos propres modèles
-oracle-guide	Reuse a guide for another brand: logos by role, colours by position.	Réutilisez une charte pour une autre marque : logos par rôle, couleurs par position.
-oracle-guide	PDF export	Export PDF
-oracle-guide	Bleed, crop marks and embedded fonts.	Fonds perdus, traits de coupe et polices incorporées.
+oracle-layout	Brand guidelines that follow your brand.	Des chartes graphiques qui suivent votre marque.
+oracle-layout	A page-layout app forked from DesignCraft, with master pages, styles and PDF export, whose colours, type, logos and mockups stay linked to your Brand Kit.	Une application de mise en page issue de DesignCraft, avec gabarits, styles et export PDF, dont les couleurs, typographies, logos et mockups restent liés à votre Brand Kit.
+oracle-layout	Linked blocks	Des blocs liés
+oracle-layout	Colour values, typefaces, rules, logos and mockups update when you ask, with a preview of every change.	Valeurs de couleur, typographies, règles, logos et mockups se mettent à jour quand vous le demandez, avec l'aperçu de chaque changement.
+oracle-layout	Your own templates	Vos propres modèles
+oracle-layout	Reuse a guide for another brand: logos by role, colours by position.	Réutilisez une charte pour une autre marque : logos par rôle, couleurs par position.
+oracle-layout	PDF export	Export PDF
+oracle-layout	Bleed, crop marks and embedded fonts.	Fonds perdus, traits de coupe et polices incorporées.
 oracle-motion	Motion graphics and visual effects, in the Oracle suite.	L'animation graphique et les effets visuels, dans la suite Oracle.
 oracle-motion	Compositions, layers, keyframes, effects, expressions, 3D cameras and lights, and a render queue, forked from EffectCraft. Your Oracle Vector logos and Oracle Edit pictures come in from the library.	Compositions, calques, images clés, effets, expressions, caméras et lumières 3D, et une file de rendu, issus d'EffectCraft. Vos logos Oracle Vector et vos images Oracle Edit arrivent depuis la Bibliothèque.
 oracle-motion	Animate anything	Tout s'anime

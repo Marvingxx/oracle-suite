@@ -9,7 +9,7 @@ pub fn app(id: &str) -> Option<ImageSource<'static>> {
         "oracle-vector" => egui::include_image!("../../../assets/app-icons/oracle-vector.png"),
         "oracle-brand-kit" => egui::include_image!("../../../assets/app-icons/oracle-brand-kit.png"),
         "oracle-mockup-studio" => egui::include_image!("../../../assets/app-icons/oracle-mockup-studio.png"),
-        "oracle-guide" => egui::include_image!("../../../assets/app-icons/oracle-guide.png"),
+        "oracle-layout" => egui::include_image!("../../../assets/app-icons/oracle-layout.png"),
         "oracle-motion" => egui::include_image!("../../../assets/app-icons/oracle-motion.png"),
         "oracle-video" => egui::include_image!("../../../assets/app-icons/oracle-video.png"),
         "oracle-assets" => egui::include_image!("../../../assets/app-icons/oracle-assets.png"),

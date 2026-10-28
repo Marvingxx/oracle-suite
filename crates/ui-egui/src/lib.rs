@@ -36,11 +36,11 @@ pub mod theme;
 mod views;
 mod widgets;
 
-pub use app::{Host, LauncherUi, Section, TitleBar};
-#[cfg(not(target_arch = "wasm32"))]
-pub use oracle_library_ui;
+pub use app::{Host, LauncherUi, LocalApp, Section, TitleBar};
 pub use i18n::{
     Lang, LangInfo, current, detect_system_lang_in_background, fmt, has, lang_from_tag, message, msg, set_current, set_system_locales, system_lang,
     t, t_id, tn, tr, tr_ctx, tr_id, trn,
 };
+#[cfg(not(target_arch = "wasm32"))]
+pub use oracle_library_ui;
 pub use settings::Settings;

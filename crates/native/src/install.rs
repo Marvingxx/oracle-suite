@@ -999,7 +999,7 @@ pub(crate) mod linux {
             "oracle-vector" => include_bytes!("../../../assets/app-icons/oracle-vector.png"),
             "oracle-brand-kit" => include_bytes!("../../../assets/app-icons/oracle-brand-kit.png"),
             "oracle-mockup-studio" => include_bytes!("../../../assets/app-icons/oracle-mockup-studio.png"),
-            "oracle-guide" => include_bytes!("../../../assets/app-icons/oracle-guide.png"),
+            "oracle-layout" => include_bytes!("../../../assets/app-icons/oracle-layout.png"),
             "oracle-motion" => include_bytes!("../../../assets/app-icons/oracle-motion.png"),
             "oracle-video" => include_bytes!("../../../assets/app-icons/oracle-video.png"),
             _ => return None,

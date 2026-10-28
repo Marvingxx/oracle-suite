@@ -29,8 +29,23 @@ pub enum TitleBar {
     MacOs,
 }
 
+/// Display metadata for an application registered on this computer.
+#[derive(Clone, Debug)]
+pub struct LocalApp {
+    pub id: String,
+    pub name: String,
+    pub description: String,
+}
+
 /// What only the shell can do. Every method has a do-nothing default (the web build).
+/// Local applications have no remote install or removal action.
 pub trait Host {
+    fn local_apps(&self) -> Vec<LocalApp> {
+        Vec::new()
+    }
+    fn launch_local_app(&mut self, _id: &str) -> Result<(), String> {
+        Err("not supported here".into())
+    }
     /// Who draws the title bar.
     fn title_bar(&self) -> TitleBar {
         TitleBar::Native
@@ -312,9 +327,9 @@ impl LauncherUi {
 
     pub(crate) fn custom_install_folders(&self) -> bool {
         self.caps.manage_apps
-            && self.platform.is_some_and(|p| {
-                matches!(p.os, oracle_suite_core::Os::Windows | oracle_suite_core::Os::MacOs | oracle_suite_core::Os::Linux)
-            })
+            && self
+                .platform
+                .is_some_and(|p| matches!(p.os, oracle_suite_core::Os::Windows | oracle_suite_core::Os::MacOs | oracle_suite_core::Os::Linux))
             && !crate::settings::is_flatpak_sandbox()
     }
 
@@ -651,7 +666,37 @@ impl LauncherUi {
                     ViewMode::Table => egui::ScrollArea::both(),
                 };
                 scroll.auto_shrink(false).show(ui, |ui| {
-                    if ids.is_empty() {
+                    let locals = host.local_apps();
+                    let needle = self.search.trim().to_lowercase();
+                    let locals: Vec<_> = locals
+                        .iter()
+                        .filter(|app| {
+                            matches!(self.settings.filter, Filter::All | Filter::Installed)
+                                && !self.settings.hidden.contains(&app.id)
+                                && (needle.is_empty()
+                                    || app.name.to_lowercase().contains(&needle)
+                                    || app.description.to_lowercase().contains(&needle))
+                        })
+                        .collect();
+                    for app in &locals {
+                        egui::Frame::new().fill(tokens.bg).stroke(tokens.hairline()).inner_margin(18).show(ui, |ui| {
+                            ui.horizontal(|ui| {
+                                ui.vertical(|ui| {
+                                    ui.label(egui::RichText::new(&app.name).family(theme::semibold()).size(20.0).color(tokens.ink_strong));
+                                    ui.label(egui::RichText::new(&app.description).color(tokens.muted));
+                                });
+                                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                                    if crate::widgets::button(ui, tl!("Open"), crate::widgets::Kind::Primary, 100.0).clicked()
+                                        && let Err(error) = host.launch_local_app(&app.id)
+                                    {
+                                        self.toast(&ctx, error, true);
+                                    }
+                                });
+                            });
+                        });
+                        ui.add_space(16.0);
+                    }
+                    if ids.is_empty() && locals.is_empty() {
                         ui.add_space(40.0);
                         ui.vertical_centered(|ui| {
                             crate::widgets::hud(ui, tl!("No apps match"), tokens.muted);

@@ -138,7 +138,7 @@ pub const DETAILS: [AppDetails; 9] = [
         platforms: "Windows",
     },
     AppDetails {
-        id: "oracle-guide",
+        id: "oracle-layout",
         headline: "Brand guidelines that follow your brand.",
         about: "A page-layout app forked from DesignCraft, with master pages, styles and PDF export, whose colours, type, \
                 logos and mockups stay linked to your Brand Kit.",

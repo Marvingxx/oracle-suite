@@ -9,7 +9,7 @@
 
 <p align="center">
   <b>One place to install, update and open every app in the Oracle Suite, rebuilt in pure Rust.</b><br>
-  Oracle Edit, Oracle Vector, Oracle Brand Kit, Oracle Mockup Studio and Oracle Brand Guide,<br>
+  Oracle Edit, Oracle Vector, Oracle Brand Kit, Oracle Mockup Studio and Oracle Layout,<br>
   plus the shared asset library: the right build for your computer, kept up to date.
 </p>
 
@@ -61,6 +61,9 @@ you when an update is out. It is a small native app that can sit in your menu ba
 </table>
 
 The web version shows the same catalog in the browser, with the latest download for each app.
+
+The desktop launcher also opens existing local applications such as Pratique, using a
+[local registration](docs/local-apps.md). These entries reuse their installed executable and data.
 
 ## Interface languages
 
@@ -233,7 +236,7 @@ Oracle Suite is part of **Oracle**, a personal creative suite, free and local:
 | **Oracle Edit** | Image editing | [oracle-edit](https://github.com/Marvingxx/oracle-edit) |
 | **Oracle Vector** | Vector illustration | [oracle-vector](https://github.com/Marvingxx/oracle-vector) |
 | **Oracle Brand Kit** · **Oracle Mockup Studio** | Brand identities and client deliveries · 2D mockups | [oracle-brand](https://github.com/Marvingxx/oracle-brand) |
-| **Oracle Brand Guide** | Brand guidelines and page layout | [oracle-guide](https://github.com/Marvingxx/oracle-guide) |
+| **Oracle Layout** | Brand guidelines and page layout | [oracle-layout](https://github.com/Marvingxx/oracle-guide) |
 
 
 ## Thanks

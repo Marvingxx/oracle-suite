@@ -22,12 +22,12 @@ use std::sync::mpsc::{Receiver, RecvTimeoutError, SyncSender, channel, sync_chan
 use std::sync::{Arc, Mutex, OnceLock, PoisonError};
 use std::time::Duration;
 
+use eframe::wgpu::rwh::{HasDisplayHandle, RawDisplayHandle};
 use oracle_suite_core::protocol::Backend;
 use oracle_suite_native::single_instance::{self, Instance};
 use oracle_suite_native::{NativeBackend, login};
 use oracle_suite_ui_egui::theme::Tokens;
 use oracle_suite_ui_egui::{Host, LauncherUi, Settings, TitleBar};
-use eframe::wgpu::rwh::{HasDisplayHandle, RawDisplayHandle};
 
 const APP_ID: &str = "app.oracle.oracle-suite";
 const SETTINGS_KEY: &str = "settings";
@@ -133,8 +133,7 @@ fn main() -> ExitCode {
 }
 
 fn native_options(hidden: bool) -> eframe::NativeOptions {
-    let icon =
-        eframe::icon_data::from_png_bytes(include_bytes!("../../../assets/app-icon/hicolor/256x256/apps/app.oracle.oracle-suite.png")).ok();
+    let icon = eframe::icon_data::from_png_bytes(include_bytes!("../../../assets/app-icon/hicolor/256x256/apps/app.oracle.oracle-suite.png")).ok();
     let mut viewport = egui::ViewportBuilder::default()
         .with_title("Oracle Suite")
         .with_app_id(APP_ID)
@@ -394,9 +393,22 @@ fn claim_notification_identity() -> &'static Result<(), String> {
 struct DesktopHost {
     tray: bool,
     quit: bool,
+    local_apps: Vec<oracle_suite_native::local_apps::LocalApp>,
 }
 
 impl Host for DesktopHost {
+    fn local_apps(&self) -> Vec<oracle_suite_ui_egui::LocalApp> {
+        self.local_apps
+            .iter()
+            .filter(|app| app.executable.is_file())
+            .map(|app| oracle_suite_ui_egui::LocalApp { id: app.id.clone(), name: app.name.clone(), description: app.description.clone() })
+            .collect()
+    }
+
+    fn launch_local_app(&mut self, id: &str) -> Result<(), String> {
+        self.local_apps.iter().find(|app| app.id == id).ok_or_else(|| "Unknown local application".to_string())?.launch()
+    }
+
     fn title_bar(&self) -> TitleBar {
         if cfg!(target_os = "macos") { TitleBar::MacOs } else { TitleBar::Custom }
     }
@@ -505,7 +517,13 @@ impl Launcher {
             system_theme: system_theme::Monitor::default(),
             ui,
             tray: None,
-            host: DesktopHost { tray: false, quit: false },
+            host: DesktopHost {
+                tray: false,
+                quit: false,
+                local_apps: oracle_suite_native::paths::Paths::new()
+                    .map(|paths| oracle_suite_native::local_apps::load(&paths.data.join("local-apps.json")))
+                    .unwrap_or_default(),
+            },
             starts,
             windowless,
             run_again,
@@ -771,8 +789,8 @@ mod tests {
     use std::sync::mpsc::Sender;
     use std::time::Instant;
 
-    use oracle_suite_core::protocol::{Capabilities, Command, Event, Source};
     use eframe::wgpu::rwh::{AppKitDisplayHandle, WaylandDisplayHandle, WindowsDisplayHandle, XcbDisplayHandle, XlibDisplayHandle};
+    use oracle_suite_core::protocol::{Capabilities, Command, Event, Source};
 
     use super::*;
 

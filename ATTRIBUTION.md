@@ -32,7 +32,7 @@ those apps. Refresh them from the source path, never redraw them.
 | `assets/app-icons/oracle-vector.png` | oracle-vector app icon, 128 px | Oracle | `Marvingxx/oracle-vector`, copied unmodified | MIT OR Apache-2.0 |
 | `assets/app-icons/oracle-brand-kit.png` | oracle-brand-kit app icon, 128 px | Oracle | `Marvingxx/oracle-brand`, copied unmodified | MIT OR Apache-2.0 |
 | `assets/app-icons/oracle-mockup-studio.png` | oracle-mockup-studio app icon, 128 px | Oracle | `Marvingxx/oracle-brand`, copied unmodified | MIT OR Apache-2.0 |
-| `assets/app-icons/oracle-guide.png` | oracle-guide app icon, 128 px | Oracle | `Marvingxx/oracle-guide`, copied unmodified | MIT OR Apache-2.0 |
+| `assets/app-icons/oracle-layout.png` | oracle-layout app icon, 128 px | Oracle | `Marvingxx/oracle-guide`, copied unmodified | MIT OR Apache-2.0 |
 | `assets/app-icons/oracle-motion.png` | oracle-motion app icon, 128 px | Oracle | `Marvingxx/oracle-motion`, copied unmodified | MIT OR Apache-2.0 |
 | `assets/app-icons/oracle-video.png` | oracle-video app icon, 128 px | Oracle | `Marvingxx/oracle-video`, copied unmodified | MIT OR Apache-2.0 |
 

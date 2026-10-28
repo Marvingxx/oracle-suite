@@ -22,7 +22,7 @@ pub fn meta(app: &CraftApp) -> (&'static str, Option<&'static str>) {
         "oracle-edit" => ("Graphics;2DGraphics;RasterGraphics;Photography;", Some("oracle-edit")),
         "oracle-vector" => ("Graphics;2DGraphics;VectorGraphics;", None),
         "oracle-brand-kit" | "oracle-mockup-studio" => ("Graphics;2DGraphics;", None),
-        "oracle-guide" => ("Graphics;Publishing;", None),
+        "oracle-layout" => ("Graphics;Publishing;", None),
         "oracle-motion" => ("AudioVideo;Video;Graphics;", None),
         "oracle-video" => ("AudioVideo;Video;AudioVideoEditing;", None),
         "oracle-assets" => ("Graphics;Utility;", None),

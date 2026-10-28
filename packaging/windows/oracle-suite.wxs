@@ -44,8 +44,8 @@
     <!-- MSI caches this icon using its Id as the filename; keep the .exe extension (ICE50). -->
     <Icon Id="ArtCraftLauncherIcon.exe" SourceFile="$(var.IconPath)" />
     <Property Id="ARPPRODUCTICON" Value="ArtCraftLauncherIcon.exe" />
-    <Property Id="ARPURLINFOABOUT" Value="https://github.com/Marvingxx/apps" />
-    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/storytold/craft-launcher/releases" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/Marvingxx/oracle-suite" />
+    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/Marvingxx/oracle-suite/releases" />
     <Property Id="ARPHELPLINK" Value="https://github.com/Marvingxx/oracle-suite" />
 
     <StandardDirectory Id="LocalAppDataFolder">

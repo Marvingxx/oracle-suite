@@ -11,6 +11,7 @@ publish = false
 workspace = true
 
 [dependencies]
+oracle-style = { path = "../../../oracle-library/style" }
 oracle-suite-core = { workspace = true }
 egui = { workspace = true }
 egui_extras = { workspace = true, features = ["image", "svg"] }

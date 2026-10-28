@@ -11,11 +11,11 @@ use serde::{Deserialize, Serialize};
 use crate::i18n::Lang;
 
 /// Oracle's slight rounding: buttons, fields, cards, menus.
-pub const RADIUS: CornerRadius = CornerRadius::same(4);
+pub const RADIUS: CornerRadius = CornerRadius::ZERO;
 /// Small chips and badges.
-pub const RADIUS_SM: CornerRadius = CornerRadius::same(3);
+pub const RADIUS_SM: CornerRadius = CornerRadius::ZERO;
 /// Windows, dialogs and the details drawer.
-pub const RADIUS_LG: CornerRadius = CornerRadius::same(6);
+pub const RADIUS_LG: CornerRadius = CornerRadius::same(2);
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ThemeChoice {
@@ -73,11 +73,6 @@ pub struct Tokens {
     pub bad: Color32,
 }
 
-const fn ink_alpha(rgb: u32, alpha: u8) -> Color32 {
-    let [_, r, g, b] = rgb.to_be_bytes();
-    Color32::from_rgba_unmultiplied_const(r, g, b, alpha)
-}
-
 const fn hex(rgb: u32) -> Color32 {
     let [_, r, g, b] = rgb.to_be_bytes();
     Color32::from_rgb(r, g, b)
@@ -86,14 +81,14 @@ const fn hex(rgb: u32) -> Color32 {
 impl Tokens {
     pub const DARK: Self = Self {
         dark: true,
-        bg: hex(0x121316),
-        sunken: hex(0x060607),
-        ink: hex(0xf2f1ee),
-        ink_strong: hex(0xffffff),
-        muted: ink_alpha(0xf2f1ee, 153),
-        faint: ink_alpha(0xf2f1ee, 97),
-        line: ink_alpha(0xf2f1ee, 38),
-        line_strong: ink_alpha(0xf2f1ee, 102),
+        bg: oracle_style::Palette::DARK.void,
+        sunken: oracle_style::Palette::DARK.void,
+        ink: oracle_style::Palette::DARK.text,
+        ink_strong: oracle_style::Palette::DARK.text,
+        muted: oracle_style::Palette::DARK.text_dim,
+        faint: oracle_style::Palette::DARK.text_faint,
+        line: oracle_style::Palette::DARK.line,
+        line_strong: oracle_style::Palette::DARK.line_strong,
         accent: hex(0xd31c3b),
         accent_ink: hex(0xf0566f),
         invert_bg: hex(0xffffff),
@@ -106,14 +101,14 @@ impl Tokens {
 
     pub const LIGHT: Self = Self {
         dark: false,
-        bg: hex(0xf2f1ee),
-        sunken: hex(0xe9e8e4),
-        ink: hex(0x101014),
-        ink_strong: hex(0x000000),
-        muted: ink_alpha(0x101014, 158),
-        faint: ink_alpha(0x101014, 107),
-        line: ink_alpha(0x101014, 41),
-        line_strong: ink_alpha(0x101014, 102),
+        bg: oracle_style::Palette::LIGHT.void,
+        sunken: oracle_style::Palette::LIGHT.void,
+        ink: oracle_style::Palette::LIGHT.text,
+        ink_strong: oracle_style::Palette::LIGHT.text,
+        muted: oracle_style::Palette::LIGHT.text_dim,
+        faint: oracle_style::Palette::LIGHT.text_faint,
+        line: oracle_style::Palette::LIGHT.line,
+        line_strong: oracle_style::Palette::LIGHT.line_strong,
         accent: hex(0xd31c3b),
         accent_ink: hex(0xa3122b),
         invert_bg: hex(0x101014),
@@ -235,10 +230,11 @@ pub fn apply(ctx: &egui::Context, choice: ThemeChoice) {
         ]
         .into();
     });
+    oracle_style::chrome::finish(ctx, false);
 }
 
 /// Height of buttons, inputs and filter cells (the site's medium button).
-pub const CONTROL_H: f32 = 34.0;
+pub const CONTROL_H: f32 = 24.0;
 
 /// The site's `.hud-label`: 11 px Geist Mono 500, upper case, 0.15 em apart.
 pub const HUD_SIZE: f32 = 11.0;
@@ -304,24 +300,24 @@ type Face<'a> = (&'a str, &'static [u8], &'a [([u8; 4], f32)], FontFamily);
 /// for a language that needs no CJK font.
 pub fn install_fonts(ctx: &egui::Context, cjk: Option<Lang>) {
     // Lexend (OFL-1.1): body, headings and the upper-case labels.
-    const LEXEND: &[u8] = include_bytes!("../../../assets/fonts/Lexend-Variable.ttf");
     // Inter stands behind Lexend for the symbols Lexend lacks (arrows such as →).
     const INTER: &[u8] = include_bytes!("../../../assets/fonts/Inter-Variable.ttf");
     const GEIST_MONO: &[u8] = include_bytes!("../../../assets/fonts/GeistMono-Variable.ttf");
     let mut fonts = FontDefinitions::default();
     // egui's own fonts stay behind ours, for symbols and emoji ours don't have.
     let mut fallback: Vec<String> = fonts.families.get(&FontFamily::Proportional).cloned().unwrap_or_default();
-    let inter = FontTweak { coords: VariationCoords::new([(*b"wght", 400.0), (*b"opsz", 14.0)]), subpixel_binning: Some(false), ..Default::default() };
+    let inter =
+        FontTweak { coords: VariationCoords::new([(*b"wght", 400.0), (*b"opsz", 14.0)]), subpixel_binning: Some(false), ..Default::default() };
     fonts.font_data.insert("Inter-Symbols".to_owned(), Arc::new(FontData::from_static(INTER).tweak(inter)));
     fallback.insert(0, "Inter-Symbols".to_owned());
     let faces: [Face<'_>; 7] = [
-        ("Lexend", LEXEND, &[(*b"wght", 400.0)], FontFamily::Proportional),
-        ("Lexend-Medium", LEXEND, &[(*b"wght", 500.0)], medium()),
-        ("Lexend-SemiBold", LEXEND, &[(*b"wght", 600.0)], semibold()),
-        ("Lexend-Display", LEXEND, &[(*b"wght", 600.0)], display()),
+        ("Inter", INTER, &[(*b"wght", 400.0)], FontFamily::Proportional),
+        ("Inter-Medium", INTER, &[(*b"wght", 500.0)], medium()),
+        ("Inter-SemiBold", INTER, &[(*b"wght", 600.0)], semibold()),
+        ("Inter-Display", INTER, &[(*b"wght", 600.0)], display()),
         ("GeistMono", GEIST_MONO, &[(*b"wght", 400.0)], FontFamily::Monospace),
-        ("Lexend-Label", LEXEND, &[(*b"wght", 500.0)], mono()),
-        ("Lexend-LabelBold", LEXEND, &[(*b"wght", 650.0)], mono_bold()),
+        ("Inter-Label", INTER, &[(*b"wght", 500.0)], mono()),
+        ("Inter-LabelBold", INTER, &[(*b"wght", 650.0)], mono_bold()),
     ];
     for (name, bytes, coords, family) in faces {
         // No subpixel binning: these fonts carry no hinting instructions, so a glyph drawn at a
@@ -342,6 +338,7 @@ pub fn install_fonts(ctx: &egui::Context, cjk: Option<Lang>) {
             stack.push("CJK".to_owned());
         }
     }
+    oracle_style::fonts::add_lexend(&mut fonts);
     ctx.set_fonts(fonts);
 }
 

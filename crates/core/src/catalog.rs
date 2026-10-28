@@ -84,7 +84,7 @@ pub const SUITE: [CraftApp; 9] = [
     ),
     app("oracle-brand-kit", "Oracle Brand Kit", "Brand identity and client deliveries", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
     app("oracle-mockup-studio", "Oracle Mockup Studio", "2D mockups", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-brand"),
-    app("oracle-guide", "Oracle Brand Guide", "Brand guidelines and page layout", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-guide"),
+    app("oracle-layout", "Oracle Layout", "Page layout, brand guidelines and presentations", [[0x1d, 0x1d, 0x1b], [0x1d, 0x1d, 0x1b], [0xd8, 0xd6, 0xd0]], "Marvingxx/oracle-guide"),
     app("oracle-motion", "Oracle Motion", "Motion graphics and compositing", [[0x8a, 0x3f, 0xfc], [0x5f, 0x24, 0xc4], [0xb0, 0x85, 0xff]], "Marvingxx/oracle-motion"),
     app("oracle-video", "Oracle Video", "Video editing", [[0x1f, 0x6f, 0xeb], [0x14, 0x4f, 0xb0], [0x6a, 0xa4, 0xff]], "Marvingxx/oracle-video"),
     app("oracle-assets", "Oracle Assets", "Your assets, outside the apps", [[0x0e, 0x8a, 0x6f], [0x0a, 0x63, 0x50], [0x4c, 0xc2, 0xa5]], "Marvingxx/oracle-brand"),
@@ -138,12 +138,14 @@ mod tests {
         for a in &SUITE {
             // Each app's repo is its id, except Brand Kit and Mockup Studio, built from one repo
             // (`oracle-brand`) whose releases carry both apps' packages.
-            let repo = if matches!(a.id, "oracle-brand-kit" | "oracle-mockup-studio" | "oracle-assets" | "oracle-font") { "oracle-brand" } else { a.id };
+            let repo = match a.id {
+                "oracle-brand-kit" | "oracle-mockup-studio" | "oracle-assets" | "oracle-font" => "oracle-brand",
+                // Oracle Layout was Oracle Brand Guide: its repository keeps that name for now.
+                "oracle-layout" => "oracle-guide",
+                id => id,
+            };
             assert_eq!(a.repo, format!("{GITHUB_OWNER}/{repo}"));
-            // The Brand Guide keeps its fork's short id (`oracle-guide`: binaries, file extension).
-            if a.id != "oracle-guide" {
-                assert_eq!(a.name.to_lowercase().replace(' ', "-"), a.id);
-            }
+            assert_eq!(a.name.to_lowercase().replace(' ', "-"), a.id);
         }
     }
 
