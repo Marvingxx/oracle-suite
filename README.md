@@ -28,7 +28,7 @@
 
 
 <p align="center">
-  <img src="docs/screenshots/oracle-suite-grid.png" alt="Oracle Suite on Windows: a card for each Oracle app with its icon, status, version, release date and an Install button" width="900">
+  <img src="docs/screenshots/oracle-suite-grid.png" alt="Oracle Suite on Windows: the nine Oracle apps, each with its icon, version, release date and an Open button" width="900">
 </p>
 <p align="center">
   <sub>Switch between the grid and a sortable table.</sub>
