@@ -139,12 +139,13 @@ pub const DETAILS: [AppDetails; 9] = [
     },
     AppDetails {
         id: "oracle-layout",
-        headline: "Brand guidelines that follow your brand.",
-        about: "A page-layout app forked from DesignCraft, with master pages, styles and PDF export, whose colours, type, \
-                logos and mockups stay linked to your Brand Kit.",
+        headline: "Page layout, and the brand guidelines that follow your brand.",
+        about: "The page-layout app of the Oracle suite (formerly Oracle Brand Guide), forked from DesignCraft: master \
+                pages, styles, links and PDF export. Its Brand module builds whole brand guidelines and logo \
+                presentations from your Brand Kit, and keeps them linked.",
         features: &[
+            feature("Generated from the Brand Kit", "A whole guide or a deck of logo concepts in one click: logos, colours, type, clearspace, construction and lockups."),
             feature("Linked blocks", "Colour values, typefaces, rules, logos and mockups update when you ask, with a preview of every change."),
-            feature("Your own templates", "Reuse a guide for another brand: logos by role, colours by position."),
             feature("PDF export", "Bleed, crop marks and embedded fonts."),
         ],
         shots: &[],
